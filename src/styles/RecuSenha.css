@@ -1,0 +1,29 @@
+h1 {
+    color: white;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
+  h1 strong {
+    color: #FF8C00;
+  }
+  
+  .titulo {
+    margin: 10px;
+  }
+
+  h2{
+    color: white;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 360px) {
+    h1 {
+      font-size: 22px;
+    }
+    h2 {
+        font-size:18px;
+    }
+  }

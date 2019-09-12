@@ -1,0 +1,30 @@
+.login{
+  margin-top: -20px;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+.formulario-login input {
+  display: block;
+}
+
+.link {
+  margin-top: 5px;
+  display: block;
+  text-decoration: underline;
+  font-size: 90%;
+  text-align: center;
+  text-decoration-color: white;
+  color: white;
+}
+
+.link:hover {
+color: lightgray;
+text-decoration-color: lightgray;
+cursor: pointer;
+}
+
+
