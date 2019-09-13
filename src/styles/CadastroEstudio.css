@@ -1,3 +1,17 @@
 .funcionamento p {
     text-align: center;
+    margin: 0;
 }
+.funcionamento {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 400px) {
+    h1 {
+      font-size: 22px;
+    }
+    .wrapper-form {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+  }

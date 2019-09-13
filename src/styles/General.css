@@ -88,3 +88,13 @@ body {
     font-size: 15px;
     text-align: center;
 }
+
+h1 {
+    padding: 10px;
+  }
+
+@media (max-width: 400px) {
+    h1 {
+      font-size: 22px;
+    }
+  }

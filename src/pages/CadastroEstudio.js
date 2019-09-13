@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import api from '../services/api';
-import '../styles/Cadastro.css';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
 import InputMask from 'react-input-mask';

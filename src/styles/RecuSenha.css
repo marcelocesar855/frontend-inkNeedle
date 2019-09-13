@@ -19,10 +19,7 @@ h1 {
     margin-bottom: 20px;
   }
 
-  @media (max-width: 360px) {
-    h1 {
-      font-size: 22px;
-    }
+  @media (max-width: 400px) {
     h2 {
         font-size:18px;
     }
