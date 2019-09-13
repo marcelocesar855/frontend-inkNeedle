@@ -31,7 +31,6 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     height: 32px;
-    margin: 5px;
     padding: 0 15px;
     font-size: 14px;
 }
@@ -41,8 +40,6 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     height: 32px;
-    width: 207px;
-    margin: 5px;
     padding: 0 15px;
     font-size: 14px;
 }
@@ -66,27 +63,18 @@ body {
     background: #FFA500	;
 }
 
-.menu {
+.navbar {
     width: 100%;
     background-color: rgba(100, 99, 99, 0.5);
     list-style-type: none;
     display: inline-block;
 }
-
-.menu li {
-    list-style-type: none;
-    float: right;
-}
   
-.menu li a { 
-    display: block;
-    text-decoration: none;
-    text-align: center;
-    color: white;
+.navbar li a { 
     padding: 8px 16px;
 }
     
-.menu li a:hover {
+.navbar li a:hover {
     background-color: #555;
     cursor: pointer;
 }

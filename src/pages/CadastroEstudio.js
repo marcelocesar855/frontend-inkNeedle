@@ -111,11 +111,10 @@ export default class Cadastro extends Component {
     render() { //renderiza html
         return (
             <div className="wrapper">
-                <nav className="menu">
-                        <li><a onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                        <li><a onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
-                
-                </nav>
+               <ul className="navbar navbar-fixed-top justify-content-end">
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
+                </ul>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>
@@ -146,7 +145,7 @@ export default class Cadastro extends Component {
                         <button onClick={this.handleSubmit}>Cadastrar estúdio</button>
                     </form>
                 </div>
-                <footer className="rodape">2019 - InkNeedle</footer>
+                <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
         );
     }

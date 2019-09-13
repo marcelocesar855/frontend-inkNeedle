@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-loader": "8.0.4",
     "bootstrap": "^4.3.1",
     "jquery": "^3.4.1",
-    "popper": "^1.0.1",
     "popper.js": "^1.15.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
@@ -19,8 +19,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "babel src -d lib",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

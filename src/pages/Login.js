@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import api from '../services/api';
+import logo from '../images/logo.png';
 import '../styles/Login.css';
 import '../styles/General.css';
-import logo from '../images/logo.png';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Login extends Component {
 
@@ -43,29 +44,29 @@ export default class Login extends Component {
   render() {
       return(
             <div className="wrapper">
-                <ul className="menu"> 
-                    <li><a onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                    <li><a onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
+                <ul className="navbar navbar-fixed-top justify-content-end">
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
                 </ul>
                 <div className="wrapper-form login">
                     <img src={logo} alt="InkNeedle"/> 
-                    <form onSubmit={this.handleSubmit} className="formulario formulario-login">
-                        <input 
+                    <form onSubmit={this.handleSubmit} className="formulario formulario-login text-center">
+                        <input className="m-2"
                         value={this.state.username}
                         placeholder='Email de usuário'
                         onChange={this.handleInputChange}
                         />
-                        <input type="password"
+                        <input type="password" className="m-2"
                         value={this.state.password}
                         placeholder='Senha'
                         onChange={this.handleInputChangePass}
                         />
                         <button type='submit' onClick={this.handleSubmit}>Entrar</button>
                         <button className="subscribe-button" onClick={() => {this.props.history.push('/cadastro_usuario');}}>Cadastrar-se</button>
-                        <a className="link" onClick={() => {this.props.history.push('/recuperar_senha');}}>Esqueceu sua senha?</a>
+                        <a className="link mt-3 text-white" onClick={() => {this.props.history.push('/recuperar_senha');}}><u>Esqueceu sua senha?</u></a>
                     </form>
                 </div>
-                <footer className="rodape">2019 - InkNeedle</footer>
+                <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
       );
   }

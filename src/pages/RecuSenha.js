@@ -22,10 +22,10 @@ export default class RecuSenha extends Component {
     render() { //renderiza html
         return (
             <div className="wrapper">
-                <nav className="navbar menu">
-                        <li><a onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                        <li><a onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
-                </nav>
+                <ul className="navbar navbar-fixed-top justify-content-end">
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
+                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
+                </ul>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe seu e-mail cadastrado na <strong>InkNeedle!</strong></h1>
@@ -37,7 +37,7 @@ export default class RecuSenha extends Component {
                         <button onClick={this.handleSubmit}>Recuperar Senha</button>
                     </form>
                 </div>
-                <footer className="rodape">2019 - InkNeedle</footer>
+                <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
         );
     }
