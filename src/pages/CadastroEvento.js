@@ -16,51 +16,46 @@ export default class Cadastro extends Component {
                 start : '00:00',
                 end : '23:59'
             },
-            telefone : '',
-            bodyPiercing : false,
-            cep : '',
-            endereco : '',
-            numero : '',
-            complemento: '',
+            estudio : null,
+            data : '',
+            entradaFranca : true,
+            diasEvento : 1,
+            precoEntrada : 0.0,
             selectedFile : null
         };
         this.featureRef = React.createRef();
-        this.handleInputChangeFuncionamento = this.handleInputChangeFuncionamento.bind(this);
+        this.handleInputChangeDuracao = this.handleInputChangeDuracao.bind(this);
     }
 
     handleInputChangeNome = e => { //possibilita a edição do texto no input
         this.setState({nome : e.target.value});
     };
 
-    handleInputChangeCEP = e => { //possibilita a edição do texto no input
-        this.setState({cep : e.target.value});
+    handleInputChangeEstudio = e => { //possibilita a edição do texto no input
+        this.setState({estudio : e.target.value});
     };
 
-    handleInputChangeEndereco = e => { //possibilita a edição do texto no input
-        this.setState({endereco : e.target.value});
+    handleInputChangeData = e => { //possibilita a edição do texto no input
+        this.setState({data : e.target.value});
     };
 
-    handleInputChangeNumero = e => { //possibilita a edição do texto no input
-        this.setState({numero : e.target.value});
+    handleInputChangeEntradaFranca = e => { //possibilita a edição do texto no input
+        this.setState({entradaFranca : e.target.value});
     };
 
-    handleInputChangeComplemento = e => { //possibilita a edição do texto no input
-        this.setState({complemento : e.target.value});
+    handleInputChangePrecoEntrada = e => { //possibilita a edição do texto no input
+        this.setState({precoEntrada : e.target.value});
     };
 
-    handleInputChangeFuncionamento(time) { //possibilita a edição do texto no input
+    handleInputChangeDuracao(time) { //possibilita a edição do texto no input
         this.setState({value : time});
     };
 
-    handleInputChangeTelefone = e => { //possibilita a edição do texto no input
-        this.setState({telefone : e.target.value});
+    handleInputChangeDiasEvento = e => { //possibilita a edição do texto no input
+        this.setState({diasEvento : e.target.value});
     };
 
-    handleInputChangeBodyPiercing = e => { //possibilita a edição do texto no input
-        this.setState({bodyPiercing : e.target.value});
-    };
-
-    handleInputChangeCertificado = e => { //possibilita a edição do texto no input
+    handleInputChangeBanner = e => { //possibilita a edição do texto no input
         console.log(e.target.files[0]);
         this.setState({
             selectedFile : e.target.files[0],
@@ -72,31 +67,26 @@ export default class Cadastro extends Component {
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
         const nome = this.state.nome;
-        const endereco = this.state.endereco;
-        const numero = this.state.numero;
-        const complemento = this.state.complemento;
-        const cep = this.state.cep;
+        const estudio = this.state.estudio;
+        const dataEvento = this.state.data;
+        const entradaFranca = this.state.entradaFranca;
+        const precoEntrada = this.state.precoEntrada;
+        const diasEvento = this.state.diasEvento;
         const {value} = this.state.value;
-        const telefone = this.state.telefone;
-        const bodyPiercing = this.state.bodyPiercing;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
-            if(endereco !== ''){
-                if(numero !== ''){
-                    if(cep !== ''){
+            if(estudio !== ''){
+                if(dataEvento !== ''){
+                    if(diasEvento > 0){
                         if(value !== null){
-                            if(data !== null){
-                                await api.post("users/", {nome,endereco,numero,complemento,cep,value,telefone,bodyPiercing,data});
-                            }else{
-                                alert("Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o value do estúdio!")
-                            }
+                            await api.post("events/", {nome,estudio,dataEvento,entradaFranca,precoEntrada,value,data});
                         }else{
                             this.state.hrFuncionamento = '';
-                            alert("Informe o horário de value do estúdio.")
+                            alert("Informe o horário de realização do evento.")
                         }
                     }else{
-                        alert("Informe um CEP válido.")
+                        alert("Informe quantos dias o evento irá durar.")
                     }
                 }else{
                     alert("Informe o número do lote/loja.")
