@@ -93,7 +93,26 @@ h1 {
     padding: 10px;
   }
 
-@media (max-width: 400px) {
+.files input {
+    outline: 2px dashed #FF8C00;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 40px;
+    text-align: center !important;
+    align-self: center;
+    margin: 0;
+    width: 100% !important;
+}
+
+.files input:focus{     outline: 2px dashed #FF8C00;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #FF8C00;
+ }
+
+.color input{ background-color:#f1f1f1;}
+
+@media (max-width: 420px) {
     h1 {
       font-size: 22px;
     }

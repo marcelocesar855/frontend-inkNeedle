@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RecuSenha.css';
 import '../styles/General.css';
 

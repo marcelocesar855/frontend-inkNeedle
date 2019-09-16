@@ -4,34 +4,33 @@ import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
 import InputMask from 'react-input-mask';
 import TimeRange from '../components/TimeSlider';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class Cadastro extends Component {
 
-    state = {
-        nome : '',
-        value : {
-            start : '00:00',
-            end : '23:59'
-         },
-        telefone : '',
-        bodyPiercing : false,
-        cep : '',
-        endereco : '',
-        numero : '',
-        complemento: '',
-        certificado : null
-    };
-
     constructor(props) {
+        if (typeof window !== 'undefined') {
+            window.React = React;
+        }
         super(props);
+        this.state = {
+            nome : '',
+            value : {
+                start : '00:00',
+                end : '23:59'
+            },
+            telefone : '',
+            bodyPiercing : false,
+            cep : '',
+            endereco : '',
+            numero : '',
+            complemento: '',
+            selectedFile : null
+        };
         this.featureRef = React.createRef();
         this.handleInputChangeFuncionamento = this.handleInputChangeFuncionamento.bind(this);
-        this.state.value = {
-            start : "00:00",
-            end : "23:59"
-        };
     }
-    
+
     handleInputChangeNome = e => { //possibilita a edição do texto no input
         this.setState({nome : e.target.value});
     };
@@ -65,7 +64,12 @@ export default class Cadastro extends Component {
     };
 
     handleInputChangeCertificado = e => { //possibilita a edição do texto no input
-        this.setState({certificado : e.target.value});
+        console.log(e.target.files[0]);
+        this.setState({
+            selectedFile : e.target.files[0],
+            loaded : 0
+        })
+        console.log(this.state.selectedFile);
     };
 
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
@@ -78,14 +82,15 @@ export default class Cadastro extends Component {
         const {value} = this.state.value;
         const telefone = this.state.telefone;
         const bodyPiercing = this.state.bodyPiercing;
-        const certificado = this.state.certificado;
+        const data = new FormData();
+        data.append('file', this.state.selectedFile);
         if(nome !== ''){
             if(endereco !== ''){
                 if(numero !== ''){
                     if(cep !== ''){
                         if(value !== null){
-                            if(certificado !== null){
-                                await api.post("users/", {nome,endereco,numero,complemento,cep,value,telefone,bodyPiercing,certificado});
+                            if(data !== null){
+                                await api.post("users/", {nome,endereco,numero,complemento,cep,value,telefone,bodyPiercing,data});
                             }else{
                                 alert("Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o value do estúdio!")
                             }
@@ -115,10 +120,10 @@ export default class Cadastro extends Component {
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
                 </ul>
                 <div className="wrapper-form">
-                    <div className="titulo">
+                    <div className="titulo mt-4">
                         <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>
                     </div>
-                    <form className="formulario">
+                    <form className="formulario mb-5">
                         <p>Nome:&nbsp;<input value={this.state.nome}
                         onChange={this.handleInputChangeNome} placeholder="Nome do estúdio"></input></p>
                         <div className="funcionamento">
@@ -141,6 +146,15 @@ export default class Cadastro extends Component {
                         onChange={this.handleInputChangeNumero} placeholder="Número lote/loja"></input></p>
                         <p>Complemento:&nbsp;<input type="text" value={this.state.complemento}
                         onChange={this.handleInputChangeComplemento} placeholder="Complemento do endereço"></input></p>
+                        <div class="justify-content-center">
+                            <div className="form-group files">
+                                <div className="funcionamento">
+                                    <p>Certificado Anvisa:</p>
+                                </div>
+                                <input type="file" multiple=""
+                                onChange={this.handleInputChangeCertificado}></input>
+                            </div>
+	                    </div>
                         <button onClick={this.handleSubmit}>Cadastrar estúdio</button>
                     </form>
                 </div>
