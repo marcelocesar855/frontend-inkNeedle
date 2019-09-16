@@ -5,9 +5,3 @@
 .funcionamento {
     margin-bottom: 5px;
 }
-
-@media (max-width: 420px) {
-    h1 {
-      font-size: 22px;
-    }
-  }

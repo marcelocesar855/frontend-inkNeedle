@@ -1,18 +1,27 @@
 
-body {
+html, body {
+    height: 100%;
+    position: relative;
     background-image: url(../images/RM_11.png)
 }
 
 .wrapper {
-    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: table;
 }
 
 .wrapper-form {
-  height: 100%;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    vertical-align:middle;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
 }
 
 .formulario{
@@ -81,17 +90,13 @@ body {
 
 .rodape {
     width: 100%;
+    position: absolute;
+    bottom: 0;
     background-color: rgba(100, 99, 99, 0.5);
-    list-style-type: none;
-    display: inline-block;
     color:  rgba(255, 255, 255, 0.5);
     font-size: 15px;
     text-align: center;
 }
-
-h1 {
-    padding: 10px;
-  }
 
 .files input {
     outline: 2px dashed #FF8C00;
@@ -110,10 +115,15 @@ h1 {
     transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #FF8C00;
  }
 
-.color input{ background-color:#f1f1f1;}
+.color input{ 
+    background-color:#f1f1f1;
+}
 
-@media (max-width: 420px) {
+@media only screen and (max-width: 420px){
     h1 {
-      font-size: 22px;
+        font-size: 22px;
     }
-  }
+    h2 {
+        font-size: 18px;
+    }
+}

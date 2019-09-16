@@ -18,9 +18,3 @@ h1 {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     margin-bottom: 20px;
   }
-
-  @media (max-width: 400px) {
-    h2 {
-        font-size:18px;
-    }
-  }

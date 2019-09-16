@@ -117,10 +117,10 @@ export default class Cadastro extends Component {
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
                 </ul>
                 <div className="wrapper-form">
-                    <div className="titulo mt-4">
+                    <div className="titulo">
                         <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>
                     </div>
-                    <form className="formulario mb-5">
+                    <form className="formulario">
                         <p>Nome:&nbsp;<input value={this.state.nome}
                         onChange={this.handleInputChangeNome} placeholder="Nome do estúdio"></input></p>
                         <div className="funcionamento">
@@ -143,7 +143,7 @@ export default class Cadastro extends Component {
                         onChange={this.handleInputChangeNumero} placeholder="Número lote/loja"></input></p>
                         <p>Complemento:&nbsp;<input type="text" value={this.state.complemento}
                         onChange={this.handleInputChangeComplemento} placeholder="Complemento do endereço"></input></p>
-                        <div class="justify-content-center">
+                        <div className="justify-content-center">
                             <div className="form-group files">
                                 <div className="funcionamento">
                                     <p>Certificado Anvisa:</p>

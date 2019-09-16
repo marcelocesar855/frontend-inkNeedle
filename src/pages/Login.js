@@ -48,7 +48,7 @@ export default class Login extends Component {
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
                 </ul>
-                <div className="wrapper-form login">
+                <div className="wrapper-form login mt-5">
                     <img src={logo} alt="InkNeedle"/> 
                     <form onSubmit={this.handleSubmit} className="formulario formulario-login text-center">
                         <input className="m-2"
