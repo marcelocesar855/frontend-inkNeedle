@@ -5,6 +5,7 @@ import '../styles/General.css';
 import InputMask from 'react-input-mask';
 import TimeRange from '../components/TimeSlider';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {DateRange} from 'react-date-range';
 
 export default class Cadastro extends Component {
 
@@ -17,9 +18,11 @@ export default class Cadastro extends Component {
                 end : '23:59'
             },
             estudio : null,
-            data : '',
+            datas : [{
+                inicio : new Date(),
+                fim : new Date()
+            }],
             entradaFranca : true,
-            diasEvento : 1,
             precoEntrada : 0.0,
             selectedFile : null
         };
@@ -35,8 +38,9 @@ export default class Cadastro extends Component {
         this.setState({estudio : e.target.value});
     };
 
-    handleInputChangeData = e => { //possibilita a edição do texto no input
-        this.setState({data : e.target.value});
+    handleInputChangeDatas = e => { //possibilita a edição do texto no input
+        this.setState({datas : e});
+        console.log(this.state.datas);
     };
 
     handleInputChangeEntradaFranca = e => { //possibilita a edição do texto no input
@@ -51,42 +55,31 @@ export default class Cadastro extends Component {
         this.setState({value : time});
     };
 
-    handleInputChangeDiasEvento = e => { //possibilita a edição do texto no input
-        this.setState({diasEvento : e.target.value});
-    };
-
     handleInputChangeBanner = e => { //possibilita a edição do texto no input
-        console.log(e.target.files[0]);
         this.setState({
             selectedFile : e.target.files[0],
             loaded : 0
         })
-        console.log(this.state.selectedFile);
     };
 
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
         const nome = this.state.nome;
         const estudio = this.state.estudio;
-        const dataEvento = this.state.data;
+        const {dataEvento} = this.state.datas;
         const entradaFranca = this.state.entradaFranca;
         const precoEntrada = this.state.precoEntrada;
-        const diasEvento = this.state.diasEvento;
         const {value} = this.state.value;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
             if(estudio !== ''){
-                if(dataEvento !== ''){
-                    if(diasEvento > 0){
-                        if(value !== null){
-                            await api.post("events/", {nome,estudio,dataEvento,entradaFranca,precoEntrada,value,data});
-                        }else{
-                            this.state.hrFuncionamento = '';
-                            alert("Informe o horário de realização do evento.")
-                        }
+                if(dataEvento !== null){
+                    if(value !== null){
+                        await api.post("events/", {nome,estudio,dataEvento,entradaFranca,precoEntrada,value,data});
                     }else{
-                        alert("Informe quantos dias o evento irá durar.")
+                        this.state.hrFuncionamento = '';
+                        alert("Informe o horário de realização do evento.")
                     }
                 }else{
                     alert("Informe o número do lote/loja.")
@@ -108,18 +101,19 @@ export default class Cadastro extends Component {
                 </ul>
                 <div className="wrapper-form">
                     <div className="titulo mt-4">
-                        <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>
+                        <h1>Informe os dados abaixo para o cadastrar o evento a ser realizado</h1>
                     </div>
                     <form className="formulario mb-5">
                         <p>Nome:&nbsp;<input value={this.state.nome}
-                        onChange={this.handleInputChangeNome} placeholder="Nome do estúdio"></input></p>
+                        onChange={this.handleInputChangeNome} placeholder="Nome do evento"></input></p>
                         <div className="funcionamento">
-                            <p>Funcionamento:&nbsp;De&nbsp;{this.state.value.start}&nbsp;às&nbsp;{this.state.value.end}</p>
-                            <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}
-                            onChange={this.handleInputChangeFuncionamento} step={15} name={"time_range"}></TimeRange>
+                            <p>Data do evento:&nbsp;</p>
                         </div>
-                        <p>Telefone:&nbsp;<InputMask type="text" value={this.state.telefone}
-                        onChange={this.handleInputChangeTelefone} mask="(99) 99999-9999" maskChar="" placeholder="Telefone do estúdio"></InputMask></p>
+                        <div className="funcionamento">
+                            <p>Duração:&nbsp;De&nbsp;{this.state.value.start}&nbsp;às&nbsp;{this.state.value.end}</p>
+                            <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}
+                            onChange={this.handleInputChangeDuracao} step={15} name={"time_range"}></TimeRange>
+                        </div>
                         <p>Body Piercing:&nbsp;<select value={this.state.bodyPiercing} onChange={this.handleInputChangeBodyPiercing}>
                             <option value="false" disabled>Realiza Body Piercing?</option>
                             <option value="true">Sim</option>
@@ -133,7 +127,7 @@ export default class Cadastro extends Component {
                         onChange={this.handleInputChangeNumero} placeholder="Número lote/loja"></input></p>
                         <p>Complemento:&nbsp;<input type="text" value={this.state.complemento}
                         onChange={this.handleInputChangeComplemento} placeholder="Complemento do endereço"></input></p>
-                        <div class="justify-content-center">
+                        <div className="justify-content-center">
                             <div className="form-group files">
                                 <div className="funcionamento">
                                     <p>Certificado Anvisa:</p>

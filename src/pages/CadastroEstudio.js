@@ -61,7 +61,6 @@ export default class Cadastro extends Component {
     };
 
     handleInputChangeCertificado = e => { //possibilita a edição do texto no input
-        console.log(e.target.files[0]);
         this.setState({
             selectedFile : e.target.files[0],
             loaded : 0
