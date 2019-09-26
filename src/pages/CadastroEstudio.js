@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import viaCep from '../services/viaCep';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
 import InputMask from 'react-input-mask';
@@ -20,8 +21,9 @@ export default class Cadastro extends Component {
             bodyPiercing : false,
             cep : '',
             endereco : '',
-            numero : '',
-            complemento: '',
+            bairro : '',
+            uf: '',
+            cidade: '',
             selectedFile : null
         };
         this.featureRef = React.createRef();
@@ -32,7 +34,7 @@ export default class Cadastro extends Component {
         this.setState({nome : e.target.value});
     };
 
-    handleInputChangeCEP = e => { //possibilita a edição do texto no input
+    handleInputChangeCep = e => { //possibilita a edição do texto no input
         this.setState({cep : e.target.value});
     };
 
@@ -40,12 +42,16 @@ export default class Cadastro extends Component {
         this.setState({endereco : e.target.value});
     };
 
-    handleInputChangeNumero = e => { //possibilita a edição do texto no input
-        this.setState({numero : e.target.value});
+    handleInputChangeBairro = e => { //possibilita a edição do texto no input
+        this.setState({bairro : e.target.value});
     };
 
-    handleInputChangeComplemento = e => { //possibilita a edição do texto no input
-        this.setState({complemento : e.target.value});
+    handleInputChangeUf = e => { //possibilita a edição do texto no input
+        this.setState({uf : e.target.value});
+    };
+
+    handleInputChangeCidade = e => { //possibilita a edição do texto no input
+        this.setState({cidade : e.target.value});
     };
 
     handleInputChangeFuncionamento(time) { //possibilita a edição do texto no input
@@ -65,15 +71,61 @@ export default class Cadastro extends Component {
             selectedFile : e.target.files[0],
             loaded : 0
         })
-        console.log(this.state.selectedFile);
     };
+
+    getAdressFromViaCEP = async (e) => {
+        e.preventDefault();
+        var cep = e.target.value;
+        if (cep.length > 8){
+            cep = cep.replace('-', '');
+            await viaCep.get(cep + '/json').then(
+                response => {
+                    if(response.data.erro !== true){
+                        this.setState({
+                            endereco : response.data.logradouro,
+                            bairro : response.data.bairro,
+                            cidade : response.data.localidade,
+                            uf : response.data.uf
+                        })
+                    }else{
+                        alert('CEP inexistente')
+                        this.setState({
+                            cep :  '',
+                            endereco : '',
+                            bairro : '',
+                            cidade : '',
+                            uf : ''
+                        })
+                    }
+                }
+            ).catch( error => {
+                alert('Informe um CEP válido')
+                this.setState({
+                    cep :  '',
+                    endereco : '',
+                    bairro : '',
+                    cidade : '',
+                    uf : ''
+                })
+            })
+        }else {
+            this.setState({
+                cep :  '',
+                endereco : '',
+                bairro : '',
+                cidade : '',
+                uf : ''
+            })
+        }
+    }
 
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
         const nome = this.state.nome;
         const endereco = this.state.endereco;
-        const numero = this.state.numero;
-        const complemento = this.state.complemento;
+        const bairro = this.state.bairro;
+        const uf = this.state.uf;
+        const cidade = this.state.cidade;
         const cep = this.state.cep;
         const {value} = this.state.value;
         const telefone = this.state.telefone;
@@ -82,11 +134,12 @@ export default class Cadastro extends Component {
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
             if(endereco !== ''){
-                if(numero !== ''){
+                if(uf !== ''){
                     if(cep !== ''){
                         if(value !== null){
                             if(data !== null){
-                                await api.post("users/", {nome,endereco,numero,complemento,cep,value,telefone,bodyPiercing,data});
+                                await api.post("users/", {nome,endereco,bairro,uf,cidade,cep,value,telefone,bodyPiercing,data});
+                                alert("Estúdio cadastrado com sucesso!")
                             }else{
                                 alert("Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o value do estúdio!")
                             }
@@ -98,7 +151,7 @@ export default class Cadastro extends Component {
                         alert("Informe um CEP válido.")
                     }
                 }else{
-                    alert("Informe o número do lote/loja.")
+                    alert("Informe um estado.")
                 }
             }else{
                 alert("Informe o endereço do estúdio.")
@@ -134,14 +187,16 @@ export default class Cadastro extends Component {
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select></p>
-                        <p>CEP:&nbsp;<InputMask type="text" value={this.state.cep}
-                        onChange={this.handleInputChangeCep} mask="99.999-999" maskChar="" placeholder="CEP do estúdio"></InputMask></p>
+                        <p>CEP:&nbsp;<InputMask type="text" value={this.state.cep} onBlur={this.getAdressFromViaCEP}
+                        onChange={this.handleInputChangeCep} mask="99999-999" maskChar="" placeholder="CEP do estúdio"></InputMask></p>
                         <p>Endereço:&nbsp;<input type="text" value={this.state.endereco}
-                        onChange={this.handleInputChangeEndereco} placeholder="Endereço do estúdio"></input></p>
-                        <p>Número:&nbsp;<input type="number" value={this.state.numero}
-                        onChange={this.handleInputChangeNumero} placeholder="Número lote/loja"></input></p>
-                        <p>Complemento:&nbsp;<input type="text" value={this.state.complemento}
-                        onChange={this.handleInputChangeComplemento} placeholder="Complemento do endereço"></input></p>
+                        onChange={this.handleInputChangeEndereco} placeholder="Endereço"></input></p>
+                        <p>Bairro:&nbsp;<input type="text" value={this.state.bairro}
+                        onChange={this.handleInputChangeBairro} placeholder="Bairro"></input></p>
+                        <p>Cidade:&nbsp;<input type="text" value={this.state.cidade}
+                        onChange={this.handleInputChangeCidade} placeholder="Cidade"></input></p>
+                        <p>UF:&nbsp;<input type="text" value={this.state.uf}
+                        onChange={this.handleInputChangeUf} placeholder="UF (Estado)"></input></p>
                         <div className="justify-content-center">
                             <div className="form-group files">
                                 <div className="funcionamento">
