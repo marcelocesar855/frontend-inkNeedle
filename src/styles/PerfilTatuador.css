@@ -1,0 +1,9 @@
+.wrapper-perfil {
+    background-color: snow;
+    background-image: unset;
+}
+
+.resumo-perfil {
+    max-width: 350px;
+    margin: 20px;
+}

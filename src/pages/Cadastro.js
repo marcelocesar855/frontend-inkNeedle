@@ -114,7 +114,7 @@ export default class Cadastro extends Component {
                         <p>Email:&nbsp;<input type="email" value={this.state.email}
                         onChange={this.handleInputChangeEmail} placeholder="E-mail"></input></p>
                         <p>Senha:&nbsp;<input type="password" value={this.state.senha}
-                        onChange={this.handleInputChangeSenha} placeholder="Senha de acesso"></input></p>
+                        onChange={this.handleInputChangeSenha} placeholder="Minímo 8 caracteres"></input></p>
                         <p>Confirmação:&nbsp;<input type="password" value={this.state.confirmacao}
                         onChange={this.handleInputChangeConfirmacao} placeholder="Confirmar senha de acesso"></input></p>
                         <button onClick={this.handleSubmit}>Efetuar cadastro</button>

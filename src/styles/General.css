@@ -2,7 +2,6 @@
 html, body {
     height: 100%;
     position: relative;
-    background-image: url(../images/RM_11.png)
 }
 
 .wrapper {
@@ -11,6 +10,7 @@ html, body {
     overflow: hidden;
     position: relative;
     display: table;
+    background-image: url(../images/RM_11.png)
 }
 
 .wrapper-form {
@@ -75,13 +75,24 @@ html, body {
 
 .navbar {
     width: 100%;
-    background-color: rgba(100, 99, 99, 0.5);
-    list-style-type: none;
+    background: rgba(100, 99, 99, 0.7);
     display: inline-block;
+    list-style-type: none;
+}
+
+.navbar ul{
+    list-style-type: none;
+    display: flex;
+}
+
+.navbar img{
+    max-width:65px;
+    height:auto;
 }
   
 .navbar li a { 
     padding: 8px 16px;
+    font-weight: bold;
 }
     
 .navbar li a:hover {
@@ -93,7 +104,7 @@ html, body {
     width: 100%;
     position: absolute;
     bottom: 0;
-    background-color: rgba(100, 99, 99, 0.5);
+    background-color: rgba(100, 99, 99, 0.7);
     color:  rgba(255, 255, 255, 0.5);
     font-size: 15px;
     text-align: center;

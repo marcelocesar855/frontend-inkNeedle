@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 import api from '../services/api';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
-import InputMask from 'react-input-mask';
 import TimeRange from '../components/TimeSlider';
+import CurrencyFormat from 'react-currency-format';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
 import moment from 'moment';
 
-export default class Cadastro extends Component {
+export default class CadastroEvento extends Component {
 
     constructor(props) {
         super(props);
@@ -63,16 +63,17 @@ export default class Cadastro extends Component {
         e.preventDefault();
         const nome = this.state.nome;
         const estudio = this.state.estudio;
-        const {dataEvento} = this.state.datas;
+        const inicio = this.state.startDate;
+        const fim = this.state.endDate;
         const precoEntrada = this.state.precoEntrada;
         const {value} = this.state.value;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
             if(estudio !== 0){
-                if(dataEvento !== null){
+                if(inicio !== null && fim !== null){
                     if(value !== null){
-                        await api.post("events/", {nome,estudio,dataEvento,precoEntrada,value,data});
+                        //await api.post("events/", {nome,estudio,inicio,fim,precoEntrada,value,data});
                     }else{
                         this.state.hrFuncionamento = '';
                         alert("Informe o horário de realização do evento.")
@@ -117,8 +118,9 @@ export default class Cadastro extends Component {
                         <p>Estúdio:&nbsp;<select value={this.state.bodyPiercing} onChange={this.handleInputChangeBodyPiercing}>
                             <option value="0" disabled selected>Sede do evento</option>
                         </select></p>
-                        <p>Preço:&nbsp;<InputMask type="text" value={this.state.precoEntrada}
-                        onChange={this.handleInputChangePrecoEntrada} mask="99.999-999" maskChar="" placeholder="Grátis? Deixe em branco"></InputMask></p>
+                        <p>Preço:&nbsp;<CurrencyFormat type="text" value={this.state.precoEntrada}
+                        onChange={this.handleInputChangePrecoEntrada} thousandSeparator="."
+                        decimalSeparator="," decimalScale="2" prefix="R$ " fixedDecimalScale="true" placeholder="Grátis? Deixe em branco"></CurrencyFormat></p>
                         <div className="funcionamento">
                             <p>Duração:&nbsp;De&nbsp;{this.state.value.start}&nbsp;às&nbsp;{this.state.value.end}</p>
                             <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}

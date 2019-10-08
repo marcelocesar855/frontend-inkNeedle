@@ -3,11 +3,11 @@ import api from '../services/api';
 import viaCep from '../services/viaCep';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
-import InputMask from 'react-input-mask';
+import CurrencyFormat from 'react-currency-format';
 import TimeRange from '../components/TimeSlider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class Cadastro extends Component {
+export default class CadastroEstudio extends Component {
 
     constructor(props) {
         super(props);
@@ -24,6 +24,7 @@ export default class Cadastro extends Component {
             bairro : '',
             uf: '',
             cidade: '',
+            complemento: '',
             selectedFile : null
         };
         this.featureRef = React.createRef();
@@ -64,6 +65,10 @@ export default class Cadastro extends Component {
 
     handleInputChangeBodyPiercing = e => { //possibilita a edição do texto no input
         this.setState({bodyPiercing : e.target.value});
+    };
+
+    handleInputChangeComplemento = e => { //possibilita a edição do texto no input
+        this.setState({complemento : e.target.value});
     };
 
     handleInputChangeCertificado = e => { //possibilita a edição do texto no input
@@ -130,6 +135,7 @@ export default class Cadastro extends Component {
         const {value} = this.state.value;
         const telefone = this.state.telefone;
         const bodyPiercing = this.state.bodyPiercing;
+        const complemento = this.state.complemento;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
@@ -138,7 +144,7 @@ export default class Cadastro extends Component {
                     if(cep !== ''){
                         if(value !== null){
                             if(data !== null){
-                                await api.post("users/", {nome,endereco,bairro,uf,cidade,cep,value,telefone,bodyPiercing,data});
+                                //await api.post("users/", {nome,endereco,bairro,uf,cidade,cep,value,telefone,bodyPiercing,complemento,data});
                                 alert("Estúdio cadastrado com sucesso!")
                             }else{
                                 alert("Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o value do estúdio!")
@@ -180,15 +186,15 @@ export default class Cadastro extends Component {
                             <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}
                             onChange={this.handleInputChangeFuncionamento} step={15} name={"time_range"}></TimeRange>
                         </div>
-                        <p>Telefone:&nbsp;<InputMask type="text" value={this.state.telefone}
-                        onChange={this.handleInputChangeTelefone} mask="(99) 99999-9999" maskChar="" placeholder="Telefone do estúdio"></InputMask></p>
+                        <p>Telefone:&nbsp;<CurrencyFormat type="text" value={this.state.telefone}
+                        onChange={this.handleInputChangeTelefone} format="(##) # ####-####" placeholder="Telefone do estúdio"></CurrencyFormat></p>
                         <p>Body Piercing:&nbsp;<select value={this.state.bodyPiercing} onChange={this.handleInputChangeBodyPiercing}>
                             <option value="false" disabled>Realiza Body Piercing?</option>
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select></p>
-                        <p>CEP:&nbsp;<InputMask type="text" value={this.state.cep} onBlur={this.getAdressFromViaCEP}
-                        onChange={this.handleInputChangeCep} mask="99999-999" maskChar="" placeholder="CEP do estúdio"></InputMask></p>
+                        <p>CEP:&nbsp;<CurrencyFormat type="text" value={this.state.cep} onBlur={this.getAdressFromViaCEP}
+                        onChange={this.handleInputChangeCep} format="#####-###" placeholder="CEP do estúdio"></CurrencyFormat></p>
                         <p>Endereço:&nbsp;<input type="text" value={this.state.endereco}
                         onChange={this.handleInputChangeEndereco} placeholder="Endereço"></input></p>
                         <p>Bairro:&nbsp;<input type="text" value={this.state.bairro}
@@ -197,6 +203,8 @@ export default class Cadastro extends Component {
                         onChange={this.handleInputChangeCidade} placeholder="Cidade"></input></p>
                         <p>UF:&nbsp;<input type="text" value={this.state.uf}
                         onChange={this.handleInputChangeUf} placeholder="UF (Estado)"></input></p>
+                        <p>Complemento:&nbsp;<input type="text" value={this.state.complemento}
+                        onChange={this.handleInputChangeComplemento} placeholder="Complemento"></input></p>
                         <div className="justify-content-center">
                             <div className="form-group files">
                                 <div className="funcionamento">

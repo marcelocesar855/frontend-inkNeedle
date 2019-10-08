@@ -30,7 +30,7 @@ export default class RecuSenha extends Component {
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe seu e-mail cadastrado na <strong>InkNeedle!</strong></h1>
-                        <h2>Em breve você receberá nele um link para redefinir sua senha.</h2>
+                        <h2 className="subtitulo">Em breve você receberá nele um link para redefinir sua senha.</h2>
                     </div>
                     <form className="formulario">
                         <p>Email:&nbsp;<input type="email" value={this.state.email}
