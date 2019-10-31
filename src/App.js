@@ -7,6 +7,7 @@ import CadastroEstudio from './pages/CadastroEstudio';
 import CadastroEvento from './pages/CadastroEvento';
 import RedefSenha from './pages/RedefSenha';
 import PerfilTatuador from './pages/PerfilTatuador';
+import Busca from './pages/Busca';
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
         <Route path="/cadastro_evento" component={CadastroEvento} />
         <Route path="/redefinir_senha" component={RedefSenha} />
         <Route path="/perfil_tatuador" component={PerfilTatuador} />
+        <Route path="/busca" component={Busca} />
       </Switch>
      </BrowserRouter>
     );

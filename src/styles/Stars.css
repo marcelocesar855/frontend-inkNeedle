@@ -52,11 +52,11 @@
   }
   .rc-rate-star-half .rc-rate-star-first,
   .rc-rate-star-full .rc-rate-star-second {
-    color: #f5a623;
+    color: #FF8C00;
   }
   .rc-rate-star-half:hover .rc-rate-star-first,
   .rc-rate-star-full:hover .rc-rate-star-second {
-    color: #f8c165;
+    color: rgb(255, 154, 31);
   }
   @font-face {
     font-family: 'anticon';

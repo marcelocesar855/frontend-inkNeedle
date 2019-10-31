@@ -1,9 +1,9 @@
-.wrapper-perfil {
+.wrapper-logado {
     background-color: snow;
     background-image: unset;
 }
 
-.resumo-perfil {
-    max-width: 350px;
-    margin: 20px;
+.social {
+    cursor: pointer;
+    margin: 10px;
 }
