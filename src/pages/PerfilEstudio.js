@@ -25,13 +25,16 @@ import ft6 from '../images/6.jpg';
 import ft7 from '../images/7.jpg';
 import ft8 from '../images/8.jpg';
 import ft11 from '../images/11.png';
+import loc from '../images/loc.png';
+import mone from '../images/mone.png';
+import clo from '../images/clo.png';
 import api from '../services/api';
 
 export default class PerfilTatuador extends Component {
 
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
-        nomeTatuador : 'Marcelo César',
-        descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
+        nomeTatuador : 'Tatuagens Bacanas Tattoo Studio',
+        descricaoTatuador : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         initialTags: [
             {id: 1, content: 'Old school'}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line'},
             {id: 4,  content: 'Tribal'}, {id: 5, content: 'Oriental'}, {id: 6, content: 'Graywash'},
@@ -61,7 +64,7 @@ export default class PerfilTatuador extends Component {
                     <Card className="card-profile resumo-perfil">
                         <Card.Header backgroundURL={capa}></Card.Header>
                         <Card.Body className="text-center">
-                            <Profile.Image className="card-profile-img" avatarURL={test}></Profile.Image>
+                            <Profile.Image className="card-profile-img" avatarURL={ft11}></Profile.Image>
                             <h2>{this.state.nomeTatuador}
                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                             </h2>
@@ -82,26 +85,63 @@ export default class PerfilTatuador extends Component {
                                 );
                             })
                             }><img className="social" src={wa}></img></a>
-                            <button className="chat">Agenda</button>
+                            
                         </Card.Body>
                     </Card>
                     <Card>
-                        <Card.Header><h2>Estúdios</h2></Card.Header>
+                        <Card.Header><h2>Membros</h2></Card.Header>
                         <List>
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={capa}></Avatar>
+                                    <Avatar size="md" imageURL={test}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>Tatuagens Bacanas
+                                            <h3>Marcelo César
                                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h3>
                                         </Media.Heading>
-                                        <small>Taguatinga Centro - CNB 10, Lote 03, Loja 2</small>
+                                        <small>Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.</small>
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
                         </List>
+                    </Card>
+                    <Card>
+                    <Card.Header><h3>Eventos</h3></Card.Header>
+                    <List>
+                        <List.GroupItem>
+                            <Media>
+                                <Avatar size="md" imageURL={capa}></Avatar>
+                                <Media.Body className="ml-3">
+                                    <Media.Heading>
+                                        <h4>Flashes por R$70</h4>
+                                    </Media.Heading>
+                                    <small>
+                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Tatuagens Bacanas
+                                        <br/><img src={clo}/>&nbsp;&nbsp;02 a 05 de Nov, das 10h às 22h
+                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">Grátis</font>
+                                        </p>
+                                    </small>
+                                </Media.Body>
+                            </Media>
+                        </List.GroupItem>
+                        <List.GroupItem>
+                            <Media>
+                                <Avatar size="md" imageURL={capa}></Avatar>
+                                <Media.Body className="ml-3">
+                                    <Media.Heading>
+                                        <h4>Flash Day Festival</h4>
+                                    </Media.Heading>
+                                    <small>
+                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Tatuagens Bacanas
+                                        <br/><img src={clo}/>&nbsp;&nbsp;<font color="red">Encerrado</font>
+                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">Grátis</font>
+                                        </p>
+                                    </small>
+                                </Media.Body>
+                            </Media>
+                        </List.GroupItem>
+                    </List>
                     </Card>
                     <Card>
                     <Card.Header><h2>Certificações</h2></Card.Header>
@@ -119,10 +159,10 @@ export default class PerfilTatuador extends Component {
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>Camila Souza</h3>
+                                            <h3>Roberto Nogueira</h3>
                                         </Media.Heading>
                                          <Rate defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                        <p><small>Muito profissional e ético.</small></p>
+                                        <p><small>Estúdio muito irado, bem equipado e com um pessoal incrível.</small></p>
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
@@ -132,16 +172,16 @@ export default class PerfilTatuador extends Component {
                 <div className="col col-lg-8 mb-5">
                 <Card>
                     <Card.Header>
-                        <Form.Input placeholder="Menssagem">
+                        <Form.Input placeholder="Comunicado">
                         </Form.Input>
                     </Card.Header>
                     <List>
                         <List.GroupItem>
                             <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
+                                <Avatar size="md" imageURL={ft11}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                        <h4>Marcelo César</h4>
+                                        <h4>Tatuagens Bacanas Tattoo Studio</h4>
                                     </Media.Heading>
                                     <small>Aenean lacinia bibendum nulla sed consectetur. 
                                         Vestibulum id ligula porta felis euismod semper. 
@@ -154,10 +194,10 @@ export default class PerfilTatuador extends Component {
                         </List.GroupItem>
                         <List.GroupItem>
                             <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
+                                <Avatar size="md" imageURL={ft11}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                        <h4>Marcelo César</h4>
+                                        <h4>Tatuagens Bacanas Tattoo Studio</h4>
                                     </Media.Heading>
                                     <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                                         Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, 
@@ -167,10 +207,10 @@ export default class PerfilTatuador extends Component {
                         </List.GroupItem>
                         <List.GroupItem>
                             <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
+                                <Avatar size="md" imageURL={ft11}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                        <h4>Marcelo César</h4>
+                                        <h4>Tatuagens Bacanas Tattoo Studio</h4>
                                     </Media.Heading>
                                     <small>Donec id elit non mi porta gravida at eget metus. 
                                         Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
@@ -182,10 +222,10 @@ export default class PerfilTatuador extends Component {
                         </List.GroupItem>
                         <List.GroupItem>
                             <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
+                                <Avatar size="md" imageURL={ft11}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                        <h4>Marcelo César</h4>
+                                        <h4>Tatuagens Bacanas Tattoo Studio</h4>
                                     </Media.Heading>
                                     <small>Donec ullamcorper nulla non metus auctor fringilla. 
                                         Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. 
@@ -231,10 +271,6 @@ export default class PerfilTatuador extends Component {
                     </GalleryCard.Image>
                     
                     <GalleryCard.Image className="m-2" rounded="true" src={ft8}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft11}>
 
                     </GalleryCard.Image>
                     </Grid.Col>

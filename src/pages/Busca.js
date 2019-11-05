@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
-import Rate from 'rc-rate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/PerfilTatuador.css';
 import '../styles/General.css';
@@ -49,7 +48,6 @@ export default class Busca extends Component {
                             <h2>Marcelo César</h2>
                             <Grid>
                                 <Grid.Row>
-                                    <button className="chat">Chats</button>
                                     <button className="chat">Sessões</button>
                                 </Grid.Row>
                             </Grid>
