@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import moment from 'moment'
 import api from '../services/api';
+import FullCalendar from '../components/EventCalendar';
 import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import EventCalendar from '../components/EventCalendar';
 
-export default class Login extends Component {
+export default class Agenda extends Component {
 
-    state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
-    };
+    
 
     handleInputChange =  e => {
 
@@ -23,6 +23,7 @@ export default class Login extends Component {
                 <div className="wrapper wrapper-logado">
                 <div className="container">
                 <div className="row">
+                    <EventCalendar></EventCalendar>
                 </div>
                 </div>
                 </div>
