@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { toastr } from 'react-redux-toastr'
 import api from '../services/api';
+import { login, getUser } from '../services/auth';
 import logo from '../images/logo.png';
 import '../styles/Login.css';
 import '../styles/General.css';
@@ -10,7 +12,6 @@ export default class Login extends Component {
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
         username: '',
         password: '',
-        token: '',
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -26,10 +27,20 @@ export default class Login extends Component {
             email,
             password
         }).then( response => {
-            this.setState({token : response.data.access_token});
+            login(response.data);
+            if (getUser().userTypeId == 2){
+                this.props.history.push('/busca');
+            }else {
+                this.props.history.push('/perfil_tatuador');
+            }
         })
         .catch(error => {
-            alert(error.response.data.message);
+            toastr.error('Erro ao realizar login', error.message)
+            this.setState({
+                username: '',
+                password: '',
+                token: '',
+            })
         })
     };
 
