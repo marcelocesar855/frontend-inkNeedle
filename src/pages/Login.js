@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { toastr } from 'react-redux-toastr'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import api from '../services/api';
 import { login, getUser } from '../services/auth';
 import logo from '../images/logo.png';
@@ -20,8 +21,8 @@ export default class Login extends Component {
         const email = this.state.username;
         const password = this.state.password;
 
-        if (email === "") return;// verifica se algo foi digitado para continuar processamento
-        if (password === "") return;
+        if (email == "") return;// verifica se algo foi digitado para continuar processamento
+        if (password == "") return;
 
         await api.post('login/', {
             email,
@@ -35,11 +36,18 @@ export default class Login extends Component {
             }
         })
         .catch(error => {
-            toastr.error('Erro ao realizar login', error.message)
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+                });
             this.setState({
                 username: '',
                 password: '',
-                token: '',
             })
         })
     };
