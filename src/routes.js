@@ -28,6 +28,33 @@ var routes = [
         path: "/login",
         name: "Login",
         component: Login
-    },
+    },    
+    {
+      path: "/cadastro_usuario",
+      name: "CadastroUsuario",
+      component: Cadastro
+  },
+  {
+    path: "/recuperar_senha",
+    name: "RecuSenha",
+    component: RedefSenha
+  },
+  {
+    path: "/redef_senha",
+    name: "RedefSenha",
+    component: RecuSenha
+  },
+  {
+    path: "/perfil_estudio",
+    name: "PerfilEstudio",
+    component: PerfilEstudio
+  },
+  {
+    path: "/agenda",
+    name: "Agenda",
+    component: Agenda,
+    isAuth : 1,
+    notPath: "/busca"
+  },
   ];
   export default routes;

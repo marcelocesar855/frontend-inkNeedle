@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Cadastro.css';
 import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -51,44 +53,88 @@ export default class Cadastro extends Component {
     
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
-        const nome = this.state.nome;
-        const tipo = this.state.tipo;
-        const telefone = this.state.telefone;
+        toast.configure();
+        const name = this.state.nome;
+        const userTypeId = this.state.tipo;
+        const userStatusId = 2;
+        const number = this.state.telefone;
+        const phones = [{
+            number : this.state.telefone,
+            phoneTypeId : 0
+        }]
+        if (this.state.telefone.charAt(6) > 5){
+            phones[0].phoneTypeId = 1
+        }else{
+            phones[0].phoneTypeId = 2
+        }
         const email = this.state.email;
-        const senha = this.state.senha;
+        const password = this.state.senha;
         const confirmacao = this.state.confirmacao;
-        if(nome !== ''){
-            if(tipo !== 0){
-                if(telefone !== '' && telefone.length === 15){
-                    if(email !== '' && email.indexOf('@') > 0 && email.indexOf('.' > 2)){
-                        if(senha === confirmacao && senha !== '' && confirmacao !== '' && senha.length > 7){
-                            //await api.post("users/", {nome,tipo,telefone,email,senha});
-                            alert("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.");
-                            if(tipo > 1) {
-                                this.props.history.push('/cadastro_estudio');
-                            }
+        if(name !== ''){
+            if(userTypeId !== 0){
+                if(number !== '' && number.length === 15){
+                    if((email !== '' && email.indexOf('@') > 0 && email.indexOf('.' > 2))){
+                        if(password === confirmacao && password !== '' && confirmacao !== '' && password.length > 7){
+                            await api.post("users/", {name,userTypeId,userStatusId,phones,email,password}).then( 
+                            toast.success("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.",{
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true
+                            })
+                            );                            
                             this.setState(initialState);
                         }else{
                             this.setState({senha : ''});
                             this.setState({confirmacao : ''});
-                            alert("As senhas informadas não são iguais.")
+                            toast.error("As senhas informadas não são iguais.",{
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true
+                            });
                         }
                     }else{
-                        alert("Informe um endereço de e-mail válido.")
+                        toast.error("Informe um endereço de e-mail válido.",{
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true
+                        });
                     }
                 }else{
-                    alert("Informe um número de telefone válido.")
+                    toast.error("Informe um número de telefone válido.",{
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true
+                    });
+                    
                 }
             }else{
-                alert("Escolha um tipo de perfil para seu cadastro.")
+                toast.error("Escolha um tipo de perfil para seu cadastro.",{
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true
+                });
             }
         }else{
-            alert("Informe seu nome.")
+            toast.error("Informe seu nome.",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            });
+
         }
     };
-
-    callEstudio () {
-    }
 
     render() { //renderiza html
         return (

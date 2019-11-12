@@ -45,3 +45,48 @@
   .fc-event-dot {
     background-color: #FF8C00;
   }
+
+  .agendar {
+    margin:  0 auto;
+    margin-top: 10px;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 30px;
+    width: 84px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+  
+.agendar:hover {
+    background: #FFA500	;
+}
+
+.agenda input {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 32px;
+  padding: 0 15px;
+  font-size: 14px;
+}
+
+.agenda button {
+  margin:  0 auto;
+  margin-top: 10px;
+  background: #FF8C00;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+}
+
+.agenda button:hover {
+  background: #FFA500	;
+}

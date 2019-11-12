@@ -44,7 +44,7 @@ export default class RedefSenha extends Component {
                     <form className="formulario">
                         <p>Nova Senha:&nbsp;<input type="password" value={this.state.senha}
                         onChange={this.handleInputChangeSenha} placeholder="Nova senha"></input></p>
-                        <p>Confirme a senha:&nbsp;<input type="password" value={this.state.confirmSenha}
+                        <p>Confirme:&nbsp;<input type="password" value={this.state.confirmSenha}
                         onChange={this.handleInputChangeConfirmSenha} placeholder="Confirmação da senha"></input></p>
                         <button onClick={this.handleSubmit}>Redefinir Senha</button>
                     </form>

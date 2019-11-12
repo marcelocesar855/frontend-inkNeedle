@@ -42,8 +42,7 @@ export default class Login extends Component {
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+                pauseOnHover: true
                 });
             this.setState({
                 username: '',
@@ -64,10 +63,14 @@ export default class Login extends Component {
       return(
             <div className="wrapper">
                 <ul className="navbar navbar-fixed-top justify-content-end">
+                <ul>
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
                     <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
                 </ul>
-                <div className="wrapper-form login mt-5">
+                </ul>
+                <div className="container">
+                <div className="row">
+                <div className="wrapper-form login">
                     <img src={logo} alt="InkNeedle"/> 
                     <form onSubmit={this.handleSubmit} className="formulario formulario-login text-center">
                         <input className="m-2"
@@ -85,6 +88,8 @@ export default class Login extends Component {
                         <a className="link mt-3 text-white" onClick={() => {this.props.history.push('/recuperar_senha');}}><u>Esqueceu sua senha?</u></a>
                     </form>
                 </div>
+                </div>
+            </div>
                 <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
       );

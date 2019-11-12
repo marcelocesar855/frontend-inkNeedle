@@ -82,7 +82,9 @@ export default class PerfilTatuador extends Component {
                                 );
                             })
                             }><img className="social" src={wa}></img></a>
-                            <button className="chat">Agenda</button>
+                            <button className="chat" onClick={() => {
+                                this.props.history.push('/agenda');
+                            }}>Agenda</button>
                         </Card.Body>
                     </Card>
                     <Card>

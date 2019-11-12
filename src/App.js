@@ -47,7 +47,7 @@ class App extends Component {
             />
           );
         }
-        if(prop.path == '/login' && getUser() !== null){
+        if((prop.path == '/login' || prop.path == '/cadastro_usuario') && getUser() !== null){
           return (<Redirect from={prop.path} to='/busca' />);
         }
         return (
