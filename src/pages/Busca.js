@@ -91,7 +91,7 @@ export default class Busca extends Component {
                     </List>
                 </Card>
                 </div>
-                <div className="col col-lg-9 mb-5">
+                <div className="col col-lg- mb-5">
                 <Card className="map-card">
                 <Card.Header>
                     <Form.Input placeholder="Buscar por estúdios e/ou profissionais">
