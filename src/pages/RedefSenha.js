@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RecuSenha.css';
 import '../styles/General.css';
@@ -19,14 +21,35 @@ export default class RedefSenha extends Component {
         this.setState({confirmSenha : e.target.value});
     };
 
-    handleSubmit = async () => { //envia as informações a serem salvar para o backend
-        const senha = this.state.senha;
+    handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
+        e.preventDefault();
+        toast.configure()
+        const password = this.state.senha;
+        const token = this.props.match.params.token;
         const confirmSenha = this.state.confirmSenha;
-        if (senha === confirmSenha) {
-            await api.post("users/", {senha});
-            alert("Senha redefinida com sucesso. Realize o login.")
+        if (password === confirmSenha) {
+            await api.post("password-reset/", {token,password}).then(
+            toast.success("Senha redefinida com sucesso. Realize o login.",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+            )
+            this.props.history.push('/login');
         }else{
-            alert('As senhas informadas não conferem, por favor informe novamente.')
+            toast.error("As senhas informadas não conferem, por favor informe novamente.",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+            this.setState({
+                senha : '',
+                confirmSenha : ''
+            })
         }
     };
 

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RecuSenha.css';
 import '../styles/General.css';
@@ -14,10 +16,20 @@ export default class RecuSenha extends Component {
         this.setState({email : e.target.value});
     };
 
-    handleSubmit = async () => { //envia as informações a serem salvar para o backend
+    handleSubmit = async (e) => { //método responsável por interceptar o submit do form
+         e.preventDefault();
+        toast.configure()
         const email = this.state.email;
-        await api.post("users/", {email});
-        alert("Verifique sua caixa de e-mails.")
+        await api.post("password-recovery/", {email}).then(
+            toast.success("Você receberá em breve no seu e-mail um link para redefinir sua senha.",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        );
+        this.props.history.push('/login');
     };
 
     render() { //renderiza html

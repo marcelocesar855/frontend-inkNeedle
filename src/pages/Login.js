@@ -85,7 +85,7 @@ export default class Login extends Component {
                         />
                         <button type='submit' onClick={this.handleSubmit}>Entrar</button>
                         <button className="subscribe-button" onClick={() => {this.props.history.push('/cadastro_usuario');}}>Cadastrar-se</button>
-                        <a className="link mt-3 text-white" onClick={() => {this.props.history.push('/recuperar_senha');}}><u>Esqueceu sua senha?</u></a>
+                        <a className="link mt-3 text-white" onClick={() => {this.props.history.push('/redef_senha');}}><u>Esqueceu sua senha?</u></a>
                     </form>
                 </div>
                 </div>

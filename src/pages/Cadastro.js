@@ -75,6 +75,7 @@ export default class Cadastro extends Component {
                 if(number !== '' && number.length === 15){
                     if((email !== '' && email.indexOf('@') > 0 && email.indexOf('.' > 2))){
                         if(password === confirmacao && password !== '' && confirmacao !== '' && password.length > 7){
+                            this.setState(initialState);
                             await api.post("users/", {name,userTypeId,userStatusId,phones,email,password}).then( 
                             toast.success("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.",{
                                 position: "top-right",
@@ -83,8 +84,8 @@ export default class Cadastro extends Component {
                                 closeOnClick: true,
                                 pauseOnHover: true
                             })
-                            );                            
-                            this.setState(initialState);
+                            );
+                            this.props.history.push('/login');                       
                         }else{
                             this.setState({senha : ''});
                             this.setState({confirmacao : ''});
@@ -152,8 +153,8 @@ export default class Cadastro extends Component {
                         onChange={this.handleInputChangeNome} placeholder="Nome completo"></input></p>
                         <p>Tipo:&nbsp;<select value={this.state.tipo} onChange={this.handleInputChangeTipo}>
                             <option value="0" disabled>Selecione o tipo de perfil</option>
-                            <option value="1">Cliente</option>
-                            <option value="2">Tatuador</option>
+                            <option value="2">Cliente</option>
+                            <option value="1">Tatuador</option>
                         </select></p>
                         <p>Telefone:&nbsp;<InputMask type="text" value={this.state.telefone}
                         onChange={this.handleInputChangeTelefone} mask="(99) 99999-9999" maskChar="" placeholder="Número de telefone"></InputMask></p>
