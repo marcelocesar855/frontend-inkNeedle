@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../services/api';
-import { login, getUser } from '../services/auth';
+import { login, getUser, logout } from '../services/auth';
 import logo from '../images/logo.png';
 import logo2 from '../images/logo2.png';
 import '../styles/Login.css';
@@ -76,7 +76,10 @@ export default class Login extends Component {
                             <a class="dropdown-item" href="#">Ação</a>
                             <a class="dropdown-item" href="#">Outra ação</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Algo mais aqui</a>
+                            <a class="dropdown-item" href="" onClick={() => {
+                                logout()
+                                this.props.history.push('/login')
+                            }}>Sair</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">

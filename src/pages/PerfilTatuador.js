@@ -3,6 +3,7 @@ import { Linking, Text } from 'react-native-web';
 import {Clickable} from 'react-clickable';
 import $ from 'jquery';
 import 'bootstrap';
+import { logout } from '../services/auth';
 import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
@@ -13,7 +14,7 @@ import '../styles/Tabler.css';
 import '../styles/Stars.css';
 import '../styles/Tags.css';
 import delTag from '../images/delete.png';
-import logo from '../images/logo2.png';
+import logo2 from '../images/logo2.png';
 import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
 import fc from '../images/facebook.png';
@@ -100,13 +101,33 @@ export default class PerfilTatuador extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <ul className="navbar navbar-fixed-top">
-                   <img src={logo} alt="InkNeedle"/>
-                    <ul className="justify-content-end">
-                        <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Minha Conta</a></li>
-                        <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Ajuda</a></li>
+                <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
+                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                    <ul className='mr-auto'></ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
+                                Minha conta
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Ação</a>
+                            <a class="dropdown-item" href="#">Outra ação</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onClick={() => {
+                                logout()
+                                this.props.history.push('/login')
+                            }}>Sair</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#">
+                                Ajuda
+                            </a>
+                        </li>
                     </ul>
-                </ul>
+                </div>
+                </nav>
                 <div className="container">
                 <div className="row ">
                 <div className="col col-lg-4">
