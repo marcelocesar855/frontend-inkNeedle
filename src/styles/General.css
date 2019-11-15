@@ -15,6 +15,10 @@ html, body {
     background-image: url(../images/RM_11.png)
 }
 
+.logo{
+    margin: 20px 140px 20px 0px;
+}
+
 .wrapper-form {
     vertical-align:middle;
     height: 100%;
@@ -76,30 +80,24 @@ html, body {
 }
 
 .navbar {
-    width: 100%;
     background: rgba(100, 99, 99, 0.7);
-    display: inline-block;
-    list-style-type: none;
 }
 
-.navbar ul{
-    list-style-type: none;
-    display: flex;
-}
-
-.navbar img{
-    max-width:65px;
-    height:auto;
-}
-  
-.navbar li a { 
+.navbar-nav li a { 
     padding: 8px 16px;
     font-weight: bold;
+    color: white;
 }
     
-.navbar li a:hover {
+.navbar-nav li a:hover {
     background-color: #555;
     cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+    
+.navbar-nav > li > .dropdown-menu { 
+    background-color:rgba(100, 99, 99, 0.7);; 
 }
 
 .rodape {
@@ -172,5 +170,10 @@ html, body {
     }
     h2 {
         font-size: 18px;
+    }
+
+    .logo{
+        max-width: 100%;
+        margin-right: 0px;
     }
 }
