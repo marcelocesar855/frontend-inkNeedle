@@ -40,6 +40,11 @@ var routes = [
     component: RedefSenha
   },
   {
+    path: "/cadastro_estudio",
+    name: "CadastroEstudio",
+    component: CadastroEstudio
+  },
+  {
     path: "/redef_senha",
     name: "RedefSenha",
     component: RecuSenha

@@ -20,7 +20,7 @@ export default class RecuSenha extends Component {
          e.preventDefault();
         toast.configure()
         const email = this.state.email;
-        await api.post("password-recovery/", {email}).then(
+        await api.post("password-recovery/", {email}).then( response => {
             toast.success("Você receberá em breve no seu e-mail um link para redefinir sua senha.",{
                 position: "top-right",
                 autoClose: 5000,
@@ -28,8 +28,8 @@ export default class RecuSenha extends Component {
                 closeOnClick: true,
                 pauseOnHover: true
             })
-        );
         this.props.history.push('/login');
+        })
     };
 
     render() { //renderiza html

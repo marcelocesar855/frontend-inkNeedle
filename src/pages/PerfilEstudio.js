@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Linking, Text } from 'react-native-web';
+import { Linking, TextInput } from 'react-native-web';
 import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
+import {Clickable} from 'react-clickable';
+import $ from 'jquery';
+import 'bootstrap';
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/PerfilTatuador.css';
+import '../styles/PerfilEstudio.css';
 import '../styles/General.css';
 import '../styles/Tabler.css'
 import '../styles/Stars.css'
@@ -29,16 +32,21 @@ import loc from '../images/loc.png';
 import mone from '../images/mone.png';
 import clo from '../images/clo.png';
 import api from '../services/api';
+import delTag from '../images/delete.png';
 
 export default class PerfilTatuador extends Component {
 
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
-        nomeTatuador : 'Tatuagens Bacanas Tattoo Studio',
-        descricaoTatuador : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
+        nomeEstduio : 'Tatuagens Bacanas Tattoo Studio',
+        descricaoEstudio : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         initialTags: [
-            {id: 1, content: 'Old school'}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line'},
-            {id: 4,  content: 'Tribal'}, {id: 5, content: 'Oriental'}, {id: 6, content: 'Graywash'},
-            {id: 7, content: 'Geometric'}, {id: 8, content: 'Biomecanic'}, {id: 9, content: 'Aquerela'}, {id: 10, content: 'Portrait'}]
+            {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
+            {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
+            {id: 7, content: 'Geometric', undraggable: true}, {id: 8, content: 'Biomecanic', undraggable: true}, {id: 9, content: 'Aquerela', undraggable: true}, 
+            {id: 10, content: 'Portrait', undraggable: true}],
+            foto : null,
+            selectedFile : null,
+            rows : 1
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -46,6 +54,50 @@ export default class PerfilTatuador extends Component {
     };
 
     handleInputChange =  e => {
+    };
+
+    handleClickDelete = tag => {
+        const tags = this.state.initialTags.filter(t => tag.id !== t.id);
+        this.setState({initialTags : tags});
+    }
+
+    handleClickAdd = () => {
+        const tags = this.state.initialTags.slice();
+        tags.push({id: tags.length + 1 , content: this.input.value, undraggable: true});
+        this.setState({initialTags : tags});
+        this.input.value = '';
+    }
+
+    componentDidMount () {
+        this.setState({foto : test});
+        const lines = document.getElementById('desc').scrollHeight / 20;
+        this.setState({rows : lines})
+    }
+
+    handleInputChangeFoto = e => { //possibilita a edição do texto no input
+        this.setState({
+            selectedFile : e.target.files[0]
+        })
+    };
+
+    handleInputChangeDescricao = e => { //possibilita a edição do texto no input
+        const lineHeight = 20;
+        const previousRows = e.target.rows;
+        e.target.rows = 1;
+        const currentRows = ~~(e.target.scrollHeight / lineHeight);
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+        this.setState({ 
+            descricaoEstudio : e.target.value,
+            rows : currentRows
+        })
+    };
+
+    changePhoto () { //possibilita a edição do texto no input
+        this.setState({
+            foto : this.state.selectedFile
+        })
     };
 
   render() {
@@ -64,17 +116,35 @@ export default class PerfilTatuador extends Component {
                     <Card className="card-profile resumo-perfil">
                         <Card.Header backgroundURL={capa}></Card.Header>
                         <Card.Body className="text-center">
-                            <Profile.Image className="card-profile-img" avatarURL={ft11}></Profile.Image>
-                            <h2>{this.state.nomeTatuador}
+                            <Clickable className='center' onClick={() => {
+                                $('#uploadPhoto').modal('show');
+                            }}>
+                                <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
+                            </Clickable>
+                            <h2>{this.state.nomeEstduio}
                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                             </h2>
-                            <p>{this.state.descricaoTatuador}</p>
+                            <Form.Textarea rows={this.state.rows} id='desc'
+                            className='mod-card-back-title'
+                            onChange={this.handleInputChangeDescricao}
+                            value={this.state.descricaoEstudio}
+                            />
                             <div className="Simple">
                                 <DraggableArea tags={this.state.initialTags} render={({tag, id}) => (
-                                <div className="tag undraggable">
+                                <div className="tag ">                                    
                                     {tag.content}
+                                    &nbsp;&nbsp;
+                                    <img
+                                    className="delete"
+                                    src={delTag}
+                                    onClick={() => this.handleClickDelete(tag)}
+                                    />
                                 </div>)} onChange={tags => console.log(tags)} />
                              </div>
+                             <div className="inputs">
+                                <input ref={r => this.input = r} />
+                                <button onClick={this.handleClickAdd}>Add tag</button>
+                            </div>
                             <a><img className="social" src={fc}></img></a>
                             <a><img className="social" src={tt}></img></a>
                             <a><img className="social" src={it}></img></a>
@@ -85,7 +155,7 @@ export default class PerfilTatuador extends Component {
                                 );
                             })
                             }><img className="social" src={wa}></img></a>
-                            
+                            <button className="chat">+ Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -279,6 +349,29 @@ export default class PerfilTatuador extends Component {
                 </div>
             </div>
             </div>
+            <div class="modal fade" id="uploadPhoto" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Mudar foto de perfil</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <div className="form-group files">
+                      <p>
+                        <input type="file" multiple=""
+                            onChange={this.handleInputChangeFoto}></input>
+                    </p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={this.changePhoto}>Upload</button>
+                  </div>
+                </div>
+              </div>
+              </div>
                 <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
       );

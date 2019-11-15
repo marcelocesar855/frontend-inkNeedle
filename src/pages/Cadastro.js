@@ -75,20 +75,32 @@ export default class Cadastro extends Component {
                 if(number !== '' && number.length === 15){
                     if((email !== '' && email.indexOf('@') > 0 && email.indexOf('.' > 2))){
                         if(password === confirmacao && password !== '' && confirmacao !== '' && password.length > 7){
-                            this.setState(initialState);
-                            await api.post("users/", {name,userTypeId,userStatusId,phones,email,password}).then( 
-                            toast.success("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.",{
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true
-                            })
-                            );
-                            this.props.history.push('/login');                       
+                            await api.post("users/", {name,userTypeId,userStatusId,phones,email,password}).then( response =>{
+                                toast.success("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.",{
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true
+                                })
+                                this.setState(initialState);
+                                this.props.history.push('/login');
+                            }
+                            ).catch( error => {
+                                toast.error(error.response.data.message,{
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true
+                                })
+                                this.setState({email : ''});
+                            });                       
                         }else{
-                            this.setState({senha : ''});
-                            this.setState({confirmacao : ''});
+                            this.setState({
+                                senha : '',
+                                confirmacao: ''
+                            });
                             toast.error("As senhas informadas não são iguais.",{
                                 position: "top-right",
                                 autoClose: 5000,

@@ -10,8 +10,13 @@ export default class RedefSenha extends Component {
 
     state = {
         senha : '',
-        confirmSenha : ''
+        confirmSenha : '',
+        token : ''
     };
+
+    componentDidMount () {
+        this.setState({token : this.props.match.params.token});
+    }
 
     handleInputChangeSenha = e => { //possibilita a edição do texto no input
         this.setState({senha : e.target.value});
@@ -25,19 +30,27 @@ export default class RedefSenha extends Component {
         e.preventDefault();
         toast.configure()
         const password = this.state.senha;
-        const token = this.props.match.params.token;
+        const token =  this.props.match.params.token;
         const confirmSenha = this.state.confirmSenha;
         if (password === confirmSenha) {
-            await api.post("password-reset/", {token,password}).then(
-            toast.success("Senha redefinida com sucesso. Realize o login.",{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
-            )
-            this.props.history.push('/login');
+            await api.post("password-reset/", {token,password}).then( response => {
+                toast.success("Senha redefinida com sucesso. Realize o login.",{
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true
+                })
+                this.props.history.push('/login');
+            }).catch(error => {
+                toast.error(error.response.data.message,{
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true
+                })
+            });
         }else{
             toast.error("As senhas informadas não conferem, por favor informe novamente.",{
                 position: "top-right",

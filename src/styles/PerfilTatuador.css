@@ -7,3 +7,26 @@
     cursor: pointer;
     margin: 10px;
 }
+
+.inputs input{
+    margin-top: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 26px;
+    padding: 0 5px;
+    font-size: 14px;
+}
+
+.inputs button {
+    margin-top: 10px;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 26px;
+    width: 64px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}

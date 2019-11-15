@@ -54,8 +54,7 @@ export default class CadastroEvento extends Component {
 
     handleInputChangeBanner = e => { //possibilita a edição do texto no input
         this.setState({
-            selectedFile : e.target.files[0],
-            loaded : 0
+            selectedFile : e.target.files[0]
         })
     };
 

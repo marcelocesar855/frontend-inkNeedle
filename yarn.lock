@@ -8761,6 +8761,11 @@ react-app-polyfill@^0.2.0:
     raf "3.4.1"
     whatwg-fetch "3.0.0"
 
+react-clickable@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-clickable/-/react-clickable-1.1.0.tgz#88fb62e1e659ea9ec98451688b51e037ae292bfb"
+  integrity sha512-4x5TscVFO1mgEpIGOkVlBt2iZtlNBKSPYHEOFE9/8j3oSLMTlZncLJHipqBkaN7Fga4WsJwivyCebnTMiVaKiA==
+
 react-clock@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-clock/-/react-clock-2.4.0.tgz#39540f84e16f8b2c2137640f535c162041bd2a1e"
