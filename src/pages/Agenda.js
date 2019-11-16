@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import api from '../services/api';
+import { logout } from '../services/auth';
 import FullCalendar from '../components/EventCalendar';
 import '../styles/General.css';
+import logo2 from '../images/logo2.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EventCalendar from '../components/EventCalendar';
 
@@ -13,10 +15,33 @@ export default class Agenda extends Component {
   render() {
       return(
             <div className="wrapper wrapper-logado">
-                <ul className="navbar navbar-fixed-top justify-content-end">
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Minha Conta</a></li>
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Ajuda</a></li>
-                </ul>
+               <nav class="navbar navbar-expand-lg p-0 pl-5">
+                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
+                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                    <ul className='mr-auto'></ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
+                                Minha conta
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Ação</a>
+                            <a class="dropdown-item" href="#">Outra ação</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="" onClick={() => {
+                                logout()
+                                this.props.history.push('/login')
+                            }}>Sair</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#">
+                                Ajuda
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                </nav>
                 <div className="container">
                 <div className="row">
                     <EventCalendar></EventCalendar>

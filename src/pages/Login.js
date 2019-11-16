@@ -63,7 +63,7 @@ export default class Login extends Component {
   render() {
       return(
             <div className="wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light">
+                <nav class="navbar navbar-expand-lg p-0 pl-5">
                 <a class="navbar-brand" href="#"><img src={logo2}></img></a>
                 <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
                     <ul className='mr-auto'></ul>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Clickable} from 'react-clickable';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
+import logo2 from '../images/logo2.png';
+import { logout } from '../services/auth';
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +26,17 @@ export default class Busca extends Component {
 
     state = {
         foto : null,
-        selectedFile : null
+        nome : 'Marcelo César',
+        selectedFile : null,
+        eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
+        preco : 20.0},{nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
+        preco : 0.0}],
+        secoes : [{nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h',},
+        {nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
+        posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
+        {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
+        {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
+        {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}]
       };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -33,6 +45,14 @@ export default class Busca extends Component {
 
     handleInputChange =  e => {
     };
+
+    mascaraValor(val) {
+        val = val.toString().replace(/\D/g,"");
+        val = val.toString().replace(/(\d)(\d{8})$/,"$1.$2");
+        val = val.toString().replace(/(\d)(\d{5})$/,"$1.$2");
+        val = val.toString().replace(/(\d)(\d{2})$/,"$1,$2");
+        return val                    
+    }
 
     componentDidMount () {
         this.setState({foto : test})
@@ -53,13 +73,33 @@ export default class Busca extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <ul className="navbar navbar-fixed-top">
-                   <img src={logo} alt="InkNeedle"/>
-                    <ul className="justify-content-end">
-                        <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Minha Conta</a></li>
-                        <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Ajuda</a></li>
+                <nav class="navbar navbar-expand-lg p-0 pl-5">
+                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
+                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                    <ul className='mr-auto'></ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
+                                Minha conta
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Ação</a>
+                            <a class="dropdown-item" href="#">Outra ação</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="" onClick={() => {
+                                logout()
+                                this.props.history.push('/login')
+                            }}>Sair</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="link" href="#">
+                                Ajuda
+                            </a>
+                        </li>
                     </ul>
-                </ul>
+                </div>
+                </nav>
                 <div className="container">
                 <div className="row">
                 <div className="col col-lg-4">
@@ -71,81 +111,53 @@ export default class Busca extends Component {
                             }}>
                                 <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
                             </Clickable>
-                            <h2>Marcelo César</h2>
+                        <h2>{this.state.nome}</h2>
                         </Card.Body>
                     </Card>
                     <Card>
                     <Card.Header><h3>Eventos</h3></Card.Header>
                     <List>
-                        <List.GroupItem>
+                        {this.state.eventos.map(event => (
+                            <List.GroupItem>
                             <Media>
                                 <Avatar size="md" imageURL={capa}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                        <h4>Flash Day Festival</h4>
+                                    <h4>{event.nome}</h4>
                                     </Media.Heading>
                                     <small>
-                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Tatuagens Bacanas
-                                        <br/><img src={clo}/>&nbsp;&nbsp;19 a 23 de Out, das 9h às 19h
-                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">Grátis</font>
+                                    <p><img src={loc}/>&nbsp;&nbsp;{event.local}
+                                        <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
+                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
                                         </p>
                                     </small>
                                 </Media.Body>
                             </Media>
                         </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={capa}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Flashes por R$70</h4>
-                                    </Media.Heading>
-                                    <small>
-                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Skina da Agulha
-                                        <br/><img src={clo}/>&nbsp;&nbsp;02 a 05 de Nov, das 10h às 22h
-                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">Grátis</font>
-                                        </p>
-                                    </small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
+                        ))}
                     </List>
                 </Card>
                 <Card>
                     <Card.Header><h3>Sessões marcadas</h3></Card.Header>
                     <List>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={capa}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <small>
-                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Tatuagens Bacanas
-                                        <br/><img src={clo}/>&nbsp;&nbsp;19 de Out, das 16h às 19h
-                                        <br/><img src={person}/>&nbsp;&nbsp;Marcelo César
-                                        </p>    
-                                    </small>
-                                </Media.Body>
-                                <button className='btn' onClick={() => {
-                                    $('#deleteSession').modal('show');
-                                }}><img src={trash}></img></button>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={capa}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <small>
-                                        <p><img src={loc}/>&nbsp;&nbsp;Estúdio Skina da Agulha
-                                        <br/><img src={clo}/>&nbsp;&nbsp;05 de Nov, das 10h às 14h
-                                        <br/><img src={person}/>&nbsp;&nbsp;Rodrigo Fonseca
-                                        </p>
-                                    </small>
-                                </Media.Body>
-                                <button className='btn' onClick={() => {
-                                    $('#deleteSession').modal('show');
-                                }}><img src={trash}></img></button>
-                            </Media>
-                        </List.GroupItem>
+                    {this.state.secoes.map(secao => (
+                    <List.GroupItem>
+                    <Media>
+                        <Avatar size="md" imageURL={capa}></Avatar>
+                        <Media.Body className="ml-3">
+                            <small>
+                                <p><img src={loc}/>&nbsp;&nbsp;{secao.local}
+                                <br/><img src={clo}/>&nbsp;&nbsp;{secao.hora}
+                                <br/><img src={person}/>&nbsp;&nbsp;{secao.nome}
+                                </p>    
+                            </small>
+                        </Media.Body>
+                        <button className='btn' onClick={() => {
+                            $('#deleteSession').modal('show');
+                        }}><img src={trash}></img></button>
+                    </Media>
+                    </List.GroupItem>
+                    ))}
                     </List>
                 </Card>
                 </div>
@@ -164,64 +176,19 @@ export default class Busca extends Component {
                         <h3>Feed de posts</h3>
                     </Card.Header>
                     <List>
+                    {this.state.posts.map(secao => (
                         <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Aenean lacinia bibendum nulla sed consectetur. 
-                                        Vestibulum id ligula porta felis euismod semper. 
-                                        Morbi leo risus, porta ac consectetur ac, vestibulum at eros. 
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Vestibulum id ligula porta felis euismod semper. 
-                                        Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                                        Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, 
-                                        ut fermentum massa justo sit amet risus.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Donec id elit non mi porta gravida at eget metus. 
-                                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
-                                        Donec ullamcorper nulla non metus auctor fringilla. 
-                                        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. 
-                                        Sed posuere consectetur est at lobortis.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Donec ullamcorper nulla non metus auctor fringilla. 
-                                        Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. 
-                                        Pellentesque ornare sem lacinia quam venenatis vestibulum. 
-                                        Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
+                        <Media>
+                            <Avatar size="md" imageURL={test}></Avatar>
+                            <Media.Body className="ml-3">
+                                <Media.Heading>
+                                    <h4>{secao.nome}</h4>
+                                </Media.Heading>
+                                <small>{secao.content}</small>
+                            </Media.Body>
+                        </Media>
+                    </List.GroupItem>
+                    ))}
                     </List>
                 </Card>
                 </div>

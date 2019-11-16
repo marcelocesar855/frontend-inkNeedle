@@ -81,6 +81,7 @@ html, body {
 
 .navbar {
     background: rgba(100, 99, 99, 0.7);
+    padding: 0px 0px;
 }
 
 .navbar-nav li a { 
