@@ -182,7 +182,7 @@ html, body {
 .gallery .animation {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
-    transform: scale(1); 
+    transform: scale(1);
 }
 
 @media only screen and (max-width: 420px){

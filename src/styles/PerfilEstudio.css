@@ -10,6 +10,12 @@
     text-align: center;
 }
 
+.image-title {
+    text-align: left;
+    font-size: 20px;
+    width: 100%;
+}
+
 .post {
     resize:none;
 }

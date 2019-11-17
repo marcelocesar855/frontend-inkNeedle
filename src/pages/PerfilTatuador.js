@@ -52,15 +52,17 @@ export default class PerfilTatuador extends Component {
         {id : 3, nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
         {id : 4, nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
         feedbacks : [{nome : 'Camila Souza', content : 'Muito profissional e ético.'}],
-        galeria : [{id : 1, content : ft1},{id : 2, content : ft2},{id : 3, content : ft3},{id : 4, content : ft4},{id : 5, content : ft5},
-            {id : 6, content : ft6},{id : 7, content : ft7},{id : 8, content : ft8},{id : 9, content : ft11}],
+        galeria : [{id : 1, title : 'Test Title', content : ft1},{id : 2, title : 'Test Title', content : ft2},
+        {id : 3, title : 'Test Title', content : ft3},{id : 4, title : 'Test Title', content : ft4},{id : 5, title : 'Test Title', content : ft5},
+            {id : 6, title : 'Test Title', content : ft6},{id : 7, title : 'Test Title', content : ft7},{id : 8, title : 'Test Title', content : ft8},
+            {id : 9, title : 'Test Title', content : ft11}],
         foto : null,
         selectedFile : null,
         rows : 1,
         rowsMessage : 1,
         menssageControl : true,
         postDelete : null,
-        photoView : {id : 0, content : null}
+        photoView : {id : 0, title : '', content : null}
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -109,6 +111,19 @@ export default class PerfilTatuador extends Component {
         this.setState({
             posts : posts,
             postDelete : null
+        });
+    }
+
+    deletePhoto () {
+        const photo = this.state.photoView;
+        const photos = this.state.galeria.filter(f => photo.id !== f.id);
+        this.setState({
+            galeria : photos,
+            photoView : {
+                id : 0,
+                title : '',
+                content : null
+            }
         });
     }
 
@@ -360,12 +375,50 @@ export default class PerfilTatuador extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
+                        <input className='mod-card-back-title image-title'
+                            onChange={e => {
+                                this.setState({photoView : {
+                                    title : e.target.value,
+                                    content : this.state.photoView.content
+                                }})
+                            }}
+                            value={this.state.photoView.title}
+                            />
+                            <button className='btn' onClick={() => {
+                                $('#deletePhoto').modal('show');
+                            }}><img src={trash}></img></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
                     <img className="rounded img-fluid" src={this.state.photoView.content}></img>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="deletePhoto" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Excluir foto</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Você tem certeza que deseja excluir essa foto?</h3>
+                    <p><font color='red'>Obs: Essa ação não pode ser desfeita.</font></p>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          this.deletePhoto();
+                          $('#deletePhoto').modal('hide');
+                          $('#viewPhoto').modal('hide')
+                      }}>Sim</button>
+                      <button className='agendar' onClick={() => {
+                          $('#deletePhoto').modal('hide');
+                      }}>Não</button>
                   </div>
                 </div>
               </div>
