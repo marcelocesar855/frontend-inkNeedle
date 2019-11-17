@@ -11,6 +11,7 @@
     "@fullcalendar/interaction": "^4.3.0",
     "@fullcalendar/react": "^4.3.0",
     "@wojtekmaj/react-timerange-picker": "^2.3.0",
+    "accounting-js": "^1.1.1",
     "axios": "^0.18.0",
     "babel-loader": "8.0.4",
     "bootstrap": "^4.3.1",

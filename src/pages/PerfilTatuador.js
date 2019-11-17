@@ -4,6 +4,7 @@ import {Clickable} from 'react-clickable';
 import $ from 'jquery';
 import 'bootstrap';
 import { logout } from '../services/auth';
+import Navbar from '../components/Navbar';
 import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
@@ -30,6 +31,8 @@ import ft6 from '../images/6.jpg';
 import ft7 from '../images/7.jpg';
 import ft8 from '../images/8.jpg';
 import ft11 from '../images/11.png';
+import loc from '../images/loc.png';
+import trash from '../images/trash.png';
 import api from '../services/api';
 
 export default class PerfilTatuador extends Component {
@@ -37,20 +40,47 @@ export default class PerfilTatuador extends Component {
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
         nomeTatuador : 'Marcelo César',
         descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
+        menssagem : '',
         initialTags: [
             {id: 1, content: 'Old school'}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line'},
             {id: 4,  content: 'Tribal'}, {id: 5, content: 'Oriental'}, {id: 6, content: 'Graywash'},
             {id: 7, content: 'Geometric'}, {id: 8, content: 'Biomecanic'}, {id: 9, content: 'Aquerela'}, {id: 10, content: 'Portrait'}],
+        estudios : [{nome : 'Tatuagens Bacanas', local : 'Taguatinga Centro - CNB 10, Lote 03, Loja 2'}],
+        certificacoes : ['OP', 'BP', 'AS'],
+        posts : [{id : 1, nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
+        {id : 2, nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
+        {id : 3, nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
+        {id : 4, nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
+        feedbacks : [{nome : 'Camila Souza', content : 'Muito profissional e ético.'}],
+        galeria : [{id : 1, content : ft1},{id : 2, content : ft2},{id : 3, content : ft3},{id : 4, content : ft4},{id : 5, content : ft5},
+            {id : 6, content : ft6},{id : 7, content : ft7},{id : 8, content : ft8},{id : 9, content : ft11}],
         foto : null,
         selectedFile : null,
-        rows : 1
+        rows : 1,
+        rowsMessage : 1,
+        menssageControl : true,
+        postDelete : null,
+        photoView : {id : 0, content : null}
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
     };
 
-    handleInputChange =  e => {
+    handleInputChangeMenssagem = e => {
+        if (this.state.menssageControl){
+            const lineHeight = 20;
+            const previousRows = e.target.rows;
+            e.target.rows = 1;
+            const currentRows = ~~(e.target.scrollHeight / lineHeight);
+            if (currentRows === previousRows) {
+                e.target.rows = currentRows;
+            }
+            this.setState({
+                menssagem : e.target.value,
+                rowsMessage : currentRows
+            })
+        }
     };
 
     handleInputChangeDescricao = e => { //possibilita a edição do texto no input
@@ -73,11 +103,41 @@ export default class PerfilTatuador extends Component {
         this.setState({initialTags : tags});
     }
 
+    deleteMessage () {
+        const post = this.state.postDelete;
+        const posts = this.state.posts.filter(p => post.id !== p.id);
+        this.setState({
+            posts : posts,
+            postDelete : null
+        });
+    }
+
     handleClickAdd = () => {
         const tags = this.state.initialTags.slice();
         tags.push({id: tags.length + 1 , content: this.input.value});
         this.setState({initialTags : tags});
         this.input.value = '';
+    }
+
+    handleEnter = e => {
+        if (e.key == 'Enter' && !e.shiftKey && this.state.menssagem != '') {
+            this.addMessage()
+            this.setState({menssageControl : false})
+        }else if (e.key == 'Enter' && this.state.menssagem == ''){
+            this.setState({menssageControl : false})
+        }else {
+            this.setState({menssageControl : true})
+        }
+    }
+
+    addMessage () {
+        const posts = this.state.posts;
+        var post = { id: posts.length + 1, nome : this.state.nomeTatuador, content : this.state.menssagem};
+        this.setState({posts : [post].concat(posts)})
+        this.setState({
+            menssagem : '',
+            rowsMessage : 1
+        })
     }
 
     componentDidMount () {
@@ -101,34 +161,8 @@ export default class PerfilTatuador extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
-                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
-                    <ul className='mr-auto'></ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
-                                Minha conta
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Ação</a>
-                            <a class="dropdown-item" href="#">Outra ação</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onClick={() => {
-                                logout()
-                                this.props.history.push('/login')
-                            }}>Sair</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="link" href="#">
-                                Ajuda
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                </nav>
-                <div className="container">
+                <Navbar/>
+                <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
                     <Card className="card-profile resumo-perfil">
@@ -182,156 +216,92 @@ export default class PerfilTatuador extends Component {
                     <Card>
                         <Card.Header><h2>Estúdios</h2></Card.Header>
                         <List>
+                        {this.state.estudios.map(estudio => (
                             <List.GroupItem>
                                 <Media>
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>Tatuagens Bacanas
+                                            <h3>{estudio.nome}
                                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h3>
                                         </Media.Heading>
-                                        <small>Taguatinga Centro - CNB 10, Lote 03, Loja 2</small>
+                                        <img src={loc}/><small>{estudio.local}</small>
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
+                        ))}
                         </List>
                     </Card>
                     <Card>
                     <Card.Header><h2>Certificações</h2></Card.Header>
                         <Avatar.List className="p-3">
-                            <Avatar>OP</Avatar>
-                            <Avatar>BP</Avatar>
-                            <Avatar>AS</Avatar>
+                            {this.state.certificacoes.map(certif => (
+                                <Avatar>{certif}</Avatar>
+                            ))}
                         </Avatar.List>
                     </Card>
                     <Card>
                         <Card.Header><h2>Feedbacks</h2></Card.Header>
                         <List>
+                        {this.state.feedbacks.map(feedback => (
                             <List.GroupItem>
                                 <Media>
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>Camila Souza</h3>
+                                            <h3>{feedback.nome}</h3>
                                         </Media.Heading>
-                                         <Rate defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                        <p><small>Muito profissional e ético.</small></p>
+                                        <Rate defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                        <p><small>{feedback.content}</small></p>
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
+                        ))}
                         </List>
                     </Card>
                 </div>
                 <div className="col col-lg-8 mb-5">
                 <Card>
                     <Card.Header>
-                        <Form.Input placeholder="Menssagem">
-                        </Form.Input>
+                            <Form.Textarea rows={this.state.rowsMessage} id='mens' onChange={this.handleInputChangeMenssagem}
+                             placeholder="Menssagem para seus seguidores" onKeyPress={this.handleEnter}
+                            value={this.state.menssagem} onSubmit={this.addMessage} className="post"
+                            />
                     </Card.Header>
                     <List>
+                    {this.state.posts.map(secao => (
                         <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Aenean lacinia bibendum nulla sed consectetur. 
-                                        Vestibulum id ligula porta felis euismod semper. 
-                                        Morbi leo risus, porta ac consectetur ac, vestibulum at eros. 
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Vestibulum id ligula porta felis euismod semper. 
-                                        Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                                        Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, 
-                                        ut fermentum massa justo sit amet risus.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Donec id elit non mi porta gravida at eget metus. 
-                                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
-                                        Donec ullamcorper nulla non metus auctor fringilla. 
-                                        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. 
-                                        Sed posuere consectetur est at lobortis.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
-                        <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={test}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                        <h4>Marcelo César</h4>
-                                    </Media.Heading>
-                                    <small>Donec ullamcorper nulla non metus auctor fringilla. 
-                                        Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. 
-                                        Pellentesque ornare sem lacinia quam venenatis vestibulum. 
-                                        Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
+                        <Media>
+                            <Avatar size="md" imageURL={test}></Avatar>
+                            <Media.Body className="ml-3">
+                                <Media.Heading>
+                                    <h4>{secao.nome}</h4>
+                                </Media.Heading>
+                                <small>{secao.content}</small>
+                            </Media.Body>
+                            <button className='btn' onClick={() => {
+                                this.setState({postDelete : secao})
+                                $('#deletePost').modal('show');
+                            }}><img src={trash}></img></button>
+                        </Media>
+                    </List.GroupItem>
+                    ))}
                     </List>
                 </Card>
                 <GalleryCard>
                 <Card.Header><h2>Galeria de artes</h2></Card.Header>
-                <div className="row">
-                    <Grid.Col>
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft1}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft2}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft3}>
-
-                    </GalleryCard.Image>
-                    </Grid.Col>
-                    <Grid.Col>
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft4}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft5}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft6}>
-
-                    </GalleryCard.Image>
-                    </Grid.Col>
-                    <Grid.Col>
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft7}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft8}>
-
-                    </GalleryCard.Image>
-                    
-                    <GalleryCard.Image className="m-2" rounded="true" src={ft11}>
-
-                    </GalleryCard.Image>
-                    </Grid.Col>
+                    <div className="gallery">
+                        {this.state.galeria.map(foto => (
+                            <div class="mb-3 pics animation all 2">
+                                <Clickable onClick={() => {
+                                    this.setState({photoView : foto})
+                                $('#viewPhoto').modal('show');
+                                }}>
+                                    <img className="rounded img-fluid" src={foto.content}></img>
+                                </Clickable>
+                            </div>
+                        ))}
                     </div>
                 </GalleryCard>
                 </div>
@@ -356,6 +326,46 @@ export default class PerfilTatuador extends Component {
                   </div>
                   <div class="modal-footer">
                       <button className='agendar' onClick={this.changePhoto}>Upload</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Excluir postagem</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Você tem certeza que deseja excluir essa postagem?</h3>
+                    <p><font color='red'>Obs: Essa ação não pode ser desfeita.</font></p>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          this.deleteMessage();
+                          $('#deletePost').modal('hide');
+                      }}>Sim</button>
+                      <button className='agendar' onClick={() => {
+                          this.setState({postDelete : null})
+                          $('#deletePost').modal('hide');
+                      }}>Não</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="viewPhoto" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <img className="rounded img-fluid" src={this.state.photoView.content}></img>
                   </div>
                 </div>
               </div>

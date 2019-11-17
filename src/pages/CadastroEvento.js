@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import api from '../services/api';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import Navbar from '../components/Navbar'
+import accounting from 'accounting-js'
 import TimeRange from '../components/TimeSlider';
 import CurrencyFormat from 'react-currency-format';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -23,7 +27,7 @@ export default class CadastroEvento extends Component {
             estudio : null,
             startDate : moment(),
             endDate : moment(),
-            precoEntrada : "",
+            precoEntrada : '',
             selectedFile : null,
             focusedInput : null
         };
@@ -58,13 +62,30 @@ export default class CadastroEvento extends Component {
         })
     };
 
+    pushErrorMessage (error) {
+        toast.error(error,{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        })
+    }
+
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
+        toast.configure();
+        var erro = '';
         const nome = this.state.nome;
         const estudio = this.state.estudio;
         const inicio = this.state.startDate;
         const fim = this.state.endDate;
-        const precoEntrada = this.state.precoEntrada;
+        var precoEntrada = null;
+        if (this.state.precoEntrada == '') {
+            precoEntrada = 0.0
+        }else {
+            precoEntrada = accounting.unformat(this.state.precoEntrada, ',');
+        }
         const {value} = this.state.value;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
@@ -72,29 +93,38 @@ export default class CadastroEvento extends Component {
             if(estudio !== 0){
                 if(inicio !== null && fim !== null){
                     if(value !== null){
-                        //await api.post("events/", {nome,estudio,inicio,fim,precoEntrada,value,data});
+                        await api.post("events/", {nome,estudio,inicio,fim,precoEntrada,value,data}).then(response => {
+                            toast.success("Evento cadastrado com sucesso.",{
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true
+                            })
+                            this.props.history.push('/perfil_tatuador');
+                        })
                     }else{
-                        this.state.hrFuncionamento = '';
-                        alert("Informe o horário de realização do evento.")
+                        erro = "Informe o horário de realização do evento.";
+                        this.pushErrorMessage(erro)
                     }
                 }else{
-                    alert("Informe as datas do evento.")
+                    erro = "Informe as datas do evento.";
+                    this.pushErrorMessage(erro)
                 }
             }else{
-                alert("Informe o estúdio sede do evento.")
+                erro = "Informe o estúdio sede do evento.";
+                this.pushErrorMessage(erro)
             }
         }else{
-            alert("Informe o nome do evento.")
+            erro = "Informe o nome do evento.";
+            this.pushErrorMessage(erro)
         }
     };
 
     render() { //renderiza html
         return (
             <div className="wrapper">
-               <ul className="navbar navbar-fixed-top justify-content-end">
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                </ul>
+               <Navbar/>
                 <div className="wrapper-form">
                     <div className="titulo mt-4">
                         <h1>Informe os dados abaixo para o cadastrar o evento a ser realizado</h1>

@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import api from '../services/api';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import viaCep from '../services/viaCep';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
 import CurrencyFormat from 'react-currency-format';
 import TimeRange from '../components/TimeSlider';
+import Navbar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class CadastroEstudio extends Component {
@@ -80,6 +83,13 @@ export default class CadastroEstudio extends Component {
 
     getAdressFromViaCEP = async (e) => {
         e.preventDefault();
+        const cepInitState = {
+            cep :  '',
+            endereco : '',
+            bairro : '',
+            cidade : '',
+            uf : ''
+        }
         var cep = e.target.value;
         if (cep.length > 8){
             cep = cep.replace('-', '');
@@ -94,86 +104,96 @@ export default class CadastroEstudio extends Component {
                         })
                     }else{
                         alert('CEP inexistente')
-                        this.setState({
-                            cep :  '',
-                            endereco : '',
-                            bairro : '',
-                            cidade : '',
-                            uf : ''
-                        })
+                        this.setState(cepInitState)
                     }
                 }
             ).catch( error => {
                 alert('Informe um CEP válido')
-                this.setState({
-                    cep :  '',
-                    endereco : '',
-                    bairro : '',
-                    cidade : '',
-                    uf : ''
-                })
+                this.setState(cepInitState)
             })
         }else {
-            this.setState({
-                cep :  '',
-                endereco : '',
-                bairro : '',
-                cidade : '',
-                uf : ''
-            })
+            this.setState(cepInitState)
         }
     }
 
-    handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
+    pushErrorMessage (error) {
+        toast.error(error,{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        })
+    }
+
+    handleSubmit = async (e) => {
+        toast.configure() //envia as informações a serem salvar para o backend
         e.preventDefault();
+        var erro = '';
         const nome = this.state.nome;
-        const endereco = this.state.endereco;
-        const bairro = this.state.bairro;
-        const uf = this.state.uf;
-        const cidade = this.state.cidade;
-        const cep = this.state.cep;
+        const local = {
+            cep : this.state.cep,
+            cidade : this.state.cidade,
+            endereco : this.state.endereco,
+            uf : this.state.uf,
+            bairro : this.state.bairro,
+            complemento : this.state.complemento
+        }
         const {value} = this.state.value;
         const telefone = this.state.telefone;
         const bodyPiercing = this.state.bodyPiercing;
-        const complemento = this.state.complemento;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
-            if(endereco !== ''){
-                if(uf !== ''){
-                    if(cep !== ''){
-                        if(value !== null){
-                            if(data !== null){
-                                //await api.post("users/", {nome,endereco,bairro,uf,cidade,cep,value,telefone,bodyPiercing,complemento,data});
-                                alert("Estúdio cadastrado com sucesso!")
+            if(local.endereco !== ''){
+                if(local.uf !== ''){
+                    if(local.cidade !== ''){
+                        if(local.cep !== ''){
+                            if(value !== null){
+                                if(data !== null){
+                                    await api.post("users/", {nome,local,value,telefone,bodyPiercing,data}).then(reponse => {
+                                        toast.success("Estúdio cadastrado com sucesso!",{
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true
+                                        })
+                                    })
+                                }else{
+                                    erro = "Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o estúdio!";
+                                    this.pushErrorMessage(erro)
+                                }
                             }else{
-                                alert("Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o value do estúdio!")
+                                erro = "Informe o horário de funcionamento do estúdio.";
+                                this.pushErrorMessage(erro)
                             }
                         }else{
-                            this.state.hrFuncionamento = '';
-                            alert("Informe o horário de value do estúdio.")
+                            erro = "Informe um CEP válido.";
+                            this.pushErrorMessage(erro)
                         }
-                    }else{
-                        alert("Informe um CEP válido.")
+                    }else {
+                        erro = 'Informe a cidade onde fica o estúdio';
+                        this.pushErrorMessage(erro)
                     }
                 }else{
-                    alert("Informe um estado.")
+                    erro = "Informe um estado.";
+                    this.pushErrorMessage(erro)
                 }
             }else{
-                alert("Informe o endereço do estúdio.")
+                erro = "Informe o endereço do estúdio.";
+                this.pushErrorMessage(erro)
             }
         }else{
-            alert("Informe o nome do estúdio.")
+            erro = "Informe o nome do estúdio.";
+            this.pushErrorMessage(erro)
         }
     };
 
     render() { //renderiza html
         return (
             <div className="wrapper">
-               <ul className="navbar navbar-fixed-top justify-content-end">
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                </ul>
+               <Navbar/>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>

@@ -33,33 +33,38 @@ var routes = [
       path: "/cadastro_usuario",
       name: "CadastroUsuario",
       component: Cadastro
-  },
-  {
-    path: "/recuperar_senha",
-    name: "RecuSenha",
-    component: RedefSenha
-  },
-  {
-    path: "/cadastro_estudio",
-    name: "CadastroEstudio",
-    component: CadastroEstudio
-  },
-  {
-    path: "/redef_senha",
-    name: "RedefSenha",
-    component: RecuSenha
-  },
-  {
-    path: "/perfil_estudio",
-    name: "PerfilEstudio",
-    component: PerfilEstudio
-  },
-  {
-    path: "/agenda",
-    name: "Agenda",
-    component: Agenda,
-    isAuth : 1,
-    notPath: "/busca"
-  },
-  ];
-  export default routes;
+    },
+    {
+      path: "/cadastro_evento",
+      name: "CadastroEvento",
+      component: CadastroEvento
+    },
+    {
+      path: "/recuperar_senha",
+      name: "RecuSenha",
+      component: RedefSenha
+    },
+    {
+      path: "/cadastro_estudio",
+      name: "CadastroEstudio",
+      component: CadastroEstudio
+    },
+    {
+      path: "/redef_senha",
+      name: "RedefSenha",
+      component: RecuSenha
+    },
+    {
+      path: "/perfil_estudio",
+      name: "PerfilEstudio",
+      component: PerfilEstudio
+    },
+    {
+      path: "/agenda",
+      name: "Agenda",
+      component: Agenda,
+      isAuth : 1,
+      notPath: "/busca"
+    },
+    ];
+export default routes;

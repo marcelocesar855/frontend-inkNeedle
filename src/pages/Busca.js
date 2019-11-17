@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Clickable} from 'react-clickable';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
-import logo2 from '../images/logo2.png';
-import { logout } from '../services/auth';
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +17,7 @@ import person from '../images/person.png';
 import trash from '../images/trash.png';
 import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
+import Navbar from '../components/Navbar';
 import Mapa from '../components/Mapa';
 import api from '../services/api';
 
@@ -73,34 +72,8 @@ export default class Busca extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <nav class="navbar navbar-expand-lg p-0 pl-5">
-                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
-                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
-                    <ul className='mr-auto'></ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
-                                Minha conta
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Ação</a>
-                            <a class="dropdown-item" href="#">Outra ação</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="" onClick={() => {
-                                logout()
-                                this.props.history.push('/login')
-                            }}>Sair</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="link" href="#">
-                                Ajuda
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                </nav>
-                <div className="container">
+                <Navbar/>
+                <div className="container mt-5">
                 <div className="row">
                 <div className="col col-lg-4">
                     <Card className="card-profile resumo-perfil">

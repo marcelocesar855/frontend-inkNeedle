@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Cadastro.css';
 import '../styles/General.css';
+import NavbarNoLog from '../components/NavbarNoLog';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputMask from 'react-input-mask';
 
@@ -50,10 +51,21 @@ export default class Cadastro extends Component {
     handleInputChangeConfirmacao = e => { //possibilita a edição do texto no input
         this.setState({confirmacao : e.target.value});
     };
+
+    pushErrorMessage (error) {
+        toast.error(error,{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        })
+    }
     
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
         toast.configure();
+        var erro = '';
         const name = this.state.nome;
         const userTypeId = this.state.tipo;
         const userStatusId = 2;
@@ -87,13 +99,7 @@ export default class Cadastro extends Component {
                                 this.props.history.push('/login');
                             }
                             ).catch( error => {
-                                toast.error(error.response.data.message,{
-                                    position: "top-right",
-                                    autoClose: 5000,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true
-                                })
+                                this.pushErrorMessage(error);
                                 this.setState({email : ''});
                             });                       
                         }else{
@@ -101,61 +107,32 @@ export default class Cadastro extends Component {
                                 senha : '',
                                 confirmacao: ''
                             });
-                            toast.error("As senhas informadas não são iguais.",{
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true
-                            });
+                            erro = "As senhas informadas não são iguais.";
+                            this.pushErrorMessage(erro);
                         }
                     }else{
-                        toast.error("Informe um endereço de e-mail válido.",{
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true
-                        });
+                        erro = "Informe um endereço de e-mail válido.";
+                        this.pushErrorMessage(erro);
                     }
                 }else{
-                    toast.error("Informe um número de telefone válido.",{
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true
-                    });
+                    erro = "Informe um número de telefone válido.";
+                    this.pushErrorMessage(erro)
                     
                 }
             }else{
-                toast.error("Escolha um tipo de perfil para seu cadastro.",{
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true
-                });
+                erro = "Escolha um tipo de perfil para seu cadastro.";
+                this.pushErrorMessage(erro)
             }
         }else{
-            toast.error("Informe seu nome.",{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            });
-
+            erro ="Informe seu nome.";
+            this.pushErrorMessage(erro)
         }
     };
 
     render() { //renderiza html
         return (
             <div className="wrapper">
-                <ul className="navbar navbar-fixed-top justify-content-end">
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Sobre nós</a></li>
-                    <li><a className="text-white" onClick={() => {this.props.history.push('/');}}>Contato</a></li>
-                </ul>
+                <NavbarNoLog/>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe os seus dados abaixo para realizar seu cadastro na <strong>InkNeedle!</strong></h1>
