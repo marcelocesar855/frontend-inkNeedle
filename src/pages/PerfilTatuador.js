@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Linking, Text } from 'react-native-web';
 import {Clickable} from 'react-clickable';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
-import { logout } from '../services/auth';
 import Navbar from '../components/Navbar';
 import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import Rate from 'rc-rate';
@@ -15,7 +17,6 @@ import '../styles/Tabler.css';
 import '../styles/Stars.css';
 import '../styles/Tags.css';
 import delTag from '../images/delete.png';
-import logo2 from '../images/logo2.png';
 import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
 import fc from '../images/facebook.png';
@@ -33,6 +34,10 @@ import ft8 from '../images/8.jpg';
 import ft11 from '../images/11.png';
 import loc from '../images/loc.png';
 import trash from '../images/trash.png';
+import plus from '../images/plus.png';
+import certif1 from '../images/certif1.jpg';
+import certif2 from '../images/certif2.jpg';
+import certif3 from '../images/certif3.jpg';
 import api from '../services/api';
 
 export default class PerfilTatuador extends Component {
@@ -42,11 +47,13 @@ export default class PerfilTatuador extends Component {
         descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
         menssagem : '',
         initialTags: [
-            {id: 1, content: 'Old school'}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line'},
-            {id: 4,  content: 'Tribal'}, {id: 5, content: 'Oriental'}, {id: 6, content: 'Graywash'},
-            {id: 7, content: 'Geometric'}, {id: 8, content: 'Biomecanic'}, {id: 9, content: 'Aquerela'}, {id: 10, content: 'Portrait'}],
+            {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
+            {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
+            {id: 7, content: 'Geometric', undraggable: true}, {id: 8, content: 'Biomecanic', undraggable: true}, {id: 9, content: 'Aquerela', undraggable: true},
+            {id: 10, content: 'Portrait', undraggable: true}],
         estudios : [{nome : 'Tatuagens Bacanas', local : 'Taguatinga Centro - CNB 10, Lote 03, Loja 2'}],
-        certificacoes : ['OP', 'BP', 'AS'],
+        certificacoes : [{id: 1, sigla : 'BS', nome : 'Bio Segurança 50h', content : certif1}, {id: 2, sigla :'OS', nome : 'Desenhos Old School 30h', content : certif2},
+        {id: 3, sigla : 'OT', nome : 'Desenhos Orientais 20h', content : certif3}],
         posts : [{id : 1, nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
         {id : 2, nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
         {id : 3, nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
@@ -62,7 +69,8 @@ export default class PerfilTatuador extends Component {
         rowsMessage : 1,
         menssageControl : true,
         postDelete : null,
-        photoView : {id : 0, title : '', content : null}
+        photoView : {id : 0, title : '', content : null},
+        certificateView : {id : 0, sigla : '', nome : '', content : null}
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -127,6 +135,20 @@ export default class PerfilTatuador extends Component {
         });
     }
 
+    deleteCertificate () {
+        const certif = this.state.certificateView;
+        const certifs = this.state.certificacoes.filter(c => certif.id !== c.id);
+        this.setState({
+            certificacoes : certifs,
+            certificateView : {
+                id : 0,
+                sigla : '',
+                nome : '',
+                content : null
+            }
+        });
+    }
+
     handleClickAdd = () => {
         const tags = this.state.initialTags.slice();
         tags.push({id: tags.length + 1 , content: this.input.value});
@@ -166,11 +188,14 @@ export default class PerfilTatuador extends Component {
             selectedFile : e.target.files[0]
         })
     };
+    cadastroEstudio = () => {
+        this.props.history.push('/cadastro_estudio')
+    }
 
     changePhoto () { //possibilita a edição do texto no input
-        this.setState({
-            foto : this.state.selectedFile
-        })
+    };
+
+    uploadPhoto () { //possibilita a edição do texto no input
     };
 
   render() {
@@ -183,7 +208,7 @@ export default class PerfilTatuador extends Component {
                     <Card className="card-profile resumo-perfil">
                         <Card.Header backgroundURL={capa}></Card.Header>
                         <Card.Body className="text-center">
-                            <Clickable className='center' onClick={() => {
+                            <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                 $('#uploadPhoto').modal('show');
                             }}>
                                 <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
@@ -209,8 +234,8 @@ export default class PerfilTatuador extends Component {
                                 </div>)} onChange={tags => console.log(tags)} />
                              </div>
                              <div className="inputs">
-                                <input ref={r => this.input = r} />
-                                <button onClick={this.handleClickAdd}>Add tag</button>
+                                <input ref={r => this.input = r} className="rounded-left"/>
+                                <button className="rounded-right" onClick={this.handleClickAdd}>Add tag</button>
                             </div>
                             <a><img className="social" src={fc}></img></a>
                             <a><img className="social" src={tt}></img></a>
@@ -247,12 +272,21 @@ export default class PerfilTatuador extends Component {
                             </List.GroupItem>
                         ))}
                         </List>
+                        <button className="cad-estudio mb-4" onClick={
+                            this.cadastroEstudio
+                        }>Cadastrar estúdio</button>
                     </Card>
                     <Card>
-                    <Card.Header><h2>Certificações</h2></Card.Header>
+                    <Card.Header><h2>Certificações</h2>
+                    <button aria-label="Adicionar certificado" data-balloon-pos="up" className="btn ml-auto" onClick={() => {
+                         $('#uploadCertificate').modal('show');
+                        }}><img src={plus}></img></button></Card.Header>
                         <Avatar.List className="p-3">
                             {this.state.certificacoes.map(certif => (
-                                <Avatar>{certif}</Avatar>
+                                <Avatar aria-label={certif.nome} data-balloon-pos="up" onClick={()=>{
+                                    this.setState({certificateView : certif});
+                                    $('#viewCertificate').modal('show');
+                                }}>{certif.sigla}</Avatar>
                             ))}
                         </Avatar.List>
                     </Card>
@@ -279,10 +313,10 @@ export default class PerfilTatuador extends Component {
                 <div className="col col-lg-8 mb-5">
                 <Card>
                     <Card.Header>
-                            <Form.Textarea rows={this.state.rowsMessage} id='mens' onChange={this.handleInputChangeMenssagem}
-                             placeholder="Menssagem para seus seguidores" onKeyPress={this.handleEnter}
-                            value={this.state.menssagem} onSubmit={this.addMessage} className="post"
-                            />
+                        <Form.Textarea rows={this.state.rowsMessage} id='mens' onChange={this.handleInputChangeMenssagem}
+                            placeholder="Menssagem para seus seguidores" onKeyPress={this.handleEnter}
+                        value={this.state.menssagem} onSubmit={this.addMessage} className="post"
+                        />
                     </Card.Header>
                     <List>
                     {this.state.posts.map(secao => (
@@ -305,13 +339,18 @@ export default class PerfilTatuador extends Component {
                     </List>
                 </Card>
                 <GalleryCard>
-                <Card.Header><h2>Galeria de artes</h2></Card.Header>
+                <Card.Header>
+                    <h2>Galeria de artes</h2>
+                    <button aria-label="Adicionar foto" data-balloon-pos="up" className="btn ml-auto" onClick={() => {
+                         $('#uploadGaleryPhoto').modal('show');
+                    }}><img src={plus}></img></button>
+                </Card.Header>
                     <div className="gallery">
                         {this.state.galeria.map(foto => (
                             <div class="mb-3 pics animation all 2">
                                 <Clickable onClick={() => {
                                     this.setState({photoView : foto})
-                                $('#viewPhoto').modal('show');
+                                    $('#viewPhoto').modal('show');
                                 }}>
                                     <img className="rounded img-fluid" src={foto.content}></img>
                                 </Clickable>
@@ -327,6 +366,29 @@ export default class PerfilTatuador extends Component {
                 <div class="modal-content">
                   <div class="modal-header">
                     <h3 class="modal-title" id="TituloModalCentralizado">Mudar foto de perfil</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <div className="form-group files">
+                      <p>
+                        <input type="file" multiple=""
+                            onChange={this.handleInputChangeFoto}></input>
+                    </p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={this.changePhoto}>Upload</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="uploadGaleryPhoto" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Adicionar foto a galeria</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -419,6 +481,91 @@ export default class PerfilTatuador extends Component {
                       <button className='agendar' onClick={() => {
                           $('#deletePhoto').modal('hide');
                       }}>Não</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="viewCertificate" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                        <input className='mod-card-back-title image-title'
+                            onChange={e => {
+                                this.setState({certificateView : {
+                                    nome : e.target.value,
+                                    content : this.state.certificateView.content
+                                }})
+                            }}
+                            value={this.state.certificateView.nome}
+                            />
+                            <button className='btn' onClick={() => {
+                                $('#deleteCertificate').modal('show');
+                            }}><img src={trash}></img></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <img className="rounded img-fluid" src={this.state.certificateView.content}></img>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="deleteCertificate" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Excluir certificado</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Você tem certeza que deseja excluir esse certificado?</h3>
+                    <p><font color='red'>Obs: Essa ação não pode ser desfeita.</font></p>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          this.deleteCertificate();
+                          $('#deleteCertificate').modal('hide');
+                          $('#viewCertificate').modal('hide')
+                      }}>Sim</button>
+                      <button className='agendar' onClick={() => {
+                          $('#deleteCertificate').modal('hide');
+                      }}>Não</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="uploadCertificate" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Adicionar certificado de experiência</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <div className="form-group files">
+                      <p>
+                        <input type="file" multiple=""
+                            onChange={this.handleInputChangeFoto}></input>
+                    </p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          $('#uploadCertificate').modal('hide');
+                          toast.configure()
+                          toast.success("Certificado enviado com sucesso!\nAnalisaremos a atenticidadade dele e em breve estará publicado em seu perfil.",{
+                            position: "top-right",
+                            autoClose: 7000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true
+                            });
+                      }}>Upload</button>
                   </div>
                 </div>
               </div>

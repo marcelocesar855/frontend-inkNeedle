@@ -196,7 +196,7 @@ export default class CadastroEstudio extends Component {
                <Navbar/>
                 <div className="wrapper-form">
                     <div className="titulo">
-                        <h1>Informe os dados abaixo para o cadastrar o seu primeiro estúdio na <strong>InkNeedle!</strong></h1>
+                        <h1>Informe os dados abaixo para o cadastrar o seu estúdio na <strong>InkNeedle!</strong></h1>
                     </div>
                     <form className="formulario">
                         <p>Nome:&nbsp;<input value={this.state.nome}

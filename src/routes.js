@@ -40,7 +40,7 @@ var routes = [
       component: CadastroEvento
     },
     {
-      path: "/recuperar_senha",
+      path: "/recuperar_senha/:token",
       name: "RecuSenha",
       component: RedefSenha
     },
@@ -50,7 +50,7 @@ var routes = [
       component: CadastroEstudio
     },
     {
-      path: "/redef_senha",
+      path: "/redef_senha/",
       name: "RedefSenha",
       component: RecuSenha
     },
