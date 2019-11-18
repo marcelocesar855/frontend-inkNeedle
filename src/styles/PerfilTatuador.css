@@ -1,0 +1,48 @@
+.wrapper-logado {
+    background-color: snow;
+    background-image: unset;
+}
+
+.social {
+    cursor: pointer;
+    margin: 10px;
+}
+
+.inputs input{
+    margin-top: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    height: 26px;
+    padding: 0 5px;
+    font-size: 14px;
+}
+
+.inputs button {
+    margin-top: 10px;
+    background: #FF8C00;
+    height: 26px;
+    width: 64px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cad-estudio {
+    margin: auto;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 30px;
+    width: 145px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+  
+.cad-estudio:hover {
+    background: #FFA500	;
+}

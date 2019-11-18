@@ -1,0 +1,69 @@
+.mod-card-back-title{
+    margin: 10px 10px 10px 0px;
+    overflow-y: visible; 
+    overflow-wrap: break-word;
+    background:transparent;
+    border-radius:3px;
+    font-size:16px;
+    resize:none;
+    border:none;
+    text-align: center;
+}
+
+.image-title {
+    text-align: left;
+    font-size: 20px;
+    width: 100%;
+}
+
+.post {
+    resize:none;
+}
+
+.add-membro input{
+    margin: auto 10px;
+    border-radius: 5px;
+    border: 1;
+}
+
+.add-membro button{
+    margin: 10px auto;
+    border-radius: 5px;
+    background: #FF8C00;
+    height: 30px;
+    width: 108px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-membro button:hover {
+    background: #FFA500	;
+    color: #fff;
+}
+
+.cancel-event {
+    margin-left: auto;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 30px;
+    width: 145px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+  
+.cancel-event:hover {
+    background: #FFA500	;
+}
+
+.mod-card-back-title.is-editing,.mod-card-back-title:focus{
+    background:#fff;
+    border:none;
+    box-shadow:inset 0 0 0 2px #0079bf
+}

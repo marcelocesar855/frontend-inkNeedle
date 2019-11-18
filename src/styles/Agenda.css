@@ -1,0 +1,73 @@
+.fc-button-primary {
+    color: #fff;
+    background-color: #FF8C00;
+    border-color: #FF8C00;
+  }
+
+  .fc-button-primary:hover {
+    color: #fff;
+    background-color:  rgba(255, 140, 0, 0.8);
+    border-color: rgba(187, 175, 160, 0.8);
+  }
+
+  .fc-button-primary:disabled {
+    color: #fff;
+    background-color: #FF8C00;
+    border-color: #FF8C00;
+  }
+
+  .fc-button-primary:focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.5);
+  }
+
+  .fc-button-primary:not(:disabled):active:focus,
+.fc-button-primary:not(:disabled).fc-button-active:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.5);
+}
+
+.fc-event {
+    position: relative;
+    display: block;
+    font-size: 0.85em;
+    line-height: 1.4;
+    border-radius: 3px;
+    border: 1px solid #FF8C00;
+  }
+
+  .fc-event {
+    color: #fff !important;
+    page-break-inside: avoid;
+  }
+  
+  .fc-event,
+  .fc-event-dot {
+    background-color: #FF8C00;
+  }
+
+.agenda input {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 32px;
+  padding: 0 15px;
+  font-size: 14px;
+}
+
+.agenda button {
+  margin:  0 auto;
+  margin-top: 10px;
+  background: #FF8C00;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+}
+
+.agenda button:hover {
+  background: #FFA500	;
+}

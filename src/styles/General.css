@@ -1,0 +1,213 @@
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+
+html, body {
+    height: 100%;
+    position: relative;
+}
+
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: table;
+    background-image: url(../images/RM_11.png)
+}
+
+.logo{
+    margin: 30px;
+}
+
+.wrapper-form {
+    vertical-align:middle;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.formulario{
+    border-radius: 5px;
+    padding: 30px;
+    background-color: rgba(100, 99, 99, 0.5);
+}
+  
+.formulario p {
+    color: white;
+    text-align: right;
+}
+
+.formulario input {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 32px;
+    padding: 0 15px;
+    font-size: 14px;
+}
+
+.formulario select {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 190px;
+    height: 32px;
+    padding: 0 15px;
+    font-size: 14px;
+}
+  
+.formulario button {
+    margin:  0 auto;
+    margin-top: 10px;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 44px;
+    width: 194px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+  
+.formulario button:hover {
+    background: #FFA500	;
+}
+
+.navbar {
+    background: rgba(100, 99, 99, 0.9);
+    padding: 0px 0px;
+}
+
+.navbar-nav li a { 
+    padding: 8px 16px;
+    font-weight: bold;
+    color: white;
+}
+    
+.navbar-nav li a:hover {
+    background-color: #555;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+    
+.navbar-nav > li > .dropdown-menu { 
+    background-color:rgba(100, 99, 99, 0.7);; 
+}
+
+.rodape {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(100, 99, 99, 0.7);
+    color:  rgba(255, 255, 255, 0.5);
+    font-size: 15px;
+    text-align: center;
+}
+
+.files input {
+    outline: 2px dashed #FF8C00;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 40px;
+    text-align: center !important;
+    align-self: center;
+    margin: 0;
+    width: 100% !important;
+}
+
+.files input:focus{     outline: 2px dashed #FF8C00;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #FF8C00;
+ }
+
+.color input{ 
+    background-color:#f1f1f1;
+}
+
+.funcionamento p {
+    text-align: center;
+    margin: 0;
+}
+.funcionamento {
+    margin-bottom: 5px;
+}
+
+.agendar {
+    margin:  0 auto;
+    margin-top: 10px;
+    background: #FF8C00;
+    border-radius: 5px;
+    height: 30px;
+    width: 84px;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+
+.center {
+    max-width: 30%;
+    margin: auto;
+    border-radius: 100%;
+  }
+  
+.agendar:hover {
+    background: #FFA500	;
+}
+
+.to-link:hover {
+    color :  #0079bf;
+    cursor: pointer;
+}
+
+.gallery {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-width: 33%;
+    -moz-column-width: 33%;
+    column-width: 33%;
+}
+
+.gallery .pics {
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+}
+
+.gallery .animation {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+@media only screen and (max-width: 420px){
+    h1 {
+        font-size: 22px;
+    }
+    h2 {
+        font-size: 18px;
+    }
+
+    .logo{
+        max-width: 100%;
+        margin-right: 0px;
+    }
+    .gallery {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+        -webkit-column-width: 50%;
+        -moz-column-width: 50%;
+        column-width: 50%;
+        }
+}
