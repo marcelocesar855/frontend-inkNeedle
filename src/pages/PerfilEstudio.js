@@ -42,7 +42,7 @@ import api from '../services/api';
 import trash from '../images/trash.png';
 import delTag from '../images/delete.png';
 import delMember from '../images/delete1.png';
-import banner from '../images/banner.jpg'
+import banner from '../images/banner1.jpg'
 
 export default class PerfilTatuador extends Component {
 
@@ -51,7 +51,7 @@ export default class PerfilTatuador extends Component {
         descricaoEstudio : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         menssagem : '',
         eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0, content : banner}],
+        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estaram todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
         initialTags: [
             {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
             {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
@@ -182,6 +182,16 @@ export default class PerfilTatuador extends Component {
             memberDelete : { id : 0, nome : '', descricao : ''}
         });
     }
+    
+    cancelEvent () {
+        const event = this.state.eventView;
+        const eventos = this.state.eventos.filter(e => event.id !== e.id);
+        this.setState({
+            eventos : eventos,
+            eventView : {nome : '', local : '', hora : '',
+            preco : 0, content : null}
+        });
+    }
 
     handleEnter = e => {
         if (e.key == 'Enter' && !e.shiftKey && this.state.menssagem != '') {
@@ -236,6 +246,10 @@ export default class PerfilTatuador extends Component {
             rows : currentRows
         })
     };
+
+    cadastroEvento = () => {
+        this.props.history.push('/cadastro_evento')
+    }
 
     mascaraValor(val) {
         val = val.toString().replace(/\D/g,"");
@@ -378,7 +392,7 @@ export default class PerfilTatuador extends Component {
                         {this.state.eventos.map(event => (
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={event.banner}></Avatar>
+                                    <Avatar size="md" imageURL={event.content}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
@@ -397,6 +411,9 @@ export default class PerfilTatuador extends Component {
                             </List.GroupItem>
                         ))}
                     </List>
+                    <button className="cad-estudio mb-4" onClick={
+                            this.cadastroEvento
+                        }>Cadastrar evento</button>
                     </Card>
                     <Card>
                     <Card.Header><h2>Certificações</h2>
@@ -832,12 +849,43 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.certificateView.content}></img>
+                    <img className="rounded mx-auto d-block" src={this.state.eventView.content}></img><br/>
+                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
+                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
+                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
+                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao}</div>
                   </div>
                   <div class="modal-footer">
+                        <button className="cancel-event">Tenho interesse</button>
                         <button className='cancel-event' onClick={() => {
-                            $('#deleteCertificate').modal('show');
+                            $('#cancelEvent').modal('show');
                         }}>Cancelar evento</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="cancelEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Cancelar evento {this.state.eventView.nome}</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Você tem certeza que deseja cancelar este evento?</h3>
+                    <p><font color='red'>Obs: Os interessados nele serão notificados do cancelamento.</font></p>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          this.cancelEvent();
+                          $('#viewEvent').modal('hide');
+                          $('#cancelEvent').modal('hide');
+                      }}>Sim</button>
+                      <button className='agendar' onClick={() => {
+                          $('#cancelEvent').modal('hide');
+                      }}>Não</button>
                   </div>
                 </div>
               </div>
