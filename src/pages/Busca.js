@@ -40,15 +40,31 @@ export default class Busca extends Component {
         {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
         {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
         eventView : {nome : '', local : '', hora : '',
-        preco : 0, content : null, descricao : ''}
+        preco : 0, content : null, descricao : ''},
+        lat : 0,
+        long : 0
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
     };
 
-    handleInputChange =  e => {
-    };
+    componentDidMount() {
+        if (navigator.geolocation) {
+            var startPos;
+            
+          var geoSuccess = function(position) {
+              startPos = position;
+              this.state.lat = startPos.coords.latitude;
+              this.state.long = startPos.coords.longitude;
+          };
+
+          navigator.geolocation.getCurrentPosition(geoSuccess);
+      }
+      else {
+        console.log('Geolocation is not supported for this Browser/OS.');
+      }
+    }
 
     mascaraValor(val) {
         val = val.toString().replace(/\D/g,"");
@@ -159,7 +175,7 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    <Mapa ></Mapa>
+                    <Mapa lat={this.state.lat} lng={this.state.long} ></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
