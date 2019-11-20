@@ -338,7 +338,7 @@ export default class PerfilTatuador extends Component {
                                 // );
                             }
                             }><img className="social" src={wa}></img></a>
-                            <button className="chat">+ Seguir</button>
+                            {/* <button className="chat">+ Seguir</button> */}
                         </Card.Body>
                     </Card>
                     <Card>
