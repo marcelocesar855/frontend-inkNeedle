@@ -41,9 +41,14 @@ import certif2 from '../images/certif2.jpg';
 import certif3 from '../images/certif3.jpg';
 import api from '../services/api';
 
+// IMAGES
+import avatarDefault from './../images/avatar.png';
+
 export default class PerfilTatuador extends Component {
 
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
+        user: getUser(),
+        studios: [],
         nomeTatuador : 'Marcelo César',
         descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
         menssagem : '',
@@ -199,9 +204,18 @@ export default class PerfilTatuador extends Component {
     }
 
     componentDidMount () {
+        this.getStudios();
         this.setState({foto : test});
         const lines = document.getElementById('desc').scrollHeight / 20;
         this.setState({rows : lines})
+    }
+
+    getStudios() {
+        api.get(`/studios`)
+        .then(res => {
+            const studios = res.data;
+            this.setState({ studios });
+        })
     }
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
@@ -209,6 +223,7 @@ export default class PerfilTatuador extends Component {
             selectedFile : e.target.files[0]
         })
     };
+
     cadastroEstudio = () => {
         this.props.history.push('/cadastro_estudio')
     }
@@ -219,7 +234,13 @@ export default class PerfilTatuador extends Component {
     uploadPhoto () { //possibilita a edição do texto no input
     };
 
+    getAvatar() {
+        const { user } = this.state;
+        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+    }
+
   render() {
+      const { user } = this.state;
       return(
           <div className="wrapper wrapper-logado">
                 <Navbar/>
@@ -232,9 +253,9 @@ export default class PerfilTatuador extends Component {
                             <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                 $('#uploadPhoto').modal('show');
                             }}>
-                                <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
+                                      <Profile.Image className="card-profile-img" avatarURL={this.getAvatar()}/>
                             </Clickable>
-                            <h2>{this.state.nomeTatuador}
+                                  <h2>{user.name}
                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                             </h2>
                             <Form.Textarea rows={this.state.rows} id='desc'
@@ -254,11 +275,11 @@ export default class PerfilTatuador extends Component {
                                     />
                                 </div>)} onChange={tags => console.log(tags)} />
                              </div>
-                             <div className="inputs">
+                             {/* <div className="inputs">
                                 <input ref={r => this.input = r} className="rounded-left"/>
                                 <button className="rounded-right" onClick={this.handleClickAdd}>Add tag</button>
-                            </div>
-                            <a aria-label='Editar Facebook' data-balloon-pos="up" onClick={() =>{
+                            </div> */}
+                            {/* <a aria-label='Editar Facebook' data-balloon-pos="up" onClick={() =>{
                                  $('#changeFacebook').modal('show');
                                 // Linking.openURL(
                                 //     this.state.facebook
@@ -285,27 +306,27 @@ export default class PerfilTatuador extends Component {
                                 //     "https://api.whatsapp.com/send?phone=5561982715613&text=Olá,%20gostaria%20de%20marcar%20uma%20sessão&lang=pt_pt"
                                 // );
                             }
-                            }><img className="social" src={wa}></img></a>
-                            <button className="chat" onClick={() => {
+                            }><img className="social" src={wa}></img></a> */}
+                            {/* <button className="chat" onClick={() => {
                                 this.props.history.push('/agenda');
-                            }}>Agenda</button>
+                            }}>Agenda</button> */}
                             {/* <button className="chat">+ Seguir</button> */}
                         </Card.Body>
                     </Card>
                     <Card>
                         <Card.Header><h2>Estúdios</h2></Card.Header>
                         <List>
-                        {this.state.estudios.map(estudio => (
+                            {this.state.studios.map(studio => (
                             <List.GroupItem>
                                 <Media>
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{estudio.nome}
-                                                <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                            <h3>{studio.name}
+                                                {/* <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/> */}
                                             </h3>
                                         </Media.Heading>
-                                        <img src={loc}/><small>{estudio.local}</small>
+                                        {/* <img src={loc}/> <small>{estudio.local}</small> */}
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
