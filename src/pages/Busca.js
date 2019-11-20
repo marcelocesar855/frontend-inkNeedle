@@ -19,6 +19,8 @@ import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
 import Navbar from '../components/Navbar';
 import Mapa from '../components/Mapa';
+import banner from '../images/banner.jpg'
+import banner1 from '../images/banner1.jpg'
 import api from '../services/api';
 
 export default class Busca extends Component {
@@ -28,15 +30,18 @@ export default class Busca extends Component {
         nome : 'Marcelo César',
         selectedFile : null,
         eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0},{nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
-        preco : 0.0}],
+        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
+        {nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
+        preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
         secoes : [{nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h',},
         {nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
         posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
         {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
         {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
-        {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}]
-      };
+        {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
+        eventView : {nome : '', local : '', hora : '',
+        preco : 0, content : null, descricao : ''}
+    };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
@@ -63,6 +68,16 @@ export default class Busca extends Component {
         })
     };
 
+    cancelEvent () {
+        const event = this.state.eventView;
+        const eventos = this.state.eventos.filter(e => event.id !== e.id);
+        this.setState({
+            eventos : eventos,
+            eventView : {nome : '', local : '', hora : '',
+            preco : 0, content : null}
+        });
+    }
+
     changePhoto () { //possibilita a edição do texto no input
         this.setState({
             foto : this.state.selectedFile
@@ -79,7 +94,7 @@ export default class Busca extends Component {
                     <Card className="card-profile resumo-perfil">
                         <Card.Header backgroundURL={capa}></Card.Header>
                         <Card.Body className="text-center">
-                            <Clickable className='center' onClick={() => {
+                            <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                 $('#uploadPhoto').modal('show');
                             }}>
                                 <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
@@ -88,29 +103,32 @@ export default class Busca extends Component {
                         </Card.Body>
                     </Card>
                     <Card>
-                    <Card.Header><h3>Eventos</h3></Card.Header>
+                    <Card.Header><h2>Eventos</h2></Card.Header>
                     <List>
                         {this.state.eventos.map(event => (
                             <List.GroupItem>
-                            <Media>
-                                <Avatar size="md" imageURL={capa}></Avatar>
-                                <Media.Body className="ml-3">
-                                    <Media.Heading>
-                                    <h4>{event.nome}</h4>
-                                    </Media.Heading>
-                                    <small>
-                                    <p><img src={loc}/>&nbsp;&nbsp;{event.local}
-                                        <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
-                                        <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
-                                        </p>
-                                    </small>
-                                </Media.Body>
-                            </Media>
-                        </List.GroupItem>
+                                <Media>
+                                    <Avatar size="md" imageURL={event.content}></Avatar>
+                                    <Media.Body className="ml-3">
+                                        <Media.Heading>
+                                            <a onClick={() => {
+                                                this.setState({eventView : event})
+                                                $('#viewEvent').modal('show');
+                                            }}><h4 className='to-link'>{event.nome}</h4></a>
+                                        </Media.Heading>
+                                        <small>
+                                            <p><img src={loc}/>&nbsp;&nbsp;{event.local}
+                                            <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
+                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
+                                            </p>
+                                        </small>
+                                    </Media.Body>
+                                </Media>
+                            </List.GroupItem>
                         ))}
                     </List>
-                </Card>
-                <Card>
+                    </Card>
+                    <Card>
                     <Card.Header><h3>Sessões marcadas</h3></Card.Header>
                     <List>
                     {this.state.secoes.map(secao => (
@@ -157,7 +175,14 @@ export default class Busca extends Component {
                                 <Media.Heading>
                                     <h4>{secao.nome}</h4>
                                 </Media.Heading>
-                                <small>{secao.content}</small>
+                                <small>{secao.content.split('\n').map(function(item) {
+                                    return (
+                                        <span>
+                                        {item}
+                                        <br/>
+                                        </span>
+                                    )
+                                    })}</small>
                             </Media.Body>
                         </Media>
                     </List.GroupItem>
@@ -209,6 +234,38 @@ export default class Busca extends Component {
                   </div>
                   <div class="modal-footer">
                       <button className='agendar' onClick={this.changePhoto}>Upload</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="viewEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3>{this.state.eventView.nome}</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <img className="rounded mx-auto d-block" src={this.state.eventView.content}></img><br/>
+                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
+                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
+                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
+                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
+                            return (
+                                <span>
+                                {item}
+                                <br/>
+                                </span>
+                            )
+                            })}</div>
+                        <div class="modal-footer">
+                            <button className="cancel-event" onClick={() => {
+                            this.cancelEvent();
+                            $('#viewEvent').modal('hide');
+                        }}>Perdi interesse</button>
+                        </div>
                   </div>
                 </div>
               </div>

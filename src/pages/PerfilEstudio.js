@@ -51,7 +51,7 @@ export default class PerfilTatuador extends Component {
         descricaoEstudio : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         menssagem : '',
         eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estaram todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
+        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
         initialTags: [
             {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
             {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
@@ -83,7 +83,7 @@ export default class PerfilTatuador extends Component {
         instagram : '',
         memberDelete : { id : 0, nome : '', descricao : ''},
         eventView : {nome : '', local : '', hora : '',
-        preco : 0, content : null}
+        preco : 0, content : null, descricao : ''}
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -466,7 +466,14 @@ export default class PerfilTatuador extends Component {
                                 <Media.Heading>
                                     <h4>{secao.nome}</h4>
                                 </Media.Heading>
-                                <small>{secao.content}</small>
+                                <small>{secao.content.split('\n').map(function(item) {
+                                    return (
+                                        <span>
+                                        {item}
+                                        <br/>
+                                        </span>
+                                    )
+                                    })}</small>
                             </Media.Body>
                             <button className='btn' onClick={() => {
                                 this.setState({postDelete : secao})
@@ -853,7 +860,14 @@ export default class PerfilTatuador extends Component {
                         <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
                         <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
                         <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
-                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao}</div>
+                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
+                            return (
+                                <span>
+                                {item}
+                                <br/>
+                                </span>
+                            )
+                            })}</div>
                   </div>
                   <div class="modal-footer">
                         <button className="cancel-event">Tenho interesse</button>

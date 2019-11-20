@@ -83,6 +83,7 @@ export default class CadastroEstudio extends Component {
 
     getAdressFromViaCEP = async (e) => {
         e.preventDefault();
+        toast.configure()
         const cepInitState = {
             cep :  '',
             endereco : '',
@@ -103,12 +104,12 @@ export default class CadastroEstudio extends Component {
                             uf : response.data.uf
                         })
                     }else{
-                        alert('CEP inexistente')
+                        this.pushErrorMessage('CEP inexistente.')
                         this.setState(cepInitState)
                     }
                 }
             ).catch( error => {
-                alert('Informe um CEP válido')
+                this.pushErrorMessage('Informe um CEP válido')
                 this.setState(cepInitState)
             })
         }else {

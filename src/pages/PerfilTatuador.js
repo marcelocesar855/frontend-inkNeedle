@@ -366,7 +366,14 @@ export default class PerfilTatuador extends Component {
                                 <Media.Heading>
                                     <h4>{secao.nome}</h4>
                                 </Media.Heading>
-                                <small>{secao.content}</small>
+                                <small>{secao.content.split('\n').map(function(item) {
+                                    return (
+                                        <span>
+                                        {item}
+                                        <br/>
+                                        </span>
+                                    )
+                                    })}</small>
                             </Media.Body>
                             <button className='btn' onClick={() => {
                                 this.setState({postDelete : secao})

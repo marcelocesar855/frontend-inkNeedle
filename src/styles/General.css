@@ -209,5 +209,11 @@ html, body {
         -webkit-column-width: 50%;
         -moz-column-width: 50%;
         column-width: 50%;
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+        -webkit-column-width: 100%;
+        -moz-column-width: 100%;
+        column-width: 100%;
         }
 }
