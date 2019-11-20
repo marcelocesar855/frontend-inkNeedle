@@ -289,7 +289,7 @@ export default class PerfilTatuador extends Component {
                             <button className="chat" onClick={() => {
                                 this.props.history.push('/agenda');
                             }}>Agenda</button>
-                            <button className="chat">+ Seguir</button>
+                            {/* <button className="chat">+ Seguir</button> */}
                         </Card.Body>
                     </Card>
                     <Card>
