@@ -14,16 +14,18 @@ import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import moment from 'moment';
 
     export default class EventCalendar extends Component {
-
-      state = {     
-        focused : null,
-        editFocused : null,
-        events : [{ id: 1, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-02' },
-        { id: 2, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-03' },
-        { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04' },
-        { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05' }],
-        selectedEvent : {id: 0, clinte : '', time : ['15:30','18:00'], date: null },
-        newEvent : {id : 0, cliente : '', time : ['',''], date : null}
+      constructor (props){
+        super(props)
+        this.state = {     
+          focused : null,
+          editFocused : null,
+          events : [{ id: 1, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-02', title : '', start : ''},
+          { id: 2, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-03', title : '', start : '' },
+          { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04', title : '', start : '' },
+          { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05', title : '', start : '' }],
+          selectedEvent : {id: 0, clinte : '', time : ['15:30','18:00'], date: null, title : '', start : ''},
+          newEvent : {id : 0, cliente : '', time : ['',''], date : null}
+        }
       }
 
     handleInputChangeTime = e => { //possibilita a edição do texto no input
@@ -41,6 +43,15 @@ import moment from 'moment';
         cliente : e.target.value
       }});
     };
+
+    componentDidMount() {
+      this.state.events.map(event => {
+        event.title = event.time[0] + ' - ' + event.cliente
+        event.start = event.date
+        const events = this.state.events.filter(e => event.id !== e.id);
+        this.setState({events : [event].concat(events)})
+      })
+    }
 
     saveEvent(){
       toast.configure()
@@ -81,12 +92,21 @@ import moment from 'moment';
       $('#addEvent').modal('show')
     }
 
+    findEventById(event) {
+      return this.state.events.find(event1 => {
+        return event1.id === event.id
+      })
+    }
+
     editEvent (info) {
+      const event = this.findEventById(info)
       this.setState({
-        selectedEvent : {
-          id : info.event.id,
-          title : info.event.title,
-          date : moment(info.event.date)
+        selectedEvent : {id: event.id, 
+          clinte : event.cliente, 
+          time : event.time, 
+          date: event.date, 
+          title : event.title, 
+          start : event.start
         }
       })
       $('#editEvent').modal('show')
@@ -108,8 +128,8 @@ import moment from 'moment';
                       }
                     }
                   }
-                  eventClick = {info => {
-                    this.editEvent(info)}
+                  eventClick = {event => {
+                    this.editEvent(event)}
                   }
                 events={this.state.events}
                 dateClick={info => {
@@ -172,7 +192,7 @@ import moment from 'moment';
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h3 class="modal-title" id="TituloModalCentralizado">Agendar nova sessão</h3>
+                    <h3 class="modal-title" id="TituloModalCentralizado">Editar sessão</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -192,11 +212,11 @@ import moment from 'moment';
                     <p>Duração:&nbsp;&nbsp;
                     <TimeRangePicker disableClock='true'
                       onChange={this.handleInputChangeTime}
-                      value={this.state.time}
+                      value={this.state.selectedEvent.time}
                     />
                     </p>
                     <p>Nome do cliente:&nbsp;&nbsp;
-                    <input value={this.state.selectedEvent.title}
+                    <input value={this.state.selectedEvent.cliente}
                     onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
                     </p>
                   </form>
