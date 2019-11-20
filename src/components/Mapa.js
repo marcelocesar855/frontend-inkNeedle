@@ -6,10 +6,6 @@ export class Mapa extends Component {
     constructor (props){
         super(props)
         this.state = {
-          currentLatLng: {
-            lat: -15.831742,
-            lng: -48.050672
-          },
           initialPlaces: [
             {id: 1, lat:-15.829140, lng: -48.050059}, {id: 2, lat:-15.831241, lng: -48.054097}, {id: 3, lat:-15.833658, lng: -48.053154},
             {id: 4,  lat:-15.834852, lng: -48.051838}, {id: 5, lat:-15.833068, lng: -48.046275}, {id: 6, lat:-15.832104, lng: -48.056953},
@@ -23,10 +19,11 @@ export class Mapa extends Component {
       }
     
   render() {
+      const estudios = this.props.initialPlaces;
     return (
         <Map google={this.props.google} zoom={14}
-        initialCenter={this.state.currentLatLng} >
-           {this.state.initialPlaces.map(studio =>(
+        initialCenter={{lat : this.props.lat, lng : this.props.lng}} >
+           {estudios.map(studio =>(
             <Marker key={studio.id}
             position={{
                 lat: studio.lat,

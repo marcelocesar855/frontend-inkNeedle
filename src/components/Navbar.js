@@ -17,8 +17,7 @@ export default class Navbar extends Component {
                                 Minha conta
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Ação</a>
-                            <a class="dropdown-item" href="#">Outra ação</a>
+                            <a class="dropdown-item" href="#">Configurações</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="" onClick={() => {
                                 logout()
