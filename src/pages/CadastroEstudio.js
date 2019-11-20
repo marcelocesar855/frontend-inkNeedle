@@ -16,6 +16,7 @@ export default class CadastroEstudio extends Component {
         super(props);
         this.state = {
             nome : '',
+            cnpj : '',
             value : {
                 start : '00:00',
                 end : '23:59'
@@ -68,6 +69,10 @@ export default class CadastroEstudio extends Component {
 
     handleInputChangeBodyPiercing = e => { //possibilita a edição do texto no input
         this.setState({bodyPiercing : e.target.value});
+    };
+
+    handleInputChangeCnpj = e => { //possibilita a edição do texto no input
+        this.setState({ cnpj : e.target.value});
     };
 
     handleInputChangeComplemento = e => { //possibilita a edição do texto no input
@@ -132,6 +137,7 @@ export default class CadastroEstudio extends Component {
         e.preventDefault();
         var erro = '';
         const nome = this.state.nome;
+        const cnpj = this.state.cnpj;
         const local = {
             cep : this.state.cep,
             cidade : this.state.cidade,
@@ -152,15 +158,31 @@ export default class CadastroEstudio extends Component {
                         if(local.cep !== ''){
                             if(value !== null){
                                 if(data !== null){
-                                    await api.post("users/", {nome,local,value,telefone,bodyPiercing,data}).then(reponse => {
-                                        toast.success("Estúdio cadastrado com sucesso!",{
+                                   
+                                    await api.post('/studios', {
+                                        name: nome,
+                                        cnpj: cnpj,
+                                        isBodyPiercing: true
+                                    }).then((response) => {
+                                        toast.success("Estúdio cadastrado com sucesso!", {
                                             position: "top-right",
                                             autoClose: 5000,
                                             hideProgressBar: false,
                                             closeOnClick: true,
                                             pauseOnHover: true
-                                        })
-                                    })
+                                        });
+
+                                        this.toPerfilTatuador();
+                                    }).catch((error) => {
+                                        toast.success("Não foi possível Cadastrar Estúdio. Tente novamente mais tarde!", {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true
+                                        });
+                                    });
+                                
                                 }else{
                                     erro = "Envie uma cópia do seu certificado da Anvisa de Biosegurança para validarmos o estúdio!";
                                     this.pushErrorMessage(erro)
@@ -191,6 +213,10 @@ export default class CadastroEstudio extends Component {
         }
     };
 
+    toPerfilTatuador = () => {
+        this.props.history.push('/perfil_tatuador')
+    }
+
     render() { //renderiza html
         return (
             <div className="wrapper">
@@ -202,6 +228,7 @@ export default class CadastroEstudio extends Component {
                     <form className="formulario">
                         <p>Nome:&nbsp;<input value={this.state.nome}
                         onChange={this.handleInputChangeNome} placeholder="Nome do estúdio"></input></p>
+                        <p>CNPJ:&nbsp;<CurrencyFormat type="text" format="##.###.###/####-##" onChange={this.handleInputChangeCnpj} placeholder="CNPJ"></CurrencyFormat></p>
                         <div className="funcionamento">
                             <p>Funcionamento:&nbsp;De&nbsp;{this.state.value.start}&nbsp;às&nbsp;{this.state.value.end}</p>
                             <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}
@@ -214,7 +241,7 @@ export default class CadastroEstudio extends Component {
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select></p>
-                        <p>CEP:&nbsp;<CurrencyFormat type="text" value={this.state.cep} onBlur={this.getAdressFromViaCEP}
+                        <p>CEP:&nbsp;<CurrencyFormat type="text" value={this.state.cep} onChange={this.getAdressFromViaCEP}
                         onChange={this.handleInputChangeCep} format="#####-###" placeholder="CEP do estúdio"></CurrencyFormat></p>
                         <p>Endereço:&nbsp;<input type="text" value={this.state.endereco}
                         onChange={this.handleInputChangeEndereco} placeholder="Endereço"></input></p>

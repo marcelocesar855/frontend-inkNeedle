@@ -10,6 +10,10 @@ import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
 import Busca from './pages/Busca';
 
+// 
+
+import StoreStudio from './pages/Studio/store';
+
 var routes = [      
     {
         path: "/busca",
@@ -49,6 +53,13 @@ var routes = [
       path: "/cadastro_estudio",
       name: "CadastroEstudio",
       component: CadastroEstudio
+    },
+    {
+      path: "/cadasta-estudio",
+      name: "Cadastra Estudio",
+      component: StoreStudio,
+      isAuth: 1,
+      notPath: "/busca"
     },
     {
       path: "/redef_senha/",
