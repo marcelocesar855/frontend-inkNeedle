@@ -1,3 +1,4 @@
+import Home from './pages/Home/index';
 import Cadastro from './pages/Cadastro';
 import Login from './pages/Login';
 import RecuSenha from './pages/RecuSenha';
@@ -9,7 +10,7 @@ import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
 import Busca from './pages/Busca';
 
-var routes = [
+var routes = [      
     {
         path: "/busca",
         name: "Busca",
@@ -28,7 +29,7 @@ var routes = [
         path: "/login",
         name: "Login",
         component: Login
-    },    
+    },   
     {
       path: "/cadastro_usuario",
       name: "CadastroUsuario",
@@ -66,5 +67,10 @@ var routes = [
       isAuth : 1,
       notPath: "/busca"
     },
-    ];
+    {
+      path: "/",
+      name: "Home",
+      component: Home
+    }
+  ];
 export default routes;
