@@ -19,11 +19,11 @@ export class Mapa extends Component {
       }
     
   render() {
-
+      const estudios = this.props.initialPlaces;
     return (
         <Map google={this.props.google} zoom={14}
         initialCenter={{lat : this.props.lat, lng : this.props.lng}} >
-           {this.state.initialPlaces.map(studio =>(
+           {estudios.map(studio =>(
             <Marker key={studio.id}
             position={{
                 lat: studio.lat,
