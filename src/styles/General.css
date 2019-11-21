@@ -15,6 +15,14 @@ html, body {
     background-image: url(../images/RM_11.png)
 }
 
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
 .logo{
     margin: 30px;
 }

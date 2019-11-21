@@ -3,13 +3,14 @@ export const isAuthenticated = () => localStorage.getItem(USER_KEY) !== null;
 
 export const getToken = () => {
     const userStr = localStorage.getItem(USER_KEY);
+    
     if (!userStr) {
         return null;
     }     
 
     const currentUser = JSON.parse(userStr);
 
-    return currentUser.access_token;
+    return currentUser.token;
 };
 
 export const getUser = () => {
