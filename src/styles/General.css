@@ -90,16 +90,23 @@ html, body {
 .navbar {
     background: rgba(100, 99, 99, 0.9);
     padding: 0px 0px;
+    list-style: none;
 }
 
 .navbar-nav li a { 
     padding: 8px 16px;
     font-weight: bold;
     color: white;
+    list-style: none;
+
+}
+
+.navbar-nav { 
+    list-style: none;
+
 }
     
 .navbar-nav li a:hover {
-    background-color: #555;
     cursor: pointer;
     text-decoration: none;
     color: white;

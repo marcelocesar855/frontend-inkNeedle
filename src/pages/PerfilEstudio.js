@@ -35,6 +35,7 @@ import loc from '../images/loc.png';
 import mone from '../images/mone.png';
 import clo from '../images/clo.png';
 import plus from '../images/plus.png';
+import { getUser } from '../services/auth';
 import certif1 from '../images/certif1.jpg';
 import certif2 from '../images/certif2.jpg';
 import certif3 from '../images/certif3.jpg';
@@ -42,11 +43,13 @@ import api from '../services/api';
 import trash from '../images/trash.png';
 import delTag from '../images/delete.png';
 import delMember from '../images/delete1.png';
-import banner from '../images/banner1.jpg'
+import banner from '../images/banner1.jpg';
+import avatarDefault from './../images/avatar.png';
 
 export default class PerfilTatuador extends Component {
 
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
+        user: getUser(),
         nomeEstudio : 'Tatuagens Bacanas Tattoo Studio',
         descricaoEstudio : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         menssagem : '',
@@ -189,7 +192,7 @@ export default class PerfilTatuador extends Component {
         this.setState({
             eventos : eventos,
             eventView : {nome : '', local : '', hora : '',
-            preco : 0, content : null}
+            preco : 0, content : null, descricao : ''}
         });
     }
 
@@ -265,6 +268,11 @@ export default class PerfilTatuador extends Component {
         })
     };
 
+    getAvatar() {
+        const { user } = this.state;
+        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+    }
+
     changePhoto () { //possibilita a edição do texto no input
     };
 
@@ -284,7 +292,7 @@ export default class PerfilTatuador extends Component {
                             <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                 $('#uploadPhoto').modal('show');
                             }}>
-                                <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
+                                <Profile.Image className="card-profile-img" avatarURL={this.getAvatar()}/>
                             </Clickable>
                             <h2>{this.state.nomeEstudio}
                                 <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>

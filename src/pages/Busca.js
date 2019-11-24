@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Clickable} from 'react-clickable';
+import { getUser } from '../services/auth';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import $ from 'jquery';
 import 'bootstrap';
@@ -22,25 +23,28 @@ import Mapa from '../components/Mapa';
 import banner from '../images/banner.jpg'
 import banner1 from '../images/banner1.jpg'
 import api from '../services/api';
+import avatarDefault from './../images/avatar.png';
 
 export default class Busca extends Component {
 
     state = {
         foto : null,
+        user: getUser(),
         nome : 'Marcelo César',
         selectedFile : null,
         eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
         preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
         {nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
         preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
-        secoes : [{nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h',},
-        {nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
+        sessoes : [{id : 1, nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h'},
+        {id : 2, nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
         posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
         {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
         {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
         {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
         eventView : {nome : '', local : '', hora : '',
-        preco : 0, content : null, descricao : ''}
+        preco : 0, content : null, descricao : ''},
+        sessionView : {id : 0, nome : '', local : '', hora : ''},
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -74,7 +78,16 @@ export default class Busca extends Component {
         this.setState({
             eventos : eventos,
             eventView : {nome : '', local : '', hora : '',
-            preco : 0, content : null}
+            preco : 0, content : null, descricao : ''}
+        });
+    }
+
+    cancelSession () {
+        const sessao = this.state.sessionView;
+        const sessoes = this.state.sessoes.filter(s => sessao.id !== s.id);
+        this.setState({
+            sessoes : sessoes,
+            sessionView : {id : 0, nome : '', local : '', hora : ''}
         });
     }
 
@@ -83,6 +96,12 @@ export default class Busca extends Component {
             foto : this.state.selectedFile
         })
     };
+
+    
+    getAvatar() {
+        const { user } = this.state;
+        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+    }
 
   render() {
       return(
@@ -97,9 +116,9 @@ export default class Busca extends Component {
                             <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                 $('#uploadPhoto').modal('show');
                             }}>
-                                <Profile.Image className="card-profile-img" avatarURL={this.state.foto}/>
+                                <Profile.Image className="card-profile-img" avatarURL={this.getAvatar()}/>
                             </Clickable>
-                        <h2>{this.state.nome}</h2>
+                        <h2>{this.state.user.name}</h2>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -131,19 +150,20 @@ export default class Busca extends Component {
                     <Card>
                     <Card.Header><h3>Sessões marcadas</h3></Card.Header>
                     <List>
-                    {this.state.secoes.map(secao => (
+                    {this.state.sessoes.map(sessao => (
                     <List.GroupItem>
                     <Media>
                         <Avatar size="md" imageURL={capa}></Avatar>
                         <Media.Body className="ml-3">
                             <small>
-                                <p><img src={loc}/>&nbsp;&nbsp;{secao.local}
-                                <br/><img src={clo}/>&nbsp;&nbsp;{secao.hora}
-                                <br/><img src={person}/>&nbsp;&nbsp;{secao.nome}
+                                <p><img src={loc}/>&nbsp;&nbsp;{sessao.local}
+                                <br/><img src={clo}/>&nbsp;&nbsp;{sessao.hora}
+                                <br/><img src={person}/>&nbsp;&nbsp;{sessao.nome}
                                 </p>    
                             </small>
                         </Media.Body>
                         <button className='btn' onClick={() => {
+                            this.setState({sessionView : sessao})
                             $('#deleteSession').modal('show');
                         }}><img src={trash}></img></button>
                     </Media>
@@ -159,7 +179,7 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    <Mapa ></Mapa>
+                    <Mapa initialPlaces={[{}]}></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
@@ -167,15 +187,15 @@ export default class Busca extends Component {
                         <h3>Feed de posts</h3>
                     </Card.Header>
                     <List>
-                    {this.state.posts.map(secao => (
+                    {this.state.posts.map(sessao => (
                         <List.GroupItem>
                         <Media>
                             <Avatar size="md" imageURL={test}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
-                                    <h4>{secao.nome}</h4>
+                                    <h4>{sessao.nome}</h4>
                                 </Media.Heading>
-                                <small>{secao.content.split('\n').map(function(item) {
+                                <small>{sessao.content.split('\n').map(function(item) {
                                     return (
                                         <span>
                                         {item}
@@ -203,14 +223,19 @@ export default class Busca extends Component {
                   </div>
                   <div class="modal-body">
                     <h3>Você tem certeza que deseja desmarcar a sessão?</h3>
-                    <p>Local:</p>
-                    <p>Data e hora:</p>
-                    <p>Tatuador:</p>
+                    <p>Local:&nbsp;&nbsp;{this.state.sessionView.local}</p>
+                    <p>Data e hora:&nbsp;&nbsp;{this.state.sessionView.hora}</p>
+                    <p>Tatuador:&nbsp;&nbsp;{this.state.sessionView.nome}</p>
                     <p><font color='red'>Obs: O tatuador será notificado da desmarcação.</font></p>
                   </div>
                   <div class="modal-footer">
-                      <button className='agendar'>Sim</button>
-                      <button className='agendar'>Não</button>
+                      <button className='agendar' onClick={() => {
+                          this.cancelSession();
+                          $('#deleteSession').modal('hide');
+                      }}>Sim</button>
+                      <button className='agendar' onClick={() => {
+                          $('#deleteSession').modal('hide');
+                      }}>Não</button>
                   </div>
                 </div>
               </div>

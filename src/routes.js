@@ -10,8 +10,6 @@ import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
 import Busca from './pages/Busca';
 
-// 
-
 import StoreStudio from './pages/Studio/store';
 
 var routes = [      
@@ -69,7 +67,9 @@ var routes = [
     {
       path: "/perfil_estudio",
       name: "PerfilEstudio",
-      component: PerfilEstudio
+      component: PerfilEstudio,
+      isAuth: 1,
+      notPath: "/busca"
     },
     {
       path: "/agenda",

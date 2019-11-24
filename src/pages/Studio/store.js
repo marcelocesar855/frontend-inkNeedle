@@ -18,7 +18,7 @@ import '../../styles/Tabler.css';
 import '../../styles/Stars.css';
 import '../../styles/Tags.css';
 
-export default class PerfilTatuador extends Component {
+export default class store extends Component {
 
     constructor(props) {
         super(props);        

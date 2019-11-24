@@ -243,7 +243,7 @@ export default class PerfilTatuador extends Component {
       const { user } = this.state;
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar/>
+                <Navbar avatar={this.getAvatar}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
@@ -275,11 +275,11 @@ export default class PerfilTatuador extends Component {
                                     />
                                 </div>)} onChange={tags => console.log(tags)} />
                              </div>
-                             {/* <div className="inputs">
+                             <div className="inputs">
                                 <input ref={r => this.input = r} className="rounded-left"/>
                                 <button className="rounded-right" onClick={this.handleClickAdd}>Add tag</button>
-                            </div> */}
-                            {/* <a aria-label='Editar Facebook' data-balloon-pos="up" onClick={() =>{
+                            </div>
+                            <a aria-label='Editar Facebook' data-balloon-pos="up" onClick={() =>{
                                  $('#changeFacebook').modal('show');
                                 // Linking.openURL(
                                 //     this.state.facebook
@@ -306,11 +306,11 @@ export default class PerfilTatuador extends Component {
                                 //     "https://api.whatsapp.com/send?phone=5561982715613&text=Olá,%20gostaria%20de%20marcar%20uma%20sessão&lang=pt_pt"
                                 // );
                             }
-                            }><img className="social" src={wa}></img></a> */}
-                            {/* <button className="chat" onClick={() => {
+                            }><img className="social" src={wa}></img></a>
+                            <button className="chat" onClick={() => {
                                 this.props.history.push('/agenda');
-                            }}>Agenda</button> */}
-                            {/* <button className="chat">+ Seguir</button> */}
+                            }}>Agenda</button>
+                            <button className="chat">+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>

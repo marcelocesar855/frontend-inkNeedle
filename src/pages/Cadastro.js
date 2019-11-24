@@ -90,7 +90,7 @@ export default class Cadastro extends Component {
                             await api.post("users/", {name,userTypeId,userStatusId,phones,email,password}).then( response =>{
                                 toast.success("Você receberá em breve no e-mail informado um link para validar seu cadastro na InkNeedle.",{
                                     position: "top-right",
-                                    autoClose: 5000,
+                                    autoClose: 7000,
                                     hideProgressBar: false,
                                     closeOnClick: true,
                                     pauseOnHover: true
