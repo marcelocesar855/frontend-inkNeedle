@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Clickable} from 'react-clickable';
-import { getUser } from '../services/auth';
+import { getUser, getToken } from '../services/auth';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import $ from 'jquery';
 import 'bootstrap';
@@ -45,6 +45,9 @@ export default class Busca extends Component {
         eventView : {nome : '', local : '', hora : '',
         preco : 0, content : null, descricao : ''},
         sessionView : {id : 0, nome : '', local : '', hora : ''},
+        lat : 0,
+        long : 0,
+        estudios : null
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -62,8 +65,33 @@ export default class Busca extends Component {
         return val                    
     }
 
-    componentDidMount () {
+    componentDidMount = async () => {
         this.setState({foto : test})
+        if (navigator.geolocation) {
+            var startPos;
+          var geoSuccess = (position) => {
+              startPos = position;
+              this.setState({lat : startPos.coords.latitude});
+              this.setState({long : startPos.coords.longitude});
+          };
+          navigator.geolocation.getCurrentPosition(geoSuccess);
+          const lat = this.state.lat;
+            const long = this.state.long;
+          await api.post('studios/search-geo', {
+            headers: {
+                'Authorization': 'Bearer ' + getToken,
+              },
+            lat,
+            long
+          }).then(response => {
+            this.setState({estudios : response.data})
+          }).catch(error => {
+              alert(error)
+          })
+      }
+      else {
+        console.log('Geolocation is not supported for this Browser/OS.');
+      }
     }
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
@@ -179,7 +207,8 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    <Mapa initialPlaces={[{}]}></Mapa>
+                    
+                    <Mapa lat={this.state.lat} lng={this.state.long} initialPlaces={this.state.estudios}></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
