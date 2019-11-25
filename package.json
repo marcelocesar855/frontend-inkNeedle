@@ -22,6 +22,7 @@
     "popper.js": "1.14.7",
     "rc-rate": "^2.5.0",
     "react": "^16.8.1",
+    "react-activity-feed": "^0.9.23",
     "react-clickable": "^1.1.0",
     "react-currency-format": "^1.0.0",
     "react-date-range": "^0.9.4",

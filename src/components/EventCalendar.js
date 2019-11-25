@@ -25,7 +25,8 @@ import trash from '../images/trash.png';
           { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04', title : '', start : '' },
           { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05', title : '', start : '' }],
           selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
-          newEvent : {id : 0, cliente : '', time : ['',''], date : null}
+          newEvent : {id : 0, cliente : '', time : ['',''], date : null},
+          cliente : ''
         }
         this.findEventById = this.findEventById.bind(this);
       }
@@ -144,6 +145,12 @@ import trash from '../images/trash.png';
       })
     }
 
+    handleInputChangeCliente= e => { //possibilita a edição do texto no input
+      this.setState({ 
+          cliente : e.target.value
+      })
+    };
+
     editEvent (info) {
       this.findEventById(info.event.id)
       $('#editEvent').modal('show')
@@ -151,10 +158,10 @@ import trash from '../images/trash.png';
 
         render () {
             return(
-              <div>
+              <div className='m-5'>
                 <FullCalendar defaultView="dayGridMonth"
                 plugins={ [dayGridPlugin, interactionPlugin] } buttonText={{today : 'Hoje'}}
-                header={{center : 'title', left : 'myCustomButton', right : 'today,prev,next'}}
+                header={{center : 'title', left : 'custom', right : 'today,prev,next'}}
                 weekends={false} locale="pt-BR" weekends='true' fixedWeekCount={false} editable='true'
                   eventClick = {event => {
                     this.editEvent(event)
@@ -162,6 +169,14 @@ import trash from '../images/trash.png';
                 events={this.state.events}
                 dateClick={info => {
                   this.showNewEvent(info)
+                }}
+                customButtons={{
+                  custom: {
+                    text: 'Disponibilizar agenda',
+                    click: () => {
+                      $('#disponiAgenda').modal('show');
+                    }
+                  }
                 }}
                 />
               <div class="modal fade" id="addEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
@@ -307,6 +322,38 @@ import trash from '../images/trash.png';
                       <button className='agendar' onClick={() => {
                           $('#deleteEvent').modal('hide');
                       }}>Não</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="disponiAgenda" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Disponibilizar agenda para cliente</h3>
+                    <div>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                  </div>
+                  <div class="modal-body">
+                  <input type="text" class="form-control"
+                        value={this.state.cliente} onChange={this.handleInputChangeCliente} placeholder=' E-mail cliente'/>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="agendar" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="agendar" onClick={() => {
+                          toast.configure()
+                          toast.success("Agenda disponibilizada para marcação.",{
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true
+                          });
+                           $('#disponiAgenda').modal('hide');
+                      }}>Enviar</button>
                   </div>
                 </div>
               </div>

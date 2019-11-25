@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import {Avatar} from "tabler-react";
+import {Avatar, Notification} from "tabler-react";
 import { getUser } from '../services/auth';
+import '../styles/Tabler.css'
 import '../styles/General.css';
 import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
 import help from './../images/help.png';
+import { StreamApp, NotificationDropdown, FlatFeed } from 'react-activity-feed';
+import 'react-activity-feed/dist/index.css';
 
 export default class Navbar extends Component {
 
@@ -29,6 +32,16 @@ export default class Navbar extends Component {
                 <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav">
+                        <a className='nav-link'>
+                        <StreamApp
+        apiKey="du8he7epvp94"
+        appId="45206"
+        token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZWNiNjFkZGEtZDUwMS00ZDgwLTk1YzgtNmI1NWY5N2FmZjhjIn0.xyXT2n_wuoiZUqTJtGHaT0yabF9V9xEqZ8x1mIAQKIM"
+      >
+        <NotificationDropdown notify/>
+      </StreamApp>
+                        <span className='nav-unread'></span>
+                        </a>
                         <li class="nav-item dropdown  dropleft">
                             <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
                             <Avatar imageURL={this.getAvatar()}></Avatar>
@@ -42,8 +55,8 @@ export default class Navbar extends Component {
                             }}>Sair</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown" >
-                            <a class="link" href="#">
+                        <li class="nav-item dropdown mr-5" >
+                            <a href="#">
                                 <img src={help}></img>
                             </a>
                         </li>

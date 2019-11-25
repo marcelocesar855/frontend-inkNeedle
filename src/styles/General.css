@@ -1,5 +1,6 @@
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
+@import '~tabler-react/dist/Tabler.css';
 
 html, body {
     height: 100%;
@@ -89,21 +90,18 @@ html, body {
 
 .navbar {
     background: rgba(100, 99, 99, 0.9);
-    padding: 0px 0px;
-    list-style: none;
 }
 
-.navbar-nav li a { 
-    padding: 8px 16px;
+.navbar-nav li a {
+    padding: 10px;
     font-weight: bold;
     color: white;
-    list-style: none;
-
 }
 
-.navbar-nav { 
+.nav-item {
+    margin-top: 10px;
+    margin-bottom: -12px;
     list-style: none;
-
 }
     
 .navbar-nav li a:hover {
@@ -113,7 +111,7 @@ html, body {
 }
     
 .navbar-nav > li > .dropdown-menu { 
-    background-color:rgba(100, 99, 99, 0.7);; 
+    background-color:rgba(100, 99, 99, 0.7);
 }
 
 .rodape {
