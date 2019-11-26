@@ -3,6 +3,7 @@ import {Avatar, Notification} from "tabler-react";
 import { getUser } from '../services/auth';
 import '../styles/Tabler.css'
 import '../styles/General.css';
+import Notifications from'./Notifications';
 import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
@@ -32,17 +33,10 @@ export default class Navbar extends Component {
                 <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav">
-                        <a className='nav-link'>
-                        <StreamApp
-        apiKey="du8he7epvp94"
-        appId="45206"
-        token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZWNiNjFkZGEtZDUwMS00ZDgwLTk1YzgtNmI1NWY5N2FmZjhjIn0.xyXT2n_wuoiZUqTJtGHaT0yabF9V9xEqZ8x1mIAQKIM"
-      >
-        <NotificationDropdown notify/>
-      </StreamApp>
-                        <span className='nav-unread'></span>
-                        </a>
-                        <li class="nav-item dropdown  dropleft">
+                        <li className='nav-item'>
+                            <Notifications></Notifications>
+                        </li>
+                        <li class="nav-item dropdown dropleft" aria-label="Minha conta" data-balloon-pos="down">
                             <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
                             <Avatar imageURL={this.getAvatar()}></Avatar>
                             </a>
@@ -55,7 +49,7 @@ export default class Navbar extends Component {
                             }}>Sair</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown mr-5" >
+                        <li class="nav-item dropdown mr-5" aria-label="Ajuda" data-balloon-pos="down">
                             <a href="#">
                                 <img src={help}></img>
                             </a>
