@@ -99,15 +99,14 @@ html, body {
 }
 
 .nav-item {
-    margin-top: 10px;
-    margin-bottom: -12px;
+    margin-bottom: -4px;
     list-style: none;
 }
     
 .navbar-nav li a:hover {
     cursor: pointer;
     text-decoration: none;
-    color: white;
+    color: rgb(139, 139, 139);
 }
     
 .navbar-nav > li > .dropdown-menu { 
