@@ -29,7 +29,7 @@ export default class Navbar extends Component {
         return(
             <div>
             <nav class="navbar navbar-expand-lg p-0 pl-5">
-                <a class="navbar-brand" href="#"><img src={logo2}></img></a>
+                <a class="navbar-brand" href="/login"><img src={logo2}></img></a>
                 <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav">
