@@ -237,6 +237,7 @@ import trash from '../images/trash.png';
                   <div class="modal-header">
                     <h3 class="modal-title" id="TituloModalCentralizado">Editar sessão</h3>
                     <div>
+                      <button role="button" class="far fa-calendar-check btn"></button>
                       <button className='btn' onClick={() => {
                                   $('#deleteEvent').modal('show');
                               }}><img src={trash}></img></button>
@@ -322,6 +323,38 @@ import trash from '../images/trash.png';
                       <button className='agendar' onClick={() => {
                           $('#deleteEvent').modal('hide');
                       }}>Não</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="closeEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Encerrar sessão</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Ao encerrar esta sessão, ela entrará para seu histórico e o cliente atendido receberá um voucher para avaliar seus serviços, fornecendo um feedback para sua conta.</h3>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                        toast.configure()
+                        toast.success("Sessão encerrada. Em breve o novo feedback deverá aparecer em seu perfil.",{
+                        position: "top-right",
+                        autoClose: 7000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true
+                        });
+                          $('#closeEvent').modal('hide');
+                          $('#editEvent').modal('hide')
+                      }}>Encerrar</button>
+                      <button className='agendar' onClick={() => {
+                          $('#closeEvent').modal('hide');
+                      }}>Cancelar</button>
                   </div>
                 </div>
               </div>
