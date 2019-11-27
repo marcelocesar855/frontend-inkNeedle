@@ -3,6 +3,9 @@ import {Clickable} from 'react-clickable';
 import { getUser, getToken } from '../services/auth';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import $ from 'jquery';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import Rate from 'rc-rate';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/PerfilTatuador.css';
@@ -11,7 +14,7 @@ import '../styles/Mapa.css'
 import '../styles/Tabler.css'
 import '../styles/Stars.css'
 import logo from '../images/logo2.png';
-import loc from '../images/loc.png';
+import loca from '../images/loc.png';
 import mone from '../images/mone.png';
 import clo from '../images/clo.png';
 import person from '../images/person.png';
@@ -27,34 +30,42 @@ import avatarDefault from './../images/avatar.png';
 
 export default class Busca extends Component {
 
-    state = {
-        foto : null,
-        user: getUser(),
-        nome : 'Marcelo César',
-        selectedFile : null,
-        eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
-        {nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
-        preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
-        sessoes : [{id : 1, nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h'},
-        {id : 2, nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
-        posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
-        {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
-        {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
-        {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
-        eventView : {nome : '', local : '', hora : '',
-        preco : 0, content : null, descricao : ''},
-        sessionView : {id : 0, nome : '', local : '', hora : ''},
-        lat : 0,
-        long : 0,
-        estudios : null
-    };
+        
+    constructor (props){
+        super(props)
+        this.state = {
+            foto : null,
+            user: getUser(),
+            nome : 'Marcelo César',
+            selectedFile : null,
+            eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
+            preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
+            {nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
+            preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
+            sessoes : [{id : 1, nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h'},
+            {id : 2, nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
+            posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
+            {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
+            {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
+            {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
+            eventView : {nome : '', local : '', hora : '',
+            preco : 0, content : null, descricao : ''},
+            sessionView : {id : 0, nome : '', local : '', hora : ''},
+            estudios : [],
+            loc : JSON.parse(localStorage.getItem('@user-loc')),
+            rate : 0,
+            feedback : '',
+            rows : 1,
+        }
+        this.setSession = this.setSession.bind(this);
+    }
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
     };
 
-    handleInputChange =  e => {
+    handleInputChangeRate =  e => {
+        this.setState({rate  : e})
     };
 
     mascaraValor(val) {
@@ -71,23 +82,22 @@ export default class Busca extends Component {
             var startPos;
           var geoSuccess = (position) => {
               startPos = position;
-              this.setState({lat : startPos.coords.latitude});
-              this.setState({long : startPos.coords.longitude});
+              localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
           };
           navigator.geolocation.getCurrentPosition(geoSuccess);
-          const lat = this.state.lat;
-            const long = this.state.long;
-          await api.post('studios/search-geo', {
-            headers: {
-                'Authorization': 'Bearer ' + getToken,
-              },
-            lat,
-            long
-          }).then(response => {
-            this.setState({estudios : response.data})
-          }).catch(error => {
-              alert(error)
-          })
+        //   const lat = this.state.loc.lat;
+        //     const long = this.state.loc.long;
+        //   await api.post('studios/search-geo', {
+        //     headers: {
+        //         'Authorization': 'Bearer ' + getToken(),
+        //       },
+        //     lat,
+        //     long
+        //   }).then(response => {
+        //     this.setState({estudios : response.data})
+        //   }).catch(error => {
+        //       alert(error)
+        //   })
       }
       else {
         console.log('Geolocation is not supported for this Browser/OS.');
@@ -100,6 +110,20 @@ export default class Busca extends Component {
         })
     };
 
+    handleInputChangeFeedback = e => {
+        const lineHeight = 20;
+        const previousRows = e.target.rows;
+        e.target.rows = 1;
+        const currentRows = ~~(e.target.scrollHeight / lineHeight);
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+        this.setState({
+            menssagem : e.target.value,
+            rowsMessage : currentRows
+        })
+    };
+
     cancelEvent () {
         const event = this.state.eventView;
         const eventos = this.state.eventos.filter(e => event.id !== e.id);
@@ -108,6 +132,10 @@ export default class Busca extends Component {
             eventView : {nome : '', local : '', hora : '',
             preco : 0, content : null, descricao : ''}
         });
+    }
+
+    setSession (sessao) {
+        this.setState({sessionView : sessao})
     }
 
     cancelSession () {
@@ -164,7 +192,7 @@ export default class Busca extends Component {
                                             }}><h4 className='to-link'>{event.nome}</h4></a>
                                         </Media.Heading>
                                         <small>
-                                            <p><img src={loc}/>&nbsp;&nbsp;{event.local}
+                                            <p><img src={loca}/>&nbsp;&nbsp;{event.local}
                                             <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
                                             <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
                                             </p>
@@ -184,14 +212,17 @@ export default class Busca extends Component {
                         <Avatar size="md" imageURL={capa}></Avatar>
                         <Media.Body className="ml-3">
                             <small>
-                                <p><img src={loc}/>&nbsp;&nbsp;{sessao.local}
+                                <p><img src={loca}/>&nbsp;&nbsp;{sessao.local}
                                 <br/><img src={clo}/>&nbsp;&nbsp;{sessao.hora}
                                 <br/><img src={person}/>&nbsp;&nbsp;{sessao.nome}
                                 </p>    
                             </small>
                         </Media.Body>
                         <button className='btn' onClick={() => {
-                            this.setState({sessionView : sessao})
+                            this.setState({
+                                sessionView : sessao,
+                                loc : JSON.parse(localStorage.getItem('@user-loc'))
+                            })
                             $('#deleteSession').modal('show');
                         }}><img src={trash}></img></button>
                     </Media>
@@ -207,8 +238,7 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    
-                    <Mapa lat={this.state.lat} lng={this.state.long} initialPlaces={this.state.estudios}></Mapa>
+                    <Mapa initialPlaces={[]}></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
@@ -319,6 +349,38 @@ export default class Busca extends Component {
                             this.cancelEvent();
                             $('#viewEvent').modal('hide');
                         }}>Perdi interesse</button>
+                        </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="giveFeedback" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3>Feedback</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <img className="rounded mx-auto d-block" src={this.state.eventView.content}></img><br/>
+                    <p>Deixe seu feedback sobre os serviços de (nome tatuador) no (nome do estudio)</p>
+                        <p><Rate className="ml-2" onChange={this.handleInputChangeRate} style={{ fontSize: 20 }} allowHalf allowClear={false} value={this.state.rate}/></p>
+                        <Form.Textarea rows={this.state.rows} id='mens' onChange={this.handleInputChangeFeedback}
+                            placeholder="Como foi a sessão de tatuagem?" value={this.state.feedback}/>
+                        <div class="modal-footer">
+                            <button className="cancel-event" onClick={() => {
+                            $('#giveFeedback').modal('hide');
+                            toast.configure()
+                            toast.sucess("Feedback enviado. Obrigado!",{
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true
+                                });
+                        }}>Avaliar</button>
                         </div>
                   </div>
                 </div>
