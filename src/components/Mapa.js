@@ -14,7 +14,8 @@ export class Mapa extends Component {
             selectedPlace : {
                 id: 0, lat:0, lng: 0
             },
-            selected : false
+            selected : false,
+            loc : JSON.parse(localStorage.getItem('@user-loc'))
         }
       }
     
@@ -22,7 +23,7 @@ export class Mapa extends Component {
       const estudios = this.props.initialPlaces;
     return (
         <Map google={this.props.google} zoom={14}
-        initialCenter={{lat : this.props.lat, lng : this.props.lng}} >
+        initialCenter={{lat : this.state.loc.lat, lng : this.state.loc.lng}} >
            {estudios.map(studio =>(
             <Marker key={studio.id}
             position={{
