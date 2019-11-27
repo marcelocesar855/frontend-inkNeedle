@@ -12,7 +12,7 @@ export default class NavbarNoLog extends Component {
                 <a class="navbar-brand" href="#"><img src={logo2}></img></a>
                 <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
                     <ul className='mr-auto'></ul>
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav mr-5" aria-label="Ajuda" data-balloon-pos="down">
                         <li class="nav-item">
                             <a class="link" href="#">
                             <img src={help}></img>
