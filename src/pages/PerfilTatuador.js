@@ -730,6 +730,45 @@ export default class PerfilTatuador extends Component {
                 </div>
               </div>
               </div>
+              <div class="modal fade" id="teamInvate" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Convite para se juntar ao (nome do estúdio)</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body formulario">
+                        <p>(nome tatuador) está te convidando para fazer parte da equipe do (nome do estúdio).</p>
+                  </div>
+                  <div class="modal-footer">
+                      <button className='agendar' onClick={() => {
+                          $('#teamInvate').modal('hide');
+                          toast.configure()
+                          toast.success("Convite aceito! Agora você faz parte da equipe do (nome do estúdio)",{
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true
+                            });
+                      }}>Aceitar</button>
+                      <button className='agendar' onClick={() => {
+                          $('#teamInvate').modal('hide');
+                          toast.configure()
+                          toast.error("Convite recusado.",{
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true
+                            });
+                      }}>Recursar</button>
+                  </div>
+                </div>
+              </div>
+              </div>
                 <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
             </div>
       );
