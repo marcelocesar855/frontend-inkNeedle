@@ -3,9 +3,9 @@ import api from '../services/api';
 import Navbar from '../components/Navbar';
 import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import EventCalendar from '../components/EventCalendar';
+import EventCalendarCliente from '../components/EventCalendarCliente';
 
-export default class Agenda extends Component {
+export default class AgendaCliente extends Component {
 
   render() {
       return(
@@ -13,7 +13,7 @@ export default class Agenda extends Component {
                <Navbar/>
                 <div className="container">
                 <div className="row">
-                    <EventCalendar></EventCalendar>
+                    <EventCalendarCliente></EventCalendarCliente>
                 </div>
                 </div>
                 <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>

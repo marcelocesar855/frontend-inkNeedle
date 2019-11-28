@@ -81,8 +81,12 @@ export default class Busca extends Component {
         if (navigator.geolocation) {
             var startPos;
           var geoSuccess = (position) => {
-              startPos = position;
-              localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
+            if (position.coords.latitude != null){
+                startPos = position;
+                localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
+            }else{
+                localStorage.setItem('@user-loc',{});
+            }
           };
           navigator.geolocation.getCurrentPosition(geoSuccess);
         //   const lat = this.state.loc.lat;

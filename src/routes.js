@@ -8,6 +8,7 @@ import RedefSenha from './pages/RedefSenha';
 import PerfilTatuador from './pages/PerfilTatuador';
 import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
+import AgendaCliente from './pages/AgendaCliente';
 import Busca from './pages/Busca';
 
 import StoreStudio from './pages/Studio/store';
@@ -76,6 +77,13 @@ var routes = [
       name: "Agenda",
       component: Agenda,
       isAuth : 1,
+      notPath: "/busca"
+    },
+    {
+      path: "/agenda_cliente",
+      name: "AgendaCliente",
+      component: AgendaCliente,
+      isAuth : 2,
       notPath: "/busca"
     },
     {

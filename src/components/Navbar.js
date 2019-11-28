@@ -8,7 +8,6 @@ import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
 import help from './../images/help.png';
-import { StreamApp, NotificationDropdown, FlatFeed } from 'react-activity-feed';
 import 'react-activity-feed/dist/index.css';
 
 export default class Navbar extends Component {
