@@ -20,11 +20,13 @@ import trash from '../images/trash.png';
         this.state = {     
           focused : null,
           editFocused : null,
+          receivedFocused : null,
           events : [{ id: 1, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-02', title : '', start : ''},
           { id: 2, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-03', title : '', start : '' },
           { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04', title : '', start : '' },
           { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05', title : '', start : '' }],
           selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
+          receivedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           newEvent : {id : 0, cliente : '', time : ['',''], date : null},
           cliente : ''
         }
@@ -387,6 +389,77 @@ import trash from '../images/trash.png';
                           });
                            $('#disponiAgenda').modal('hide');
                       }}>Enviar</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="modal fade" id="validateEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="TituloModalCentralizado">Validar agendamento enviado pelo cliente</h3>
+                    <div>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                  </div>
+                  <div class="modal-body">
+                  <form className="agenda">
+                    <p>Data:&nbsp;&nbsp;
+                    <SingleDatePicker
+                      date={moment(this.state.receivedEvent.date)} // momentPropTypes.momentObj or null
+                      displayFormat='DD/MM/YYYY'
+                      numberOfMonths={1}
+                      onDateChange={date => this.setState({ receivedEvent: {
+                        id : this.state.receivedEvent.id,
+                        date : date,
+                        time : this.state.receivedEvent.time,
+                        cliente : this.state.receivedEvent.cliente
+                      }})} // PropTypes.func.isRequired
+                      focused={this.state.receivedFocused} // PropTypes.bool
+                      onFocusChange={({ focused }) => this.setState({ receivedFocused : focused })} // PropTypes.func.isRequired
+                      id="edit" // PropTypes.string.isRequired,
+                    /></p>
+                    <p>Duração:&nbsp;&nbsp;
+                    <TimeRangePicker disableClock='true'
+                      onChange={e => { //possibilita a edição do texto no input
+                        this.setState({receivedEvent: {
+                          id : this.state.receivedEvent.id,
+                          date : this.state.receivedEvent.date,
+                          time : e,
+                          cliente : this.state.receivedEvent.cliente
+                        }})}}
+                      value={this.state.receivedEvent.time}
+                    />
+                    </p>
+                    <p>Nome do cliente:&nbsp;&nbsp;
+                    <input value={this.state.receivedEvent.cliente}
+                    onChange={e => { //possibilita a edição do texto no input
+                      this.setState({receivedEvent : {
+                        id : this.state.receivedEvent.id,
+                        date : this.state.receivedEvent.date,
+                        time : this.state.receivedEvent.time,
+                        cliente : e.target.value
+                      }});
+                    }} placeholder="Nome do cliente"></input>
+                    </p>
+                  </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="agendar" data-dismiss="modal" onClick={() => {
+                      this.setState({
+                        receivedEvent : {id : 0, cliente : '', time : ['',''], date : null}
+                     })
+                    }}>Recusar</button>
+                    <button type="button" class="agendar" data-dismiss="modal" onClick={() => {
+                      this.setState({
+                        receivedEvent : {id : 0, cliente : '', time : ['',''], date : null}
+                     })
+                    }} aria-label="Desiponibilizar para marcação outra vez" data-balloon-pos="up">Pedir outra data</button>
+                    <button type="button" class="agendar" onClick={() => {
+                      this.addEditedEvent()
+                    }}>Salvar</button>
                   </div>
                 </div>
               </div>
