@@ -9,6 +9,7 @@ import PerfilTatuador from './pages/PerfilTatuador';
 import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
 import AgendaCliente from './pages/AgendaCliente';
+import EditarPerfil from './pages/EditarPerfil';
 import Busca from './pages/Busca';
 
 import StoreStudio from './pages/Studio/store';
@@ -83,6 +84,13 @@ var routes = [
       path: "/agenda_cliente",
       name: "AgendaCliente",
       component: AgendaCliente,
+      isAuth : 2,
+      notPath: "/busca"
+    },
+    {
+      path: "/editar_perfil",
+      name: "EditarPerfil",
+      component: EditarPerfil,
       isAuth : 2,
       notPath: "/busca"
     },
