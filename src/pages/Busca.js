@@ -31,9 +31,7 @@ import avatarDefault from './../images/avatar.png';
 export default class Busca extends Component {
 
         
-    constructor (props){
-        super(props)
-        this.state = {
+    state = {
             foto : null,
             user: getUser(),
             nome : 'Marcelo César',
@@ -57,8 +55,7 @@ export default class Busca extends Component {
             feedback : '',
             rows : 1,
         }
-        this.setSession = this.setSession.bind(this);
-    }
+
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
