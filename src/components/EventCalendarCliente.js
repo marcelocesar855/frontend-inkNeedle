@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Form} from "tabler-react";
 import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify'
@@ -12,7 +13,7 @@ import 'bootstrap';
 import '../styles/Agenda.css';
 import moment from 'moment';
 
-    export default class EventCalendarCliente extends Component {
+    export default class EventCalendar extends Component {
       constructor (props){
         super(props)
         this.state = {     
@@ -21,7 +22,8 @@ import moment from 'moment';
           { id: 2, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-03', title : '', start : '' },
           { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04', title : '', start : '' },
           { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05', title : '', start : '' }],
-          newEventClient : {id : 0, cliente : '', date : null}
+          newEventClient : {id : 0, cliente : '', date : null, obs : ''},
+          rows : 1
         }
       }
     handleInputChangeNome = e => { //possibilita a edição do texto no input
@@ -30,11 +32,6 @@ import moment from 'moment';
         cliente : e.target.value
       }});
     };
-
-    
-    redirect = () => {
-      this.props.history.push('/busca')
-  }
 
     componentDidMount() {
       this.state.events.map(event => {
@@ -45,7 +42,8 @@ import moment from 'moment';
       })
     }
 
-    saveEvent = () => {
+    saveEvent = async () => {
+      const delay = ms => new Promise(res => setTimeout(res, ms));
       toast.configure()
       if (this.state.newEventClient.cliente != '' && this.state.newEventClient.date != null) {
         const events = this.state.events;
@@ -60,7 +58,6 @@ import moment from 'moment';
         this.setState({
            newEvent : {id : 0, cliente : '', date : null}
         })
-        this.redirect()
          toast.success("Agendamento enviado para validação do tatuador.",{
             position: "top-right",
             autoClose: 5000,
@@ -68,6 +65,8 @@ import moment from 'moment';
             closeOnClick: true,
             pauseOnHover: true
             });
+            await delay(5000)
+            window.location.replace('/login');   
       }else{
         toast.error('Todas as informações são necessárias para a marcação da sessão.',{
           position: "top-right",
@@ -79,18 +78,29 @@ import moment from 'moment';
       }
     }
 
+    handleInputChangeObs = e => { //possibilita a edição do texto no input
+      const lineHeight = 20;
+      const previousRows = e.target.rows;
+      e.target.rows = 1;
+      const currentRows = ~~(e.target.scrollHeight / lineHeight);
+      if (currentRows === previousRows) {
+          e.target.rows = currentRows;
+      }
+      this.setState({ newEventClient : {
+          obs : e.target.value,
+          date : this.state.newEventClient.date,
+          cliente : this.state.newEventClient.cliente
+        },
+        rows : currentRows
+      })
+  };
+
     showNewEvent(info) {
       this.setState({
         newEventClient : {date : info.dateStr}
       })
       $('#addEvent').modal('show')
     }
-
-    handleInputChangeCliente= e => { //possibilita a edição do texto no input
-      this.setState({ 
-          cliente : e.target.value
-      })
-    };
 
         render () {
             return(
@@ -132,12 +142,18 @@ import moment from 'moment';
                     <input value={this.state.newEventClient.cliente}
                     onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
                     </p>
+                    Observações:<br/><br/>
+                    <Form.Textarea rows={this.state.rows}
+                      className='mod-card-back-title' className="post"
+                      onChange={this.handleInputChangeObs}
+                      value={this.state.newEventClient.obs}
+                      />
                   </form>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="agendar" data-dismiss="modal" onClick={() => {
                        this.setState({
-                        newEvent : {id : 0, cliente : '', time : ['',''], date : null}
+                        newEventClient : {id : 0, cliente : '', time : ['',''], date : null}
                      })
                     }}>Cancelar</button>
                     <button type="button" class="agendar" onClick={() =>{
