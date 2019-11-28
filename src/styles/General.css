@@ -202,7 +202,18 @@ html, body {
     transform: scale(1);
 }
 
+@media only screen and (max-width: 991px){
+    .navbar-expand-lg .navbar-nav {
+        flex-direction: row;
+    }
+
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+}
+
 @media only screen and (max-width: 420px){
+
     h1 {
         font-size: 22px;
     }
@@ -228,4 +239,5 @@ html, body {
         -moz-column-width: 100%;
         column-width: 100%;
         }
+
 }
