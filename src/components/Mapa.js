@@ -1,7 +1,9 @@
 import React, { useState, Component } from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
-export class Mapa extends Component {
+export default GoogleApiWrapper({
+  apiKey: ('AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q')
+})(class Mapa extends Component {
 
     constructor (props){
         super(props)
@@ -15,8 +17,13 @@ export class Mapa extends Component {
                 id: 0, lat:0, lng: 0
             },
             selected : false,
-            loc : JSON.parse(localStorage.getItem('@user-loc'))
+            loc  : JSON.parse(localStorage.getItem('@user-loc'))
         }
+        this.componentDidUpdate = this.componentDidUpdate.bind(this)
+      };
+
+      componentDidUpdate () {
+        this.setState({ loc : JSON.parse(localStorage.getItem('@user-loc'))})
       }
     
   render() {
@@ -47,8 +54,4 @@ export class Mapa extends Component {
         </Map>
     );
   }
-}
-
-export default GoogleApiWrapper({
-  apiKey: ('AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q')
-})(Mapa)
+})
