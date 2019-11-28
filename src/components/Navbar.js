@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Notification} from "tabler-react";
+import {Avatar} from "tabler-react";
 import { getUser } from '../services/auth';
 import '../styles/Tabler.css'
 import '../styles/General.css';
@@ -8,7 +8,6 @@ import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
 import help from './../images/help.png';
-import 'react-activity-feed/dist/index.css';
 
 export default class Navbar extends Component {
 
@@ -28,8 +27,7 @@ export default class Navbar extends Component {
         return(
             <div>
             <nav class="navbar navbar-expand-lg p-0 pl-5">
-                <a class="navbar-brand" href="/login"><img src={logo2}></img></a>
-                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                <a class="navbar-brand " href="/login"><img src={logo2}></img></a>
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav">
                         <li className='nav-item'>
@@ -40,7 +38,7 @@ export default class Navbar extends Component {
                             <Avatar imageURL={this.getAvatar()}></Avatar>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Configurações</a>
+                            <a class="dropdown-item" href="/editar_perfil">Editar informações</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="" onClick={() => {
                                 logout()
@@ -54,7 +52,6 @@ export default class Navbar extends Component {
                             </a>
                         </li>
                     </ul>
-                </div>
             </nav>
             </div>
         )
