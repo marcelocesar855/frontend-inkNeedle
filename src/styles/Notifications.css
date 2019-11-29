@@ -28,6 +28,7 @@
   }
   
   .number{
+    display: none;
     height: 12px;
     width:  12px;
     background-color: #FF8C00;
