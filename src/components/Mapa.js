@@ -16,21 +16,18 @@ export default GoogleApiWrapper({
             selectedPlace : {
                 id: 0, lat:0, lng: 0
             },
-            selected : false,
-            loc  : JSON.parse(localStorage.getItem('@user-loc'))
+            selected : false
         }
-        this.componentDidUpdate = this.componentDidUpdate.bind(this)
       };
 
-      componentDidUpdate () {
-        this.setState({ loc : JSON.parse(localStorage.getItem('@user-loc'))})
+      shouldComponentUpdate() {
+        return false;  
       }
-    
+
   render() {
       const estudios = this.props.initialPlaces;
     return (
-        <Map google={this.props.google} zoom={14}
-        initialCenter={{lat : this.state.loc.lat, lng : this.state.loc.lng}} >
+        <Map google={this.props.google} zoom={14} initialCenter={{lat : JSON.parse(localStorage.getItem('@user-loc')).lat, lng : JSON.parse(localStorage.getItem('@user-loc')).lng}} >
            {estudios.map(studio =>(
             <Marker key={studio.id}
             position={{
