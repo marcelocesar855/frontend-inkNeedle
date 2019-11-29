@@ -504,15 +504,6 @@ export default class PerfilTatuador extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                        <input className='mod-card-back-title image-title'
-                            onChange={e => {
-                                this.setState({photoView : {
-                                    title : e.target.value,
-                                    content : this.state.photoView.content
-                                }})
-                            }}
-                            value={this.state.photoView.title}
-                            />
                             <button className='btn' onClick={() => {
                                 $('#deletePhoto').modal('show');
                             }}><img src={trash}></img></button>
