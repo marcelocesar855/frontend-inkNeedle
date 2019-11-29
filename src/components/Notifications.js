@@ -7,13 +7,14 @@ import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUser } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
+import $ from 'jquery';
 
 export default class Notifications extends Component {
 
   state = {
     user: getUser(),
     notifications : [{id : 1, nome : 'Marcelo César', content :'iis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', read : false},
-        {id : 2, nome : 'Marcelo César', content : ' ut fermentum massa justo sit amet risus.', read : false},
+        {id : 2, nome : 'Marcelo César', content : ' ut fermentum massa justo sit amet risus.', read : true},
         {id : 3, nome : 'Marcelo César', content : 'risque nisl consectetur et. Sed posuere consectetur est at lobortis.', read : true},
         {id : 4, nome : 'Marcelo César', content : 'am porta sem malesuada magna mollis euismod. Donec sed odio dui.', read : true}],
   }
@@ -23,10 +24,18 @@ export default class Notifications extends Component {
     return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
 }
 
+componentDidMount () {
+  this.state.notifications.map(notification => {
+    if (notification.read == false) {
+      $('#hasNew').css('display', 'inline');
+    }
+  })
+}
+
   render() {
       return(
         <div class = "notification">
-          <div class = "number"> </div>
+          <div class = "number" id='hasNew'> </div>
           <i class="fas fa-bell notBtn">
             <div class = "box">
               <div class = "display">
