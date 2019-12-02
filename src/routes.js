@@ -6,6 +6,8 @@ import CadastroEstudio from './pages/CadastroEstudio';
 import CadastroEvento from './pages/CadastroEvento';
 import RedefSenha from './pages/RedefSenha';
 import PerfilTatuador from './pages/PerfilTatuador';
+import PerfilTatuadorClienteView from './pages/PerfilTatuadorClienteView';
+import PerfilEstudioClienteView from './pages/PerfilEstudioViewCliente';
 import PerfilEstudio from './pages/PerfilEstudio';
 import Agenda from './pages/Agenda';
 import AgendaCliente from './pages/AgendaCliente';
@@ -20,15 +22,22 @@ var routes = [
         name: "Busca",
         component: Busca,
         isAuth: 2,
-        notPath: "/perfil_tatuador"
+        notPath: "/meu_perfil"
     },
     {
-        path: "/perfil_tatuador",
+        path: "/meu_perfil",
         name: "PerfilTatuador",
         component: PerfilTatuador,
         isAuth: 1,
         notPath: "/busca"
       },
+      {
+          path: "/perfil_tatuador",
+          name: "PerfilTatuadorClienteView",
+          component: PerfilTatuadorClienteView,
+          isAuth: 2,
+          notPath: "/meu_perfil"
+        },
     {
         path: "/login",
         name: "Login",
@@ -67,11 +76,18 @@ var routes = [
       component: RecuSenha
     },
     {
-      path: "/perfil_estudio",
+      path: "/meu_estudio",
       name: "PerfilEstudio",
       component: PerfilEstudio,
       isAuth: 1,
       notPath: "/busca"
+    },
+    {
+      path: "/perfil_estudio",
+      name: "PerfilEstudioClienteView",
+      component: PerfilEstudioClienteView,
+      isAuth: 2,
+      notPath: "/meu_perfil"
     },
     {
       path: "/agenda",
@@ -85,6 +101,13 @@ var routes = [
       name: "AgendaCliente",
       component: AgendaCliente,
       isAuth : 2,
+      notPath: "/busca"
+    },
+    {
+      path: "/editar_perfil",
+      name: "EditarPerfil",
+      component: EditarPerfil,
+      isAuth : 1,
       notPath: "/busca"
     },
     {
