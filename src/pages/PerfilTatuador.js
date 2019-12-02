@@ -77,9 +77,9 @@ export default class PerfilTatuador extends Component {
         postDelete : null,
         photoView : {id : 0, title : '', content : null},
         certificateView : {id : 0, sigla : '', nome : '', content : null},
-        facebook : 'https://www.facebook.com/',
-        twitter : 'https://www.twitter.com/',
-        instagram : 'https://www.instagram.com/',
+        facebook : '',
+        twitter : '',
+        instagram : '',
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -262,6 +262,7 @@ export default class PerfilTatuador extends Component {
                             className='mod-card-back-title'
                             onChange={this.handleInputChangeDescricao}
                             value={this.state.descricaoTatuador}
+                            placeholder="Deixe uma descrição sobre você aqui"
                             />
                             <div className="Simple">
                                 <DraggableArea tags={this.state.initialTags} render={({tag, id}) => (
@@ -281,36 +282,20 @@ export default class PerfilTatuador extends Component {
                             </div>
                             <a aria-label='Editar Facebook' data-balloon-pos="up" onClick={() =>{
                                  $('#changeFacebook').modal('show');
-                                // Linking.openURL(
-                                //     this.state.facebook
-                                // );
                                 
                             }
                             }><img className="social" src={fc}></img></a>
                             <a aria-label='Editar Twitter' data-balloon-pos="up" onClick={() =>{
                                  $('#changeTwitter').modal('show');
-                                // Linking.openURL(
-                                //     this.state.twitter
-                                // );
                             }
                             }><img className="social" src={tt}></img></a>
                             <a aria-label='Editar Instagram' data-balloon-pos="up" onClick={() =>{
                                 $('#changeInstagram').modal('show');
-                                // Linking.openURL(
-                                //     this.state.instagram
-                                // );
                             }
                             }><img className="social" src={it}></img></a>
-                            <a onClick={() =>{
-                                // Linking.openURL(
-                                //     "https://api.whatsapp.com/send?phone=5561982715613&text=Olá,%20gostaria%20de%20marcar%20uma%20sessão&lang=pt_pt"
-                                // );
-                            }
-                            }><img className="social" src={wa}></img></a>
                             <button className="chat" onClick={() => {
                                 this.props.history.push('/agenda');
                             }}>Agenda</button>
-                            <button className="chat">+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -638,10 +623,13 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body formulario">
-                      Facebook:&nbsp;&nbsp;
-                        <input className='w-75'
-                            onChange={this.handleInputChangeFacebook}
-                            value={this.state.facebook} />
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text fix-link">https://www.facebook.com/</span>
+                      </div>
+                      <input type="text" class="form-control" onChange={this.handleInputChangeFacebook}
+                            value={this.state.facebook}/>
+                    </div>
                   </div>
                   <div class="modal-footer">
                       <button className='agendar' onClick={() => {
@@ -669,10 +657,13 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body formulario">
-                        Twitter:&nbsp;&nbsp;
-                        <input className='w-75'
-                            onChange={this.handleInputChangeTwitter}
-                            value={this.state.twitter} />
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text fix-link">https://www.twitter.com/</span>
+                      </div>
+                      <input type="text" class="form-control" onChange={this.handleInputChangeTwitter}
+                              value={this.state.twitter}/>
+                    </div>
                   </div>
                   <div class="modal-footer">
                       <button className='agendar' onClick={() => {
@@ -700,10 +691,13 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body formulario">
-                        Instagram:&nbsp;&nbsp;
-                        <input className='w-75'
-                            onChange={this.handleInputChangeInstagram}
-                            value={this.state.instagram} />
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text fix-link">https://www.instagram.com/</span>
+                    </div>
+                    <input type="text" class="form-control" onChange={this.handleInputChangeInstagram}
+                            value={this.state.instagram}/>
+                  </div>
                   </div>
                   <div class="modal-footer">
                       <button className='agendar' onClick={() => {
