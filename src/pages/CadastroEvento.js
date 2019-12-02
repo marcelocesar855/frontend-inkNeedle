@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import api from '../services/api';
 import '../styles/CadastroEstudio.css';
+import { Form } from "tabler-react";
 import '../styles/General.css';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,7 +30,9 @@ export default class CadastroEvento extends Component {
             endDate : moment(),
             precoEntrada : '',
             selectedFile : null,
-            focusedInput : null
+            focusedInput : null,
+            descricao : '',
+            rows : 2,
         };
         this.featureRef = React.createRef();
         this.handleInputChangeDuracao = this.handleInputChangeDuracao.bind(this);
@@ -46,6 +49,20 @@ export default class CadastroEvento extends Component {
 
     handleInputChangeDatas ({ startDate, endDate }) { //possibilita a edição do texto no input
         this.setState({ startDate , endDate });
+    };
+
+    handleInputChangeDescricao = e => { //possibilita a edição do texto no input
+        const lineHeight = 20;
+        const previousRows = e.target.rows;
+        e.target.rows = 1;
+        const currentRows = ~~(e.target.scrollHeight / lineHeight);
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+        this.setState({ 
+            descricao : e.target.value,
+            rows : currentRows
+        })
     };
 
     handleInputChangePrecoEntrada = e => { //possibilita a edição do texto no input
@@ -80,6 +97,7 @@ export default class CadastroEvento extends Component {
         const estudio = this.state.estudio;
         const inicio = this.state.startDate;
         const fim = this.state.endDate;
+        const descricao = this.state.descricao;
         var precoEntrada = null;
         if (this.state.precoEntrada == '') {
             precoEntrada = 0.0
@@ -93,7 +111,7 @@ export default class CadastroEvento extends Component {
             if(estudio !== 0){
                 if(inicio !== null && fim !== null){
                     if(value !== null){
-                        await api.post("events/", {nome,estudio,inicio,fim,precoEntrada,value,data}).then(response => {
+                        await api.post("events/", {nome,estudio,inicio,fim,descricao,precoEntrada,value,data}).then(response => {
                             toast.success("Evento cadastrado com sucesso.",{
                                 position: "top-right",
                                 autoClose: 5000,
@@ -155,6 +173,10 @@ export default class CadastroEvento extends Component {
                             <TimeRange format={24} value={this.state.value} maxValue={"23:59"} minValue={"00:00"}
                             onChange={this.handleInputChangeDuracao} step={15} name={"time_range"}></TimeRange>
                         </div>
+                        <Form.Textarea rows={this.state.rows} id='desc' onChange={this.handleInputChangeDescricao}
+                            placeholder="Descrição do evento"
+                        value={this.state.descricao} className="post my-3"
+                        />
                         <div className="justify-content-center">
                             <div className="form-group files">
                                 <div className="funcionamento">
