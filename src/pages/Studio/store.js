@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify'
 import api from '../../services/api';
 import CurrencyFormat from 'react-currency-format';
-import TimeRange from '../../components/TimeSlider';
-
 import viaCep from '../../services/viaCep';
 import 'react-toastify/dist/ReactToastify.css';
 import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
 import Navbar from '../../components/Navbar';
-import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button } from "tabler-react";
+import { Card } from "tabler-react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/PerfilTatuador.css';
 import '../../styles/General.css';
