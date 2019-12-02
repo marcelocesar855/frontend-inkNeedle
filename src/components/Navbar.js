@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {Avatar} from "tabler-react";
 import { getUser } from '../services/auth';
 import '../styles/Tabler.css'
@@ -8,18 +8,33 @@ import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
 import avatarDefault from './../images/avatar.png';
 import help from './../images/help.png';
-import 'react-activity-feed/dist/index.css';
+import socket from "./../services/socket";
+
+const io = socket();
 
 export default class Navbar extends Component {
 
     constructor (props){
         super(props)
         this.state = {
-            user : getUser()
+            user : getUser(),
+            notifications: []
         }
-      }
+    }
 
-      getAvatar() {
+    componentDidMount() {
+        io.on('initResponse', initResponse => {
+            if (initResponse.userNotifications) {
+                this.setInitialNotifications(initResponse.userNotifications);
+            }
+        });
+    }
+
+    setInitialNotifications(notifications) {
+        this.setState({ notifications });       
+    }
+
+    getAvatar() {
         const { user } = this.state;
         return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
     }
@@ -33,7 +48,7 @@ export default class Navbar extends Component {
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav">
                         <li className='nav-item'>
-                            <Notifications></Notifications>
+                            <Notifications notifications={ this.state.notifications }></Notifications>
                         </li>
                         <li class="nav-item dropdown dropleft" aria-label="Minha conta" data-balloon-pos="down">
                             <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >

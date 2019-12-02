@@ -38,6 +38,7 @@
     "react-toastify": "^5.4.0",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.2.0",
+    "sweetalert2": "^9.4.1",
     "tabler-react": "^2.0.0-alpha.1"
   },
   "scripts": {
