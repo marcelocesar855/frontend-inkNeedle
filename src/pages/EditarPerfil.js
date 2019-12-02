@@ -19,6 +19,7 @@ const initialState = {
 export default class EditarPerfil extends Component {
 
     state = {
+        user : getUser(),
         nome : '',
         telefone : '',
         email : '',
