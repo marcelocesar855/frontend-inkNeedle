@@ -21,6 +21,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
  class App extends Component {
+  
   getRoutes = routes => {
     return routes.map((prop, key) => {
         if (!!prop.isAuth) {

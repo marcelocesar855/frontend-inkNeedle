@@ -16,13 +16,19 @@ export default class Notifications extends Component {
     notifications : [{id : 1, nome : 'Marcelo César', content :'iis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', read : false},
         {id : 2, nome : 'Marcelo César', content : ' ut fermentum massa justo sit amet risus.', read : true},
         {id : 3, nome : 'Marcelo César', content : 'risque nisl consectetur et. Sed posuere consectetur est at lobortis.', read : true},
-        {id : 4, nome : 'Marcelo César', content : 'am porta sem malesuada magna mollis euismod. Donec sed odio dui.', read : true}],
+        {id : 4, nome : 'Marcelo César', content : 'am porta sem malesuada magna mollis euismod. Donec sed odio dui.', read : true}]
   }
 
   getAvatar() {
     const { user } = this.state;
     return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
-}
+  }
+
+  getNotificationsNumber() {
+    let count = 0;
+    this.props.notifications.forEach(element => element.status === 1 && count++);    
+    return count;
+  }
 
 componentDidMount () {
   this.state.notifications.map(notification => {
@@ -36,6 +42,7 @@ componentDidMount () {
       return(
         <div class = "notification">
           <div class = "number" id='hasNew'> </div>
+          <div class="number"> {this.getNotificationsNumber()} </div>
           <i class="fas fa-bell notBtn">
             <div class = "box">
               <div class = "display">
@@ -44,16 +51,16 @@ componentDidMount () {
                   <div class = "cent">Você está atualizado em tudo!</div>
                 </div>
                 <div class = "cont">
-                {this.state.notifications.map(secao => (
-                <div class={'sec', secao.read ? '': 'new'} >
+                  {this.props.notifications.map(notification => (
+                    <div class={'sec', notification.status === 0 ? '': 'new'} >
                         <List.GroupItem className='sec-int'>
                         <Media>
                             <Avatar size="md" imageURL={this.getAvatar()}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
-                                    <h4>{secao.nome}</h4>
+                              <h4>{notification.title}</h4>
                                 </Media.Heading>
-                                <small>{secao.content.split('\n').map(function(item) {
+                            <small>{notification.message.split('\n').map(function(item) {
                                     return (
                                         <span>
                                         {item}
@@ -63,8 +70,7 @@ componentDidMount () {
                                     })}</small>
                             </Media.Body>
                         </Media>
-                    </List.GroupItem>
-                    
+                    </List.GroupItem>                    
                </div>
                     ))}
                   </div>
