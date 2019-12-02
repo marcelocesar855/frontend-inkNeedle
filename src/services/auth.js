@@ -25,6 +25,7 @@ export const getUser = () => {
 export const login = payload => {
     const currentUser = Object.assign({}, payload.user, { token: payload.access_token });
     localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+    localStorage.setItem('@user-loc',JSON.stringify({lat : 0, lng : 0}));
 };
 
 export const logout = () => {

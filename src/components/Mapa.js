@@ -16,9 +16,49 @@ export default GoogleApiWrapper({
             selectedPlace : {
                 id: 0, lat:0, lng: 0
             },
-            selected : false
+            selected : false,
+            loc : {
+              lat : 0,
+              lng : 0
+            }
         }
       };
+
+      componentDidMount = async () => {
+        if (navigator.geolocation) {
+            var startPos;
+          var geoSuccess = (position) => {
+            if (position.coords.latitude != null){
+                startPos = position;
+                localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
+            }
+          };
+          navigator.permissions.query({name:'geolocation'}).then( status => {
+            if (status.state == 'granted'){
+              navigator.geolocation.getCurrentPosition(geoSuccess)
+            }else{
+              alert('Conceda permissão ao navegador a acessar sua localização para usar o serviço de busca.')
+            }
+
+          })
+        //   const lat = this.state.loc.lat;
+        //     const long = this.state.loc.long;
+        //   await api.post('studios/search-geo', {
+        //     headers: {
+        //         'Authorization': 'Bearer ' + getToken(),
+        //       },
+        //     lat,
+        //     long
+        //   }).then(response => {
+        //     this.setState({estudios : response.data})
+        //   }).catch(error => {
+        //       alert(error)
+        //   })
+      }
+      else {
+        console.log('Geolocation is not supported for this Browser/OS.');
+      }
+    }
 
       shouldComponentUpdate() {
         return false;  
