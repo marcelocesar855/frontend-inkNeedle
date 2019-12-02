@@ -40,6 +40,14 @@ import moment from 'moment';
         const events = this.state.events.filter(e => event.id !== e.id);
         this.setState({events : [event].concat(events)})
       })
+      toast.configure()
+      toast.success("Escolha uma data para marcar sua sessão.",{
+        position: "top-right",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true
+    })
     }
 
     saveEvent = async () => {
