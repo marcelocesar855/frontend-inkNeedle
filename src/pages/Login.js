@@ -33,7 +33,7 @@ export default class Login extends Component {
             if (getUser().userTypeId == 2){
                 this.props.history.push('/busca');
             }else {
-                this.props.history.push('/perfil_tatuador');
+                this.props.history.push('/meu_perfil');
             }
         })
         .catch(error => {
