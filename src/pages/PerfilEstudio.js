@@ -77,6 +77,7 @@ export default class PerfilTatuador extends Component {
         selectedFile : null,
         rows : 1,
         rowsMessage : 1,
+        rowsEvent : 0,
         menssageControl : true,
         postDelete : null,
         photoView : {id : 0, title : '', content : null},
@@ -94,6 +95,22 @@ export default class PerfilTatuador extends Component {
     };
 
     handleInputChange =  e => {
+    };
+
+    handleInputChangeDescEvent = e => { //possibilita a edição do texto no input
+        const lineHeight = 20;
+        const previousRows = e.target.rows;
+        e.target.rows = 1;
+        const currentRows = ~~(e.target.scrollHeight / lineHeight);
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+        this.setState({ 
+            eventView : {
+                descricao : e.target.value,
+            },
+            rowsEvent : currentRows
+        })
     };
 
     handleInputChangeMenssagem = e => {
@@ -301,6 +318,7 @@ export default class PerfilTatuador extends Component {
                             className='mod-card-back-title'
                             onChange={this.handleInputChangeDescricao}
                             value={this.state.descricaoEstudio}
+                            placeholder="Deixe uma descrição sobre seu estúdio aqui"
                             />
                             <div className="Simple">
                                 <DraggableArea tags={this.state.initialTags} render={({tag, id}) => (
@@ -859,17 +877,29 @@ export default class PerfilTatuador extends Component {
                         <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
                         <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
                         <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
-                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
+                        {/* <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
                             return (
                                 <span>
                                 {item}
                                 <br/>
                                 </span>
                             )
-                            })}</div>
+                            })}</div> */}
+                            <Form.Textarea rows={this.state.rowsEvent} id='desc'
+                            className='mod-card-back-title'
+                            onChange={this.handleInputChangeDescEvent}
+                            value={this.state.eventView.descricao.split('\n').map(function(item) {
+                                return (
+                                    <span>
+                                    {item}
+                                    <br/>
+                                    </span>
+                                )
+                                })}
+                            placeholder="Descreva o evento a ser realizado"
+                            />
                   </div>
                   <div class="modal-footer">
-                        <button className="cancel-event">Tenho interesse</button>
                         <button className='cancel-event' onClick={() => {
                             $('#cancelEvent').modal('show');
                         }}>Cancelar evento</button>
