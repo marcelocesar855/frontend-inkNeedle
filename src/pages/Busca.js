@@ -36,9 +36,9 @@ export default class Busca extends Component {
             user: getUser(),
             nome : 'Marcelo César',
             selectedFile : null,
-            eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
+            eventos : [{id : 1, nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
             preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
-            {nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
+            {id : 2, nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
             preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
             sessoes : [{id : 1, nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h'},
             {id : 2, nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
@@ -133,6 +133,14 @@ export default class Busca extends Component {
             eventView : {nome : '', local : '', hora : '',
             preco : 0, content : null, descricao : ''}
         });
+        toast.configure()
+        toast.success("Evento retirado da lista de interesses.",{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        });
     }
 
     setSession (sessao) {
@@ -145,6 +153,14 @@ export default class Busca extends Component {
         this.setState({
             sessoes : sessoes,
             sessionView : {id : 0, nome : '', local : '', hora : ''}
+        });
+        toast.configure()
+        toast.success("Sessão desmarcada.",{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
         });
     }
 
@@ -253,7 +269,9 @@ export default class Busca extends Component {
                             <Avatar size="md" imageURL={test}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
-                                    <h4>{sessao.nome}</h4>
+                                    <a onClick={() => {
+                                        this.props.history.push('/perfil_tatuador')
+                                    }}><h4 className='to-link'>{sessao.nome}</h4></a>
                                 </Media.Heading>
                                 <small>{sessao.content.split('\n').map(function(item) {
                                     return (
