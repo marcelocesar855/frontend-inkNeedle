@@ -31,7 +31,7 @@ export default class Notifications extends Component {
   }
 
 componentDidMount () {
-  this.state.notifications.map(notification => {
+  this.props.notifications.map(notification => {
     if (notification.read == false) {
       $('#hasNew').css('display', 'inline');
     }
