@@ -252,7 +252,7 @@ export default class Home extends Component {
                                                 </div>
                                                 <div id="collapseOne" className="panel-collapse collapse in">
                                                     <div className="panel-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                    Para utilizar o serviço antes é necessário cadastrar-se na plataforma, ao cadastrar você terá acesso ao serviços de acordo com o que foi cadastrado (Perfil de cliente/tatuador), após cadastrar, só é necessário logar e o serviço estará disponível.
                                                     </div>
                                                 </div>
                                                 </div>
@@ -267,7 +267,7 @@ export default class Home extends Component {
                                                 </div>
                                                 <div id="collapseTwo" className="panel-collapse collapse">
                                                     <div className="panel-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                    A criação do perfil é gratuita, fazendo um simples cadastro você já pode participar da plataforma, para mais funcionalidades poderá contratar a plataforma fazendo o custo variar de acordo com a necessidade, possuímos planos que tem benefícios, diferentes planos são disponibilizados para os tatuadores e estúdios, entre em contato e contrate o melhor para você.
                                                     </div>
                                                 </div>
                                                 </div>
@@ -282,8 +282,10 @@ export default class Home extends Component {
                                                 </div>
                                                 <div id="collapseThree" className="panel-collapse collapse">
                                                     <div className="panel-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                    </div>
+                                                    Para assegurar a segurança de quem está procurando se tatuar, garantimos que todos os tatuadores e estúdios ao se cadastrar mostrem que possuem certificado da ANVISA de Bioseguraça, com verificação e licença para trabalhar com procedimentos estéticos e/ou cirurgicos.
+                                                        <br/>
+                                                    Nós garantimos a segurança das informações de nossos clientes e dos clientes de nossos clientes, bem como de nossos parceiros de negócio: cumprimos com as exigências de segurança da informação, além de garantir as melhores práticas de segurança da informação do mercado tais como a ISO27001 e ISO27005.
+                                                   </div>
                                                 </div>
                                                 </div>
 
@@ -297,7 +299,7 @@ export default class Home extends Component {
                                                 </div>
                                                 <div id="collapseFour" className="panel-collapse collapse">
                                                     <div className="panel-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                    O contato com o tatuador e feito preferencialmente via WhatsApp, contando com funcionalidades do próprio sistema para marcação e gerenciamento de sessões.
                                                     </div>
                                                 </div>
                                                 </div>
@@ -312,7 +314,7 @@ export default class Home extends Component {
                                                 </div>
                                                 <div id="collapseFive" className="panel-collapse collapse">
                                                     <div className="panel-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                    As informações disponibilizadas pelo tatuador são as suas redes sociais, endereço onde atende, os trabalhos feitos por ele com feedback dos clientes, comunicados para os clientes que o acompanham, seus estúdios, divulgações de eventos realizados nos estúdios e as equipes que o compõe, promoções e as certificações que possui para maior confiabilidade em sua competência. 
                                                     </div>
                                                 </div>
                                                 </div>
