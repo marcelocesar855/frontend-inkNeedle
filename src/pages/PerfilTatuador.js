@@ -252,6 +252,8 @@ export default class PerfilTatuador extends Component {
         .then(res => {
           const { description } = res.data;
           this.setState({ descricaoTatuador: description });
+          const lines = document.getElementById('desc').scrollHeight / 20;
+          this.setState({descricaoTatuadorRows : lines})
         })
     }
 

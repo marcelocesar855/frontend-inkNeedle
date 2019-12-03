@@ -53,8 +53,7 @@ export default class PerfilTatuador extends Component {
         nomeEstudio : 'Tatuagens Bacanas Tattoo Studio',
         descricaoEstudio : 'Tradição da arte milenar que se expressa na pele desde 2001 aqui no DF.',
         menssagem : '',
-        eventos : [{nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
+        eventos : [],
         initialTags: [
             {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
             {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
@@ -77,7 +76,7 @@ export default class PerfilTatuador extends Component {
         selectedFile : null,
         rows : 1,
         rowsMessage : 1,
-        rowsEvent : 0,
+        rowsEvent : 1,
         menssageControl : true,
         postDelete : null,
         photoView : {id : 0, title : '', content : null},
@@ -107,6 +106,8 @@ export default class PerfilTatuador extends Component {
         }
         this.setState({ 
             eventView : {
+                nome : this.state.eventView.nome, local : this.state.eventView.local, hora : this.state.eventView.hora,
+                preco : this.state.eventView.preco, content : this.state.eventView.content,
                 descricao : e.target.value,
             },
             rowsEvent : currentRows
@@ -245,6 +246,14 @@ export default class PerfilTatuador extends Component {
         this.setState({foto : test});
         const lines = document.getElementById('desc').scrollHeight / 20;
         this.setState({rows : lines})
+        this.getEvents()
+    }
+
+    getEvents() {
+        api.get(`/events`)
+        .then(res => {
+          this.setState({ eventos : res.data });
+        })
     }
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
@@ -418,18 +427,22 @@ export default class PerfilTatuador extends Component {
                         {this.state.eventos.map(event => (
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={event.content}></Avatar>
+                                    <Avatar size="md" imageURL={event.bannerUrl}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
-                                                this.setState({eventView : event})
                                                 $('#viewEvent').modal('show');
+                                                const lines = document.getElementById('descEvent').scrollHeight / 20;
+                                                this.setState({
+                                                    eventView : event,
+                                                    rowsEvent : lines
+                                                })
                                             }}><h4 className='to-link'>{event.nome}</h4></a>
                                         </Media.Heading>
                                         <small>
-                                            <p><img src={loc}/>&nbsp;&nbsp;{event.local}
-                                            <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
-                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
+                                            <p><img src={loc}/>&nbsp;&nbsp;{event.studio.name}
+                                            <br/><img src={clo}/>&nbsp;&nbsp;{event.dateHour}
+                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.title !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
                                             </p>
                                         </small>
                                     </Media.Body>
@@ -877,25 +890,10 @@ export default class PerfilTatuador extends Component {
                         <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
                         <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
                         <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
-                        {/* <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
-                            return (
-                                <span>
-                                {item}
-                                <br/>
-                                </span>
-                            )
-                            })}</div> */}
-                            <Form.Textarea rows={this.state.rowsEvent} id='desc'
+                            <Form.Textarea rows={this.state.rowsEvent} id='descEvent'
                             className='mod-card-back-title'
                             onChange={this.handleInputChangeDescEvent}
-                            value={this.state.eventView.descricao.split('\n').map(function(item) {
-                                return (
-                                    <span>
-                                    {item}
-                                    <br/>
-                                    </span>
-                                )
-                                })}
+                            value={this.state.eventView.descricao}
                             placeholder="Descreva o evento a ser realizado"
                             />
                   </div>
