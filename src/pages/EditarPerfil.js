@@ -24,6 +24,14 @@ export default class EditarPerfil extends Component {
         telefone : '',
         email : '',
     };
+
+    componentDidMount() {
+        this.setState({
+            nome : this.state.user.name,
+            telefone : this.state.user.phones[0].number,
+            email : this.state.user.email
+        })
+    }
     
     handleInputChangeNome = e => { //possibilita a edição do texto no input
         this.setState({nome : e.target.value});

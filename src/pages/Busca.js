@@ -32,29 +32,25 @@ export default class Busca extends Component {
 
         
     state = {
-            foto : null,
-            user: getUser(),
-            nome : 'Marcelo César',
-            selectedAvatarFile : null,
-            eventos : [{id : 1, nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-            preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
-            {id : 2, nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
-            preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
-            sessoes : [{id : 1, nome : 'Marcelo César', local : 'Estúdio Tatuagens Bacanas', hora : '25 de Nov, das 16h às 19h'},
-            {id : 2, nome : 'Rodrigo Fonseca', local : 'Estúdio Skina da Agulha', hora : '05 de Dec, das 10h às 16h'}],
-            posts : [{nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
-            {nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
-            {nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
-            {nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
-            eventView : {nome : '', local : '', hora : '',
-            preco : 0, content : null, descricao : ''},
-            sessionView : {id : 0, nome : '', local : '', hora : ''},
-            estudios : [],
-            loc : JSON.parse(localStorage.getItem('@user-loc')),
-            rate : 0,
-            feedback : '',
-            rows : 1,
-        }
+        foto : null,
+        user: getUser(),
+        nome : 'Marcelo César',
+        selectedAvatarFile : null,
+        eventos : [{id : 1, nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
+        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
+        {id : 2, nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
+        preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
+        sessoes : [],
+        posts : [],
+        eventView : {nome : '', local : '', hora : '',
+        preco : 0, content : null, descricao : ''},
+        sessionView : {id : 0, nome : '', local : '', hora : ''},
+        estudios : [],
+        loc : JSON.parse(localStorage.getItem('@user-loc')),
+        rate : 0,
+        feedback : '',
+        rows : 1,
+    }
 
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -74,31 +70,35 @@ export default class Busca extends Component {
     }
 
     componentDidMount = async () => {
-        this.setState({foto : test})
+        this.getEstudios()
+        this.getPosts()
+    }
+
+    getEstudios = async () => {
+        var latitude = ''
+        var longitude = ''
         if (navigator.geolocation) {
             var startPos;
           var geoSuccess = (position) => {
             if (position.coords.latitude != null){
                 startPos = position;
+                latitude = startPos.coords.latitude
+                longitude = startPos.coords.longitude
                 localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
             }else{
                 localStorage.setItem('@user-loc',{});
             }
           };
           navigator.geolocation.getCurrentPosition(geoSuccess);
-        //   const lat = this.state.loc.lat;
-        //     const long = this.state.loc.long;
-        //   await api.post('studios/search-geo', {
-        //     headers: {
-        //         'Authorization': 'Bearer ' + getToken(),
-        //       },
-        //     lat,
-        //     long
-        //   }).then(response => {
-        //     this.setState({estudios : response.data})
-        //   }).catch(error => {
-        //       alert(error)
-        //   })
+          
+          await api.post('studios/search-geo', {
+            latitude,
+            longitude
+          }).then(response => {
+            this.setState({estudios : response.data})
+          }).catch(error => {
+              alert(error)
+          })
       }
       else {
         console.log('Geolocation is not supported for this Browser/OS.');
@@ -111,6 +111,20 @@ export default class Busca extends Component {
         })
     };
 
+    getPosts() {
+        api.get(`/posts`)
+          .then(res => {
+            this.setState({ posts : res.data });
+        })
+    }
+
+    getSessions(){
+        api.get(`/schedulings`)
+          .then(res => {
+            this.setState({ sessoes : res.data });
+        })
+    }
+ 
     handleInputChangeFeedback = e => {
         const lineHeight = 20;
         const previousRows = e.target.rows;
@@ -274,7 +288,7 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    <Mapa initialPlaces={[]}></Mapa>
+                    <Mapa initialPlaces={this.state.estudios}></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
@@ -282,7 +296,7 @@ export default class Busca extends Component {
                         <h3>Feed de posts</h3>
                     </Card.Header>
                     <List>
-                    {this.state.posts.map(sessao => (
+                    {this.state.posts.map(post => (
                         <List.GroupItem>
                         <Media>
                             <Avatar size="md" imageURL={test}></Avatar>
@@ -290,9 +304,9 @@ export default class Busca extends Component {
                                 <Media.Heading>
                                     <a onClick={() => {
                                         this.props.history.push('/perfil_tatuador')
-                                    }}><h4 className='to-link'>{sessao.nome}</h4></a>
+                                    }}><h4 className='to-link'>{post.tattooArtist.name}</h4></a>
                                 </Media.Heading>
-                                <small>{sessao.content.split('\n').map(function(item) {
+                                <small>{post.content.split('\n').map(function(item) {
                                     return (
                                         <span>
                                         {item}
