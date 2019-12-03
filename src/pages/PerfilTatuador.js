@@ -92,7 +92,8 @@ export default class PerfilTatuador extends Component {
           },
           certificationTypeId: '',
           selectedFile: null
-        }
+        },
+        baseURL : ''
     };
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
@@ -276,6 +277,30 @@ export default class PerfilTatuador extends Component {
         })
     }
 
+    defineBaseURL(id) {
+      switch(id) {
+        case '1' : this.setState({baseURL : 'https://www.facebook.com/'});break;
+        
+        case '2' : this.setState({baseURL : 'https://www.twitter.com/'});break;
+        
+        case '3' : this.setState({baseURL : 'https://www.instagram.com/'});break;
+
+        default : this.setState({baseURL : ''});break;
+      }
+    }
+
+    defineBaseURLEdit(id) {
+      switch(id) {
+        case 1 : this.setState({baseURL : 'https://www.facebook.com/'});break;
+        
+        case 2 : this.setState({baseURL : 'https://www.twitter.com/'});break;
+        
+        case 3 : this.setState({baseURL : 'https://www.instagram.com/'});break;
+
+        default : this.setState({baseURL : ''});break;
+      }
+    }
+
     getCertificationTypes() {
       api.get(`/tattoo-artist-index-certification-types`)
         .then(res => {
@@ -351,6 +376,7 @@ export default class PerfilTatuador extends Component {
 
     editSocialMedia(socialMedia) {
       this.setState({ modalEditSocialMedia: socialMedia });
+      this.defineBaseURLEdit(socialMedia.type.id)
       $('#changeModalEditSocialMedia').modal('show');
     }
 
@@ -815,7 +841,7 @@ export default class PerfilTatuador extends Component {
                                 <img className="social" src={socialMedia.type.icon} />
                               </a>);
                             })}
-                            <a aria-label="Adicionar" className="btn btn-primary" data-balloon-pos="up" onClick={() => { this.addSocialMedia(); }}>
+                            <a aria-label="Adicionar rede social" className="btn btn-primary mt-3" data-balloon-pos="down" onClick={() => { this.addSocialMedia(); }}>
                       <i className="fa fa-plus" style={{ color: '#FFF'}}></i>   
                             </a>                
                             <button className="chat" onClick={() => {
@@ -1161,11 +1187,16 @@ export default class PerfilTatuador extends Component {
                             {(this.state.modalEditSocialMedia.type.id !== 4 ? (
                                 <div className="form-group">
                                   <label>Link*</label>
-                                  <input type="url" value={this.state.modalEditSocialMedia.link} onChange={(e) => {
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text fix-link">{this.state.baseURL}</span>
+                                    </div>
+                                    <input type="text" class="form-control" value={this.state.modalEditSocialMedia.link} onChange={(e) => {
                                     let modalEditSocialMedia = this.state.modalEditSocialMedia;
                                     modalEditSocialMedia.link = e.target.value;
                                     this.setState({ modalEditSocialMedia });
-                                  }} name="link" className="form-control" placeholder="Link rede social" required />
+                                  }} name="link" className="form-control" placeholder="Link rede social" required/>
+                            </div>
                                 </div>
                                 ) : (
                                   <div>
@@ -1215,6 +1246,7 @@ export default class PerfilTatuador extends Component {
                             let modalAddSocialMedia = this.state.modalAddSocialMedia;
                             modalAddSocialMedia.socialMediaTypeId = e.target.value;                            
                             this.setState({ modalAddSocialMedia });
+                            this.defineBaseURL(modalAddSocialMedia.socialMediaTypeId)
                           }} required>
                             <option value="">Selecione</option>
                             {this.state.socialMediaTypes.map(socialMediaType => {
@@ -1226,11 +1258,16 @@ export default class PerfilTatuador extends Component {
                         {(this.state.modalAddSocialMedia.socialMediaTypeId !== '4' ? (
                           <div className="form-group">
                             <label>Link*</label>
-                            <input type="url" onChange={(e) => {
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                              <span class="input-group-text fix-link">{this.state.baseURL}</span>
+                              </div>
+                              <input type="text" class="form-control" onChange={(e) => {
                               let modalAddSocialMedia = this.state.modalAddSocialMedia;
                               modalAddSocialMedia.link = e.target.value;
                               this.setState({ modalAddSocialMedia });
-                            }} name="link" className="form-control" placeholder="Link rede social" required />
+                            }} name="link" className="form-control" placeholder="Link rede social" required/>
+                            </div>
                           </div>
                         ) : (
                           <div>
