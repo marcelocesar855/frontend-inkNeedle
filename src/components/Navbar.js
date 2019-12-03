@@ -37,9 +37,8 @@ export default class Navbar extends Component {
 
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
     }
-
     render () {
         return(
             <div>

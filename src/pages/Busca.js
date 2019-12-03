@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Clickable} from 'react-clickable';
-import { getUser, getToken } from '../services/auth';
+import { getUser, setAvatarUser } from '../services/auth';
 import { Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
 import $ from 'jquery';
 import { toast } from 'react-toastify'
@@ -35,7 +35,7 @@ export default class Busca extends Component {
             foto : null,
             user: getUser(),
             nome : 'Marcelo César',
-            selectedFile : null,
+            selectedAvatarFile : null,
             eventos : [{id : 1, nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
             preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
             {id : 2, nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
@@ -107,7 +107,7 @@ export default class Busca extends Component {
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
         this.setState({
-            selectedFile : e.target.files[0]
+            selectedAvatarFile : e.target.files[0]
         })
     };
 
@@ -164,16 +164,35 @@ export default class Busca extends Component {
         });
     }
 
-    changePhoto () { //possibilita a edição do texto no input
-        this.setState({
-            foto : this.state.selectedFile
+    changePhoto = () => { //possibilita a edição do texto no input
+        const { selectedAvatarFile } = this.state;        
+        let url = '/users-avatar';
+        let formData = new FormData();
+
+        formData.append('file', selectedAvatarFile);
+
+        api({
+          method: 'post',
+          url,
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' }
         })
-    };
+        .then((response) => {
+            if (response.data.url) {
+                setAvatarUser(response.data.url);
+                this.getAvatar();
+                $('#uploadPhoto').modal('hide');
+            }
+        })
+        .catch((response) => {
+            console.log(response);
+        });
+    }
 
     
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
     }
 
   render() {

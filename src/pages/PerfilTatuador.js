@@ -1110,7 +1110,7 @@ export default class PerfilTatuador extends Component {
                         }}>Deletar</button>
                       </div>
                       <div className="col-md-12 text-center">
-                        <img className="rounded img-fluid" src={this.state.modalEditCertification.file.url}></img>
+                        <img className="rounded img-fluid my-3" src={this.state.modalEditCertification.file.url}></img>
                         <form onSubmit={this.submitEditCertification}>
                           <div className="form-group">
                             <label>Tipo*</label>
@@ -1146,19 +1146,6 @@ export default class PerfilTatuador extends Component {
                         </form>        
                       </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button className='agendar' onClick={() => {
-                          $('#uploadCertificate').modal('hide');
-                          toast.configure()
-                          toast.success("Certificado enviado com sucesso!\nAnalisaremos a atenticidadade dele e em breve estará publicado em seu perfil.",{
-                            position: "top-right",
-                            autoClose: 7000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true
-                            });
-                      }}>Upload</button>
                   </div>
                 </div>
               </div>
