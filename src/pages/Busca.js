@@ -205,6 +205,7 @@ export default class Busca extends Component {
         .then((response) => {
             if (response.data.url) {
                 setAvatarUser(response.data.url);
+                this.setState({user : getUser()})
                 this.getAvatar();
                 $('#uploadPhoto').modal('hide');
             }
@@ -223,7 +224,7 @@ export default class Busca extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row">
                 <div className="col col-lg-4">

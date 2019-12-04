@@ -107,7 +107,7 @@ var routes = [
       path: "/editar_perfil",
       name: "EditarPerfil",
       component: EditarPerfil,
-      isAuth : 1 && 2,
+      isAuth : 1,
       notPath: "/busca"
     },
     {

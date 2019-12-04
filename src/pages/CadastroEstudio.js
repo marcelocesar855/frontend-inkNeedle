@@ -3,12 +3,14 @@ import api from '../services/api';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import viaCep from '../services/viaCep';
+import getLatLng from '../services/googleGetLatLng';
 import '../styles/CadastroEstudio.css';
 import '../styles/General.css';
 import CurrencyFormat from 'react-currency-format';
 import TimeRange from '../components/TimeSlider';
 import Navbar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
+const apiKey = 'AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q'
 
 export default class CadastroEstudio extends Component {
 
@@ -29,6 +31,8 @@ export default class CadastroEstudio extends Component {
             uf: '',
             cidade: '',
             complemento: '',
+            lat : '',
+            lng : '',
             selectedFile : null
         };
         this.featureRef = React.createRef();
@@ -102,12 +106,19 @@ export default class CadastroEstudio extends Component {
             await viaCep.get(cep + '/json').then(
                 response => {
                     if(response.data.erro !== true){
+                        getLatLng.get(cep + '&key=' + apiKey).then(response =>{
+                            this.setState({
+                                lat : response.data.results[0].geometry.location.lat,
+                                lng : response.data.results[0].geometry.location.lng
+                            })
+                        })
                         this.setState({
                             endereco : response.data.logradouro,
                             bairro : response.data.bairro,
                             cidade : response.data.localidade,
                             uf : response.data.uf
                         })
+
                     }else{
                         this.pushErrorMessage('CEP inexistente.')
                         this.setState(cepInitState)
@@ -121,6 +132,19 @@ export default class CadastroEstudio extends Component {
             this.setState(cepInitState)
         }
     }
+
+//     getLatLong(address)
+// {
+//     address = str_replace(" ", "+", $address);
+    
+//     $json = file_get_contents("http://maps.google.com/maps/api/geocode/json?address=$address&amp;sensor=false&amp;region=$region");
+//     $json = json_decode($json);
+    
+//     $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+//     $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+    
+//     return array('latitude'=>$lat,'longitude'=>$long);
+//     }
 
     pushErrorMessage (error) {
         toast.error(error,{
@@ -149,6 +173,8 @@ export default class CadastroEstudio extends Component {
         const {value} = this.state.value;
         const telefone = this.state.telefone;
         const bodyPiercing = this.state.bodyPiercing;
+        const lat = this.state.lat;
+        const lng = this.state.lng;
         const data = new FormData();
         data.append('file', this.state.selectedFile);
         if(nome !== ''){
@@ -241,7 +267,7 @@ export default class CadastroEstudio extends Component {
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select></p>
-                        <p>CEP:&nbsp;<CurrencyFormat type="text" value={this.state.cep} onChange={this.getAdressFromViaCEP}
+                        <p>CEP:&nbsp;<CurrencyFormat type="text" value={this.state.cep} onBlur={this.getAdressFromViaCEP}
                         onChange={this.handleInputChangeCep} format="#####-###" placeholder="CEP do estúdio"></CurrencyFormat></p>
                         <p>Endereço:&nbsp;<input type="text" value={this.state.endereco}
                         onChange={this.handleInputChangeEndereco} placeholder="Endereço"></input></p>
