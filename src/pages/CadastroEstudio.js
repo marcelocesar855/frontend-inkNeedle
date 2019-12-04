@@ -189,7 +189,18 @@ export default class CadastroEstudio extends Component {
                                         name: nome,
                                         cnpj: cnpj,
                                         isBodyPiercing: true
-                                    }).then((response) => {
+                                    }).then(async (response) => {
+                                        await this.saveAddress({
+                                            name: local.endereco,
+                                            neighborhood: local.bairro,
+                                            city: local.cidade,
+                                            state: local.uf,
+                                            cep: local.cep,
+                                            complement: local.complemento,
+                                            latitude: local,
+                                            longitude: local,
+                                        }, response.data.id);
+
                                         toast.success("Estúdio cadastrado com sucesso!", {
                                             position: "top-right",
                                             autoClose: 5000,
@@ -238,6 +249,25 @@ export default class CadastroEstudio extends Component {
             this.pushErrorMessage(erro)
         }
     };
+
+    async saveAddress(address, studioId) {
+        const data = {
+            name: address.name,
+            neighborhood: address.neighborhood,
+            city: address.city,
+            state: address.state,
+            cep: address.cep,
+            complement: address.complement, 
+            latitude: '0',
+            longitude: '0'
+        }
+
+        const url = `studios/${studioId}/addresses`;
+
+        await api.post(url, data).then((response) => {
+            console.log(response);
+        });
+    }
 
     toPerfilTatuador = () => {
         this.props.history.push('/meu_perfil')
