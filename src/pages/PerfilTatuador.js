@@ -608,7 +608,7 @@ export default class PerfilTatuador extends Component {
         text: "Você não poderá reverter isso!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#FF8C00',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, deletar!',
         cancelButtonText: 'Não',
@@ -636,7 +636,7 @@ export default class PerfilTatuador extends Component {
         text: "Você não poderá reverter isso!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#FF8C00',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, deletar!',
         cancelButtonText: 'Não',
@@ -686,7 +686,7 @@ export default class PerfilTatuador extends Component {
         text: "Você não poderá reverter isso!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#FF8C00',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, deletar!',
         cancelButtonText: 'Não',
@@ -767,7 +767,7 @@ export default class PerfilTatuador extends Component {
         text: "Você não poderá reverter isso!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#FF8C00',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, deletar!',
         cancelButtonText: 'Não',
@@ -1165,12 +1165,7 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body">
-                    <div className="row">
-                      <div className="col-md-12 text-center">
-                        <button className="btn btn-danger" onClick={() => {
-                          this.deleteCertification(this.state.modalEditCertification.id);
-                        }}>Deletar</button>
-                      </div>
+                    <div className="row">                      
                       <div className="col-md-12 text-center">
                         <img className="rounded img-fluid my-3" src={this.state.modalEditCertification.file.url}></img>
                         <form onSubmit={this.submitEditCertification}>
@@ -1204,7 +1199,10 @@ export default class PerfilTatuador extends Component {
                             }} name="file" className="form-control" required />
                           </div>
                           <small>Campos obrigatórios (*)</small> <br /> <br />
-                          <button type="submit" className="btn btn-primary">Salvar</button>
+                          <button type="submit" className="btn btn-primary" style={{float: 'left'}}>Salvar</button>
+                          <button className="btn btn-danger" style={{ float: 'right' }} onClick={() => {
+                            this.deleteCertification(this.state.modalEditCertification.id);
+                          }}>Deletar</button>
                         </form>        
                       </div>
                     </div>
@@ -1224,12 +1222,7 @@ export default class PerfilTatuador extends Component {
                       </button>
                     </div>
                     <div class="modal-body">
-                        <div className="row">
-                          <div className="col-md-12 text-center">
-                      <button className="btn btn-danger" onClick={() => {
-                        this.deleteSocialMedia(this.state.modalEditSocialMedia.id);
-                      }}>Deletar</button>
-                          </div>
+                        <div className="row">                         
                           <div className="col-md-12">
                             <p> <strong>{this.state.modalEditSocialMedia.type.name}</strong> </p>
                            <form onSubmit={this.submitEditSocialMedia}>
@@ -1269,7 +1262,10 @@ export default class PerfilTatuador extends Component {
                                   </div>
                                 ))}
                               <small>Campos obrigatórios (*)</small> <br /> <br />
-                              <button type="submit" className="btn btn-primary">Salvar</button>
+                              <button type="submit" className="btn btn-primary" style={{ float: 'left' }}>Salvar</button>
+                              <button className="btn btn-danger" style={{ float: 'right' }} onClick={() => {
+                                this.deleteSocialMedia(this.state.modalEditSocialMedia.id);
+                              }}>Deletar</button>
                             </form>
                           </div>
                         </div>
