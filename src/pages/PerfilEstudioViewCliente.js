@@ -100,7 +100,7 @@ export default class PerfilTatuador extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
@@ -233,7 +233,7 @@ export default class PerfilTatuador extends Component {
                     {this.state.posts.map(secao => (
                         <List.GroupItem>
                         <Media>
-                            <Avatar size="md" imageURL={test}></Avatar>
+                            <Avatar size="md" imageURL={this.getAvatar()}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
                                     <h4>{secao.nome}</h4>
