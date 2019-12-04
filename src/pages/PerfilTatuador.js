@@ -7,7 +7,7 @@ import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
 import Navbar from '../components/Navbar';
-import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
+import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button, Alert} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -257,11 +257,16 @@ export default class PerfilTatuador extends Component {
         })
     }
 
-    getTags() {
-      api.get(`/tattoo-artist-index-tags`)
+    async getTags () {
+     await api.get(`/tattoo-artist-index-tags`)
         .then(res => {
           this.setState({ initialTags: res.data });
         })
+      if(this.state.initialTags.length < 1){
+        $('#alertTags').css('display', 'inline');
+      }else{
+        $('#alertTags').css('display', 'none');
+      }
     }
 
     getSocialMedias() {
@@ -271,12 +276,17 @@ export default class PerfilTatuador extends Component {
         })
     }
 
-    getStudios() {
-        api.get(`/studios`)
+    getStudios = async () =>  {
+       await api.get(`/studios`)
         .then(res => {
             const studios = res.data;
             this.setState({ studios });
         })
+      if(this.state.studios.length < 1){
+        $('#alertStudios').css('display', 'inline');
+      }else{
+        $('#alertStudios').css('display', 'none');
+      }
     }
 
     defineBaseURL(id) {
@@ -311,12 +321,17 @@ export default class PerfilTatuador extends Component {
         })
     }
 
-    getCertification() {
-        api.get(`/tattoo-artist-index-certification`)
+    async getCertification() {
+       await api.get(`/tattoo-artist-index-certification`)
         .then(res => {
             const certifications = res.data;
             this.setState({ certifications });
         })
+      if(this.state.certifications.length < 1){
+        $('#alertCertificate').css('display', 'inline');
+      }else{
+        $('#alertCertificate').css('display', 'none');
+      }
     }
 
     getSocialMediaTypes() {
@@ -326,25 +341,38 @@ export default class PerfilTatuador extends Component {
         })
     }
 
-    getFeedbacks() {
-      api.get(`/tattoo-artist-my-feedbacks`)
+    async getFeedbacks() {
+      await api.get(`/tattoo-artist-my-feedbacks`)
         .then(res => {
           this.setState({ feedbacks: res.data });
         })
+      if(this.state.feedbacks.length < 1){
+        $('#alertFeedback').css('display', 'inline');
+      }
     }
 
-    getPosts() {
-      api.get(`/tattoo-artist-index-posts`)
+    async getPosts() {
+      await api.get(`/tattoo-artist-index-posts`)
         .then(res => {
           this.setState({ posts: res.data });
         })
+      if(this.state.posts.length < 1){
+        $('#alertPosts').css('display', 'inline');
+      }else{
+        $('#alertPosts').css('display', 'none');
+      }
     }
 
-    getGalleries() {
-      api.get(`/tattoo-artist-index-galleries`)
+    async getGalleries() {
+      await api.get(`/tattoo-artist-index-galleries`)
         .then(res => {
           this.setState({ galleries: res.data });
         })
+      if(this.state.galleries.length < 1){
+        $('#alertPhotos').css('display', 'inline');
+      }else{
+        $('#alertPhotos').css('display', 'none');
+      }
     }
 
     addSocialMedia() {
@@ -360,7 +388,9 @@ export default class PerfilTatuador extends Component {
     }
 
     editGallery(image) {
-      this.setState({ imageView: image });
+      this.setState({ 
+        imageView: image
+      });
       $('#viewImage').modal('show');
     }
 
@@ -824,7 +854,7 @@ export default class PerfilTatuador extends Component {
 
                             <div className="Simple">
                                 <DraggableArea tags={this.state.initialTags} render={({tag, id}) => (
-                                <div className="tag ">                                    
+                                  <div className="tag ">                                    
                                     {tag.name}
                                     &nbsp;&nbsp;
                                     <img
@@ -832,7 +862,11 @@ export default class PerfilTatuador extends Component {
                                     src={delTag}
                                     onClick={() => this.handleClickDelete(tag)}
                                     />
-                                </div>)} onChange={tags => console.log(tags)} />
+                                </div>
+                                )} onChange={tags => console.log(tags)} />
+                                <div className='alerts'>
+                                  <p id='alertTags'>Sem tags para apresentar</p>
+                                </div>
                              </div>
                              <div className="inputs">
                                 <input ref={r => this.input = r} className="rounded-left"/>
@@ -869,6 +903,9 @@ export default class PerfilTatuador extends Component {
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div className='alerts'>
+                        <p id='alertStudios'>Sem estúdios para apresentar</p>
+                        </div>
                         </List>
                         <button className="cad-estudio mb-4" onClick={
                             this.cadastroEstudio
@@ -885,6 +922,9 @@ export default class PerfilTatuador extends Component {
                                     this.editCertification(certification)
                                 }}>{certification.certificationType.name}</Avatar>
                           ))}
+                          <div className='alerts'>
+                          <p id='alertCertificate'>Sem certificações para apresentar</p>
+                          </div>
                         </Avatar.List>
                     </Card>
                     <Card>
@@ -904,6 +944,9 @@ export default class PerfilTatuador extends Component {
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div  className='alerts'>
+                          <p id='alertFeedback'>Sem feedbacks para apresentar</p>
+                        </div>
                         </List>
                     </Card>
                 </div>
@@ -921,16 +964,16 @@ export default class PerfilTatuador extends Component {
                               <Avatar size="md" imageURL={this.getAvatar()}></Avatar>
                                 <Media.Body className="ml-3">
                                     <Media.Heading>
-                                      <h4>{user.name}</h4>
+                                      <h4>{post.name}</h4>
                                     </Media.Heading>
                                     <small>{post.content.split('\n').map(function(item) {
-                                        return (
-                                            <span>
-                                            {item}
-                                            <br/>
-                                            </span>
-                                        )
-                                        })}</small>
+                                    return (
+                                        <span>
+                                        {item}
+                                        <br/>
+                                        </span>
+                                    )
+                                    })}</small>
                                 </Media.Body>
                                 <button className='btn' onClick={() => {
                                   this.deletePost(post.id);
@@ -938,6 +981,9 @@ export default class PerfilTatuador extends Component {
                             </Media>
                         </List.GroupItem>
                     ))}
+                    <div className='alerts'>
+                      <p id='alertPosts'>Sem posts para apresetar</p>
+                    </div>
                     </List>
                 </Card>
                 <GalleryCard>
@@ -957,6 +1003,9 @@ export default class PerfilTatuador extends Component {
                                 </Clickable>
                             </div>
                         ))}
+                    </div>
+                    <div className='alerts'>
+                      <p id='alertPhotos'>Sem fotos para apresetar</p>
                     </div>
                 </GalleryCard>
                 </div>
@@ -1082,11 +1131,11 @@ export default class PerfilTatuador extends Component {
                       <div className="form-group">
                         <label>Arquivo*</label>
                         <input type="file" onChange={(e) => {
-                          let modalAddCertification = this.state.modalAddCertification;
-                          modalAddCertification.selectedFile = e.target.files[0];
-                          this.setState({ modalAddCertification });
+                          let uploadGaleryImage = this.state.uploadGaleryImage;
+                          uploadGaleryImage.file = e.target.files[0];
+                          this.setState({ uploadGaleryImage });
                         }} name="file" className="form-control" required />
-                      </div>                                           
+                      </div>                                   
                       <small>Campos obrigatórios (*)</small> <br /> <br />
                       <button type="submit" className="btn btn-primary">Salvar</button>
                     </form>                    

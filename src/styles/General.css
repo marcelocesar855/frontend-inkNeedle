@@ -16,6 +16,19 @@ html, body {
     background-image: url(../images/background.jpg)
 }
 
+.alerts {
+    text-align: center;
+}
+
+.alerts p {
+    display: none;
+    font-size: 12px;
+    padding: 3px;
+    background-color: #FF8C00;
+    opacity: 50%;
+    border-radius: 5px;
+}
+
 .show {
     display: block;
 }
