@@ -820,6 +820,7 @@ export default class PerfilTatuador extends Component {
         .then((response) => {
             if (response.data.url) {
                 setAvatarUser(response.data.url);
+                this.setState({user : getUser()})
                 this.getAvatar();
                 $('#uploadPhoto').modal('hide');
             }
@@ -838,7 +839,7 @@ export default class PerfilTatuador extends Component {
       const { user } = this.state;
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar avatar={this.getAvatar}/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
@@ -993,7 +994,7 @@ export default class PerfilTatuador extends Component {
                         </List.GroupItem>
                     ))}
                     <div className='alerts'>
-                      <p id='alertPosts'>Sem posts para apresetar</p>
+                      <p id='alertPosts'>Sem posts para apresentar</p>
                     </div>
                     </List>
                 </Card>
@@ -1016,7 +1017,7 @@ export default class PerfilTatuador extends Component {
                         ))}
                     </div>
                     <div className='alerts'>
-                      <p id='alertPhotos'>Sem fotos para apresetar</p>
+                      <p id='alertPhotos'>Sem fotos para apresentar</p>
                     </div>
                 </GalleryCard>
                 </div>

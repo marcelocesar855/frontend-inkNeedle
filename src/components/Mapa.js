@@ -1,5 +1,6 @@
 import React, { useState, Component } from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Avatar} from "tabler-react";
 
 export default GoogleApiWrapper({
   apiKey: ('AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q')
@@ -40,7 +41,6 @@ export default GoogleApiWrapper({
                 this.setState({selectedPlace: studio});
                 this.setState({selected : true})
             }}>
-            
             </Marker>
            ))}
 
@@ -48,8 +48,11 @@ export default GoogleApiWrapper({
                 lat: this.state.selectedPlace.lat,
                 lng: this.state.selectedPlace.lng
             }}>
-            <p>Teste</p> 
-            <p>{this.state.selectedPlace.id}</p> 
+            <Avatar size="md" imageURL={this.state.selectedPlace.imageURL}></Avatar>
+            <a onClick={() => {
+              this.props.history.push('/perfil_estudio')
+              }}><h3>{this.state.selectedPlace.name}</h3> </a>
+            <p>{this.state.selectedPlace.descricao}</p> 
             </InfoWindow>
         </Map>
     );

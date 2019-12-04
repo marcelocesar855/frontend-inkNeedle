@@ -8,6 +8,7 @@ import { getUser } from '../services/auth';
 import Navbar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputMask from 'react-input-mask';
+import avatarDefault from './../images/avatar.png';
 
 const initialState = {
     user: getUser(),
@@ -26,9 +27,13 @@ export default class EditarPerfil extends Component {
     };
 
     componentDidMount() {
+        const number =''
+        if (this.state.user.phones.length > 0) {
+            number = this.state.user.phones[0].number
+        }
         this.setState({
             nome : this.state.user.name,
-            telefone : this.state.user.phones[0].number,
+            telefone : number,
             email : this.state.user.email
         })
     }
@@ -119,10 +124,15 @@ export default class EditarPerfil extends Component {
         }
     };
 
+    getAvatar() {
+        const { user } = this.state;
+        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+    }
+
     render() { //renderiza html
         return (
             <div className="wrapper">
-                <Navbar/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Edição dos dados do seu cadastro na <strong>InkNeedle!</strong></h1>

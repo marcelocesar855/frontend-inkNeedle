@@ -308,7 +308,7 @@ export default class PerfilTatuador extends Component {
   render() {
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar/>
+                <Navbar  avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
