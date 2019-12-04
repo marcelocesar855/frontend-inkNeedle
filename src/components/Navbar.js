@@ -18,7 +18,6 @@ export default class Navbar extends Component {
     constructor (props){
         super(props)
         this.state = {
-            user : getUser(),
             notifications: []
         }
     }
@@ -35,10 +34,6 @@ export default class Navbar extends Component {
         this.setState({ notifications });       
     }
 
-    getAvatar() {
-        const { user } = this.state;
-        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
-    }
     render () {
         return(
             <div>
@@ -51,7 +46,7 @@ export default class Navbar extends Component {
                         </li>
                         <li class="nav-item dropdown dropleft" aria-label="Minha conta" data-balloon-pos="down">
                             <a class="link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" >
-                            <Avatar imageURL={this.getAvatar()}></Avatar>
+                            <Avatar imageURL={this.props.avatar}></Avatar>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/editar_perfil">Editar informações</a>
@@ -63,7 +58,7 @@ export default class Navbar extends Component {
                             </div>
                         </li>
                         <li class="nav-item dropdown mr-5" aria-label="Ajuda" data-balloon-pos="down">
-                            <a href="#">
+                            <a href="/#mu-faq">
                                 <img src={help}></img>
                             </a>
                         </li>

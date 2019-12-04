@@ -186,14 +186,14 @@ export default class PerfilTatuador extends Component {
         });
     }
 
-    handleClickAdd = () => {
+     handleClickAdd = async () => {
         const tags = this.state.initialTags.slice();
 
         if (this.input.value.length === 0) {
           return;
         }
 
-        if (this.saveTag(this.input.value)) {
+        if (await this.saveTag(this.input.value)) {
           tags.push({ id: tags.length + 1, name: this.input.value });
           this.setState({ initialTags: tags });        
         }
@@ -206,11 +206,10 @@ export default class PerfilTatuador extends Component {
         this.input.value = ''; 
     }
 
-    handleClickDelete = tag => {
-      if (this.deleteTag(tag.id)) {
+    handleClickDelete = async tag => {
+      if (await this.deleteTag(tag.id)) {
         const tags = this.state.initialTags.filter(t => tag.id !== t.id);
         this.setState({ initialTags: tags });
-        alert(this.state.initialTags.length )
         if(this.state.initialTags.length < 1){
           $('#alertTags').css('display', 'inline');
         }else{
@@ -268,7 +267,6 @@ export default class PerfilTatuador extends Component {
     }
 
     async getTags () {
-      alert('teste')
      await api.get(`/tattoo-artist-index-tags`)
         .then(res => {
           this.setState({ initialTags: res.data });
@@ -359,6 +357,8 @@ export default class PerfilTatuador extends Component {
         })
       if(this.state.feedbacks.length < 1){
         $('#alertFeedback').css('display', 'inline');
+      }else{
+        $('#alertFeedback').css('display', 'none');
       }
     }
 
@@ -820,6 +820,7 @@ export default class PerfilTatuador extends Component {
         .then((response) => {
             if (response.data.url) {
                 setAvatarUser(response.data.url);
+                this.setState({user : getUser()})
                 this.getAvatar();
                 $('#uploadPhoto').modal('hide');
             }
@@ -838,7 +839,7 @@ export default class PerfilTatuador extends Component {
       const { user } = this.state;
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar avatar={this.getAvatar}/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
@@ -930,8 +931,8 @@ export default class PerfilTatuador extends Component {
                         <Avatar.List className="p-3">
                           {this.state.certifications.map(certification => (
                                 <Avatar aria-label={certification.name} data-balloon-pos="up" onClick={()=>{
-                                    this.editCertification(certification)
-                                }}>{certification.certificationType.name}</Avatar>
+                                    this.editCertification(certification) 
+                                }} imageURL={certification.file.url}></Avatar>
                           ))}
                           <div className='alerts'>
                           <p id='alertCertificate'>Sem certificações para apresentar</p>
@@ -993,7 +994,7 @@ export default class PerfilTatuador extends Component {
                         </List.GroupItem>
                     ))}
                     <div className='alerts'>
-                      <p id='alertPosts'>Sem posts para apresetar</p>
+                      <p id='alertPosts'>Sem posts para apresentar</p>
                     </div>
                     </List>
                 </Card>
@@ -1016,7 +1017,7 @@ export default class PerfilTatuador extends Component {
                         ))}
                     </div>
                     <div className='alerts'>
-                      <p id='alertPhotos'>Sem fotos para apresetar</p>
+                      <p id='alertPhotos'>Sem fotos para apresentar</p>
                     </div>
                 </GalleryCard>
                 </div>
@@ -1143,7 +1144,7 @@ export default class PerfilTatuador extends Component {
                         <label>Arquivo*</label>
                         <input type="file" onChange={(e) => {
                           let modalAddCertification = this.state.modalAddCertification;
-                          modalAddCertification.file = e.target.files[0];
+                          modalAddCertification.selectedFile = e.target.files[0];
                           this.setState({ modalAddCertification });
                         }} name="file" className="form-control" required />
                       </div>                                   

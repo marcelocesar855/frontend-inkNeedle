@@ -14,7 +14,7 @@ export default class NavbarNoLog extends Component {
                     <ul className='mr-auto'></ul>
                     <ul class="navbar-nav mr-5" aria-label="Ajuda" data-balloon-pos="down">
                         <li class="nav-item">
-                            <a class="link" href="#">
+                            <a class="link" href="/#mu-faq">
                             <img src={help}></img>
                             </a>
                         </li>
