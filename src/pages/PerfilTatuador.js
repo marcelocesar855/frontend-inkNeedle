@@ -186,14 +186,14 @@ export default class PerfilTatuador extends Component {
         });
     }
 
-    handleClickAdd = () => {
+     handleClickAdd = async () => {
         const tags = this.state.initialTags.slice();
 
         if (this.input.value.length === 0) {
           return;
         }
 
-        if (this.saveTag(this.input.value)) {
+        if (await this.saveTag(this.input.value)) {
           tags.push({ id: tags.length + 1, name: this.input.value });
           this.setState({ initialTags: tags });        
         }
@@ -206,11 +206,10 @@ export default class PerfilTatuador extends Component {
         this.input.value = ''; 
     }
 
-    handleClickDelete = tag => {
-      if (this.deleteTag(tag.id)) {
+    handleClickDelete = async tag => {
+      if (await this.deleteTag(tag.id)) {
         const tags = this.state.initialTags.filter(t => tag.id !== t.id);
         this.setState({ initialTags: tags });
-        alert(this.state.initialTags.length )
         if(this.state.initialTags.length < 1){
           $('#alertTags').css('display', 'inline');
         }else{
@@ -268,7 +267,6 @@ export default class PerfilTatuador extends Component {
     }
 
     async getTags () {
-      alert('teste')
      await api.get(`/tattoo-artist-index-tags`)
         .then(res => {
           this.setState({ initialTags: res.data });
