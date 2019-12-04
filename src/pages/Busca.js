@@ -72,33 +72,34 @@ export default class Busca extends Component {
     componentDidMount = async () => {
         this.getEstudios()
         this.getPosts()
+        this.getSessions()
     }
 
     getEstudios = async () => {
-        var lat = ''
-        var long = ''
+        var latitude = ''
+        var longitude = ''
         if (navigator.geolocation) {
             var startPos;
-          var geoSuccess = (position) => {
+          var geoSuccess = async (position) => {
             if (position.coords.latitude != null){
                 startPos = position;
-                lat = startPos.coords.latitude
-                long = startPos.coords.longitude
+                latitude = startPos.coords.latitude
+                longitude = startPos.coords.longitude
                 localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
+                await api.post('studios/search-geo', {
+                    latitude,
+                    longitude
+                  }).then(response => {
+                    this.setState({estudios : response.data})
+                  }).catch(error => {
+                      alert(error)
+                  })
             }else{
                 localStorage.setItem('@user-loc',{});
             }
           };
           navigator.geolocation.getCurrentPosition(geoSuccess);
           
-          await api.post('studios/search-geo', {
-            lat,
-            long
-          }).then(response => {
-            this.setState({estudios : response.data})
-          }).catch(error => {
-              alert(error)
-          })
       }
       else {
         console.log('Geolocation is not supported for this Browser/OS.');
@@ -111,18 +112,28 @@ export default class Busca extends Component {
         })
     };
 
-    getPosts() {
-        api.get(`/posts`)
+    async getPosts() {
+        await api.get(`/posts`)
           .then(res => {
             this.setState({ posts : res.data });
         })
+        if(this.state.posts.length < 1){
+            $('#alertPosts').css('display', 'inline');
+          }else{
+            $('#alertPosts').css('display', 'none');
+          }
     }
 
-    getSessions(){
-        api.get(`/schedulings`)
+    async getSessions(){
+        await api.get(`/schedulings`)
           .then(res => {
             this.setState({ sessoes : res.data });
         })
+        if(this.state.posts.length < 1){
+            $('#alertSessions').css('display', 'inline');
+          }else{
+            $('#alertSessions').css('display', 'none');
+          }
     }
  
     handleInputChangeFeedback = e => {
@@ -278,6 +289,9 @@ export default class Busca extends Component {
                     </Media>
                     </List.GroupItem>
                     ))}
+                    <div className='alerts'>
+                      <p id='alertSessions'>Sem sessões marcadas</p>
+                    </div>
                     </List>
                 </Card>
                 </div>
@@ -318,6 +332,9 @@ export default class Busca extends Component {
                         </Media>
                     </List.GroupItem>
                     ))}
+                    <div className='alerts'>
+                      <p id='alertPosts'>Sem posts para apresetar</p>
+                    </div>
                     </List>
                 </Card>
                 </div>

@@ -357,6 +357,8 @@ export default class PerfilTatuador extends Component {
         })
       if(this.state.feedbacks.length < 1){
         $('#alertFeedback').css('display', 'inline');
+      }else{
+        $('#alertFeedback').css('display', 'none');
       }
     }
 
@@ -928,8 +930,8 @@ export default class PerfilTatuador extends Component {
                         <Avatar.List className="p-3">
                           {this.state.certifications.map(certification => (
                                 <Avatar aria-label={certification.name} data-balloon-pos="up" onClick={()=>{
-                                    this.editCertification(certification)
-                                }}>{certification.certificationType.name}</Avatar>
+                                    this.editCertification(certification) 
+                                }} imageURL={certification.file.url}></Avatar>
                           ))}
                           <div className='alerts'>
                           <p id='alertCertificate'>Sem certificações para apresentar</p>
@@ -1141,7 +1143,7 @@ export default class PerfilTatuador extends Component {
                         <label>Arquivo*</label>
                         <input type="file" onChange={(e) => {
                           let modalAddCertification = this.state.modalAddCertification;
-                          modalAddCertification.file = e.target.files[0];
+                          modalAddCertification.selectedFile = e.target.files[0];
                           this.setState({ modalAddCertification });
                         }} name="file" className="form-control" required />
                       </div>                                   

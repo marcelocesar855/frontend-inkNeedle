@@ -63,7 +63,7 @@ export default class Navbar extends Component {
                             </div>
                         </li>
                         <li class="nav-item dropdown mr-5" aria-label="Ajuda" data-balloon-pos="down">
-                            <a href="#">
+                            <a href="/#mu-faq">
                                 <img src={help}></img>
                             </a>
                         </li>
