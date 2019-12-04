@@ -75,15 +75,15 @@ export default class Busca extends Component {
     }
 
     getEstudios = async () => {
-        var latitude = ''
-        var longitude = ''
+        var lat = ''
+        var long = ''
         if (navigator.geolocation) {
             var startPos;
           var geoSuccess = (position) => {
             if (position.coords.latitude != null){
                 startPos = position;
-                latitude = startPos.coords.latitude
-                longitude = startPos.coords.longitude
+                lat = startPos.coords.latitude
+                long = startPos.coords.longitude
                 localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
             }else{
                 localStorage.setItem('@user-loc',{});
@@ -92,8 +92,8 @@ export default class Busca extends Component {
           navigator.geolocation.getCurrentPosition(geoSuccess);
           
           await api.post('studios/search-geo', {
-            latitude,
-            longitude
+            lat,
+            long
           }).then(response => {
             this.setState({estudios : response.data})
           }).catch(error => {

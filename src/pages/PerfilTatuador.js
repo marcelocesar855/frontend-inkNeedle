@@ -198,13 +198,24 @@ export default class PerfilTatuador extends Component {
           this.setState({ initialTags: tags });        
         }
 
-        this.input.value = '';        
+        if(this.state.initialTags.length < 1){
+          $('#alertTags').css('display', 'inline');
+        }else{
+          $('#alertTags').css('display', 'none');
+        }   
+        this.input.value = ''; 
     }
 
     handleClickDelete = tag => {
       if (this.deleteTag(tag.id)) {
         const tags = this.state.initialTags.filter(t => tag.id !== t.id);
         this.setState({ initialTags: tags });
+        alert(this.state.initialTags.length )
+        if(this.state.initialTags.length < 1){
+          $('#alertTags').css('display', 'inline');
+        }else{
+          $('#alertTags').css('display', 'none');
+        }  
       }      
     }
 
@@ -221,8 +232,7 @@ export default class PerfilTatuador extends Component {
       })
       .then((response) => {
         check = true;
-      });
-
+      });    
       return check;       
     }
 
@@ -258,6 +268,7 @@ export default class PerfilTatuador extends Component {
     }
 
     async getTags () {
+      alert('teste')
      await api.get(`/tattoo-artist-index-tags`)
         .then(res => {
           this.setState({ initialTags: res.data });
@@ -1131,9 +1142,9 @@ export default class PerfilTatuador extends Component {
                       <div className="form-group">
                         <label>Arquivo*</label>
                         <input type="file" onChange={(e) => {
-                          let uploadGaleryImage = this.state.uploadGaleryImage;
-                          uploadGaleryImage.file = e.target.files[0];
-                          this.setState({ uploadGaleryImage });
+                          let modalAddCertification = this.state.modalAddCertification;
+                          modalAddCertification.file = e.target.files[0];
+                          this.setState({ modalAddCertification });
                         }} name="file" className="form-control" required />
                       </div>                                   
                       <small>Campos obrigatórios (*)</small> <br /> <br />
