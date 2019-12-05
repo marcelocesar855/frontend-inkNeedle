@@ -76,14 +76,14 @@ var routes = [
       component: RecuSenha
     },
     {
-      path: "/meu_estudio",
+      path: "/meu_estudio/:studioId",
       name: "PerfilEstudio",
       component: PerfilEstudio,
       isAuth: 1,
       notPath: "/busca"
     },
     {
-      path: "/perfil_estudio",
+      path: "/perfil_estudio/:studioId",
       name: "PerfilEstudioClienteView",
       component: PerfilEstudioClienteView,
       isAuth: 2,

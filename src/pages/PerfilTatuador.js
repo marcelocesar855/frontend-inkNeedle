@@ -835,6 +835,14 @@ export default class PerfilTatuador extends Component {
         return (!!user.avatar.url ? user.avatar.url : avatarDefault);
     }
 
+    openStudio(studio) {
+      if (studio.isManager) {
+          this.props.history.push(`/meu_estudio/${studio.id}`);
+      } else {
+          this.props.history.push(`/perfil_estudio/${studio.id}`); 
+      }
+    }
+
   render() {
       const { user } = this.state;
       return(
@@ -901,16 +909,17 @@ export default class PerfilTatuador extends Component {
                         <Card.Header><h2>Estúdios</h2></Card.Header>
                         <List>
                             {this.state.studios.map(studio => (
-                            <List.GroupItem>
+                              <List.GroupItem onClick={() => { this.openStudio(studio) }} style={{ cursor: 'pointer' }} title={studio.name}>
                                 <Media>
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{studio.name}
-                                                {/* <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/> */}
+                                            <h3>{studio.name} 
+                                              <br/>
+                                              <Rate className="ml-2" defaultValue={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h3>
                                         </Media.Heading>
-                                        {/* <img src={loc}/> <small>{estudio.local}</small> */}
+                                        {/* <img src={loc}/> <small>{studio.address}</small> TEMP */}
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
