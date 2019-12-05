@@ -36,10 +36,7 @@ export default class Busca extends Component {
         user: getUser(),
         nome : 'Marcelo César',
         selectedAvatarFile : null,
-        eventos : [{id : 1, nome : 'Flash Day Festival', local : 'Estúdio Tatuagens Bacanas', hora : '19 a 23 de Out, das 9h às 19h',
-        preco : 20.0, content : banner, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'},
-        {id : 2, nome : 'Flashes por R$70', local : 'Estúdio Skina da Agulha', hora : '02 a 05 de Nov, das 10h às 22h',
-        preco : 0.0, content : banner1, descricao : 'É com imenso prazer que anunciamos o nosso evento Flash Day Festival! \n\n Aqui você tem direito a uma flash grátis (de tamanho micro) e poderá conhecer os tatuadores de nosso estúdio e dos arredores, pois estarão todos presentes esperando pra te rabiscar! \n\n Contaremos também com atrações de literatura, cafés e música, para além de sair mais lindo(a) daqui, sairá com cultura e cafeína \\o/'}],
+        eventos : [],
         sessoes : [],
         posts : [],
         eventView : {nome : '', local : '', hora : '',
@@ -73,6 +70,7 @@ export default class Busca extends Component {
         this.getEstudios()
         this.getPosts()
         this.getSessions()
+        this.getEvents()
     }
 
     getEstudios = async () => {
@@ -111,6 +109,18 @@ export default class Busca extends Component {
             selectedAvatarFile : e.target.files[0]
         })
     };
+
+    async getEvents() {
+        await api.get(`/events`)
+          .then(res => {
+            this.setState({ eventos : res.data });
+        })
+        if(this.state.posts.length < 1){
+            $('#alertEvents').css('display', 'inline');
+          }else{
+            $('#alertEvents').css('display', 'none');
+          }
+    }
 
     async getPosts() {
         await api.get(`/posts`)
@@ -263,6 +273,9 @@ export default class Busca extends Component {
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div className='alerts'>
+                            <p id='alertEvents'>Sem eventos para apresetar</p>
+                        </div>
                     </List>
                     </Card>
                     <Card>

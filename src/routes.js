@@ -86,8 +86,15 @@ var routes = [
       path: "/perfil_estudio/:studioId",
       name: "PerfilEstudioClienteView",
       component: PerfilEstudioClienteView,
+      isAuth: 1,
+      notPath: "/login"
+    },
+    {
+      path: "/perfil_estudio/:studioId",
+      name: "PerfilEstudioClienteView",
+      component: PerfilEstudioClienteView,
       isAuth: 2,
-      notPath: "/meu_perfil"
+      notPath: "/login"
     },
     {
       path: "/agenda",

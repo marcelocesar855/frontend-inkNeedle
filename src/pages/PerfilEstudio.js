@@ -172,11 +172,16 @@ export default class PerfilTatuador extends Component {
             })
     }
 
-    getTags(studioId) {
-        api.get(`/studio-index-tags/${studioId}`)
+    async getTags(studioId) {
+        await api.get(`/studio-index-tags/${studioId}`)
         .then(res => {
             this.setState({ initialTags: res.data });
         })
+        if(this.state.initialTags.length < 1){
+          $('#alertTags').css('display', 'inline');
+        }else{
+          $('#alertTags').css('display', 'none');
+        }
     }
 
     getSocialMediaTypes() {
@@ -201,40 +206,65 @@ export default class PerfilTatuador extends Component {
             })
     }
 
-    getCertification(studioId) {
-        api.get(`/studio-index-certification/${studioId}`)
+    async getCertification(studioId) {
+        await api.get(`/studio-index-certification/${studioId}`)
             .then(res => {
                 const certifications = res.data;
                 this.setState({ certifications });
+                if(this.state.certifications.length < 1){
+                    $('#alertCertificate').css('display', 'inline');
+                }else{
+                    $('#alertCertificate').css('display', 'none');
+                }
             })
     }
 
-    getFeedbacks(studioId) {
-        api.get(`/studio-my-feedbacks/${studioId}`)
+    async getFeedbacks(studioId) {
+        await api.get(`/studio-my-feedbacks/${studioId}`)
             .then(res => {
                 this.setState({ feedbacks: res.data });
+                if(this.state.feedbacks.length < 1){
+                    $('#alertFeedbacks').css('display', 'inline');
+                }else{
+                    $('#alertFeedbacks').css('display', 'none');
+                }
             })
     }
 
-    getPosts(studioId) {
-        api.get(`/studio-index-posts/${studioId}`)
+    async getPosts(studioId) {
+        await api.get(`/studio-index-posts/${studioId}`)
         .then(res => {
             this.setState({ posts: res.data });
+            if(this.state.posts.length < 1){
+                $('#alertPosts').css('display', 'inline');
+            }else{
+                $('#alertPosts').css('display', 'none');
+            }
         })
     }
 
-    getGalleries(studioId) {
-        api.get(`/studio-index-galleries/${studioId}`)
+    async getGalleries(studioId) {
+        await api.get(`/studio-index-galleries/${studioId}`)
             .then(res => {
                 this.setState({ galleries: res.data });
             })
+            if(this.state.galleries.length < 1){
+                $('#alertGallery').css('display', 'inline');
+            }else{
+                $('#alertGallery').css('display', 'none');
+            }
     }
 
-    getEvents(studioId) {
-        api.get(`/studio-index-event/${studioId}`)
-            .then(res => {
-                this.setState({ events: res.data });
-            })
+    async getEvents(studioId) {
+        await api.get(`/studio-index-event/${studioId}`)
+        .then(res => {
+            this.setState({ events: res.data });
+        })
+        if(this.state.events.length < 1){
+            $('#alertEvents').css('display', 'inline');
+        }else{
+            $('#alertEvents').css('display', 'none');
+        }
     }
 
     getMembers(studioId) {
@@ -244,25 +274,35 @@ export default class PerfilTatuador extends Component {
             })
     }
 
-    handleClickAdd = () => {
+     handleClickAdd = async () => {
         const tags = this.state.initialTags.slice();
 
         if (this.input.value.length === 0) {
             return;
         }
 
-        if (this.saveTag(this.input.value)) {
+        if (await this.saveTag(this.input.value)) {
             tags.push({ id: tags.length + 1, name: this.input.value });
             this.setState({ initialTags: tags });
+            if(this.state.initialTags.length < 1){
+                $('#alertTags').css('display', 'inline');
+            }else{
+                $('#alertTags').css('display', 'none');
+            }
         }
 
         this.input.value = '';
     }
 
-    handleClickDelete = tag => {
-        if (this.deleteTag(tag.id)) {
+    handleClickDelete = async (tag) => {
+        if (await this.deleteTag(tag.id)) {
             const tags = this.state.initialTags.filter(t => tag.id !== t.id);
             this.setState({ initialTags: tags });
+            if(this.state.initialTags.length < 1){
+                $('#alertTags').css('display', 'inline');
+            }else{
+                $('#alertTags').css('display', 'none');
+            }
         }
     }
 
@@ -1096,6 +1136,9 @@ export default class PerfilTatuador extends Component {
                                         src={delTag}
                                         onClick={() => this.handleClickDelete(tag)}/>
                                 </div>)} onChange={tags => console.log(tags)} />
+                                <div className='alerts'>
+                                  <p id='alertTags'>Sem tags para apresentar</p>
+                                </div>
                             </div>
                             <div className="inputs">
                                 <input ref={r => this.input = r} className="rounded-left" />
@@ -1167,6 +1210,7 @@ export default class PerfilTatuador extends Component {
                                                     rowsEvent : lines
                                                 })
                                             }}><h4 className='to-link'>{event.title}</h4></a>
+                                            <p><img src={loc}></img>{event.studio.name}</p>
                                         </Media.Heading>
                                         <small>
                                             <p><img src={loc}/>&nbsp;&nbsp;{event.description}
@@ -1178,6 +1222,9 @@ export default class PerfilTatuador extends Component {
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div className='alerts'>
+                            <p id='alertEvents'>Sem eventos para apresentar</p>
+                        </div>
                     </List>
                     <button className="cad-estudio mb-4" onClick={
                             this.cadastroEvento
@@ -1194,6 +1241,9 @@ export default class PerfilTatuador extends Component {
                                           this.editCertification(certification)
                                       }}>{certification.certificationType.name}</Avatar>
                                   ))}
+                                  <div className='alerts'>
+                                      <p id='alertCertificate'>Sem certificados para apresentar</p>
+                                  </div>
                               </Avatar.List>
                           </Card>
                           <Card>
@@ -1213,6 +1263,9 @@ export default class PerfilTatuador extends Component {
                                           </Media>
                                       </List.GroupItem>
                                   ))}
+                                  <div className='alerts'>
+                                      <p id='alertFeedbacks'>Sem certificados para apresentar</p>
+                                  </div>
                               </List>
                           </Card>
                 </div>
@@ -1247,6 +1300,9 @@ export default class PerfilTatuador extends Component {
                                           </Media>
                                       </List.GroupItem>
                                   ))}
+                                  <div className='alerts'>
+                                      <p id='alertPosts'>Sem postagens para apresentar</p>
+                                  </div>
                               </List>
                           </Card>
                           <GalleryCard>
@@ -1267,6 +1323,9 @@ export default class PerfilTatuador extends Component {
                                       </div>
                                   ))}
                               </div>
+                                  <div className='alerts'>
+                                      <p id='alertGallery'>Sem fotos para apresentar</p>
+                                  </div>
                           </GalleryCard>
                 </div>
             </div>
