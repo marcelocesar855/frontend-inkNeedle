@@ -270,7 +270,7 @@ export default class CadastroEstudio extends Component {
     }
 
     toPerfilTatuador = () => {
-        this.props.history.push('/perfil_tatuador')
+        this.props.history.push('/meu_perfil')
     }
 
     render() { //renderiza html
