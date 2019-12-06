@@ -7,7 +7,7 @@ import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
 import Navbar from '../components/Navbar';
-import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
+import {Card, Profile, List, Media, Avatar, GalleryCard} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,24 +16,7 @@ import '../styles/General.css';
 import '../styles/Tabler.css';
 import '../styles/Stars.css';
 import '../styles/Tags.css';
-import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
-import fc from '../images/facebook.png';
-import tt from '../images/twitter.png';
-import it from '../images/instagram.png';
-import wa from '../images/whatsapp.png';
-import ft1 from '../images/1.jpg';
-import ft2 from '../images/2.jpg';
-import ft3 from '../images/3.jpg';
-import ft4 from '../images/4.jpg';
-import ft5 from '../images/5.jpg';
-import ft6 from '../images/6.jpg';
-import ft7 from '../images/7.jpg';
-import ft8 from '../images/8.jpg';
-import ft11 from '../images/11.png';
-import certif1 from '../images/certif1.jpg';
-import certif2 from '../images/certif2.jpg';
-import certif3 from '../images/certif3.jpg';
 import api from '../services/api';
 
 // IMAGES
@@ -45,8 +28,6 @@ export default class PerfilTatuador extends Component {
         user: getUser(),
         id : this.props.match.params.id,
         studios: [],
-        nomeTatuador : 'Marcelo César',
-        descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
         initialTags: [],
         tattooArtist : {},
         certifications : [],
@@ -56,9 +37,6 @@ export default class PerfilTatuador extends Component {
         socialMedias : [],
         photoView : {id : 0, title : '', content : null},
         certificateView : {id : 0, sigla : '', nome : '', content : null},
-        facebook : 'https://www.facebook.com/',
-        twitter : 'https://www.twitter.com/',
-        instagram : 'https://www.instagram.com/',
     };
     
     componentDidMount () {
@@ -256,7 +234,7 @@ export default class PerfilTatuador extends Component {
                             </List.GroupItem>
                         ))}
                         <div className='alerts'>
-                                    <p id='alertTags'>Sem feedbacks para apresentar</p>
+                                    <p id='alertFeedbacks'>Sem feedbacks para apresentar</p>
                                 </div>
                         </List>
                     </Card>
@@ -334,13 +312,13 @@ export default class PerfilTatuador extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                        <h3>{this.state.certificateView.nome}</h3>
+                        <h3>{this.state.certificateView.name}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.certificateView.content}></img>
+                    <img className="rounded img-fluid" src={this.state.certificateView.fileUrl}></img>
                   </div>
                 </div>
               </div>
