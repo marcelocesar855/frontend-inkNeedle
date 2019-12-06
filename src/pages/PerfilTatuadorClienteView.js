@@ -43,25 +43,17 @@ export default class PerfilTatuador extends Component {
 
     state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
         user: getUser(),
+        id : this.props.match.params.id,
         studios: [],
         nomeTatuador : 'Marcelo César',
         descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
-        initialTags: [
-            {id: 1, content: 'Old school', undraggable: true}, {id: 2, content: 'New school', undraggable: true}, {id: 3, content: 'Bold line', undraggable: true},
-            {id: 4,  content: 'Tribal', undraggable: true}, {id: 5, content: 'Oriental', undraggable: true}, {id: 6, content: 'Graywash', undraggable: true},
-            {id: 7, content: 'Geometric', undraggable: true}, {id: 8, content: 'Biomecanic', undraggable: true}, {id: 9, content: 'Aquerela', undraggable: true},
-            {id: 10, content: 'Portrait', undraggable: true}],
-        certificacoes : [{id: 1, sigla : 'BS', nome : 'Bio Segurança 50h', content : certif1}, {id: 2, sigla :'OS', nome : 'Desenhos Old School 30h', content : certif2},
-        {id: 3, sigla : 'OT', nome : 'Desenhos Orientais 20h', content : certif3}],
-        posts : [{id : 1, nome : 'Marcelo César', content :'Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'},
-        {id : 2, nome : 'Marcelo César', content : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.'},
-        {id : 3, nome : 'Marcelo César', content : 'Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.'},
-        {id : 4, nome : 'Marcelo César', content : 'Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.'}],
-        feedbacks : [{nome : 'Camila Souza', content : 'Muito profissional e ético.'}],
-        galeria : [{id : 1, title : 'Test Title', content : ft1},{id : 2, title : 'Test Title', content : ft2},
-        {id : 3, title : 'Test Title', content : ft3},{id : 4, title : 'Test Title', content : ft4},{id : 5, title : 'Test Title', content : ft5},
-            {id : 6, title : 'Test Title', content : ft6},{id : 7, title : 'Test Title', content : ft7},{id : 8, title : 'Test Title', content : ft8},
-            {id : 9, title : 'Test Title', content : ft11}],
+        initialTags: [],
+        tattooArtist : {},
+        certifications : [],
+        gallery : [],
+        feedbacks : [],
+        posts: [],
+        socialMedias : [],
         photoView : {id : 0, title : '', content : null},
         certificateView : {id : 0, sigla : '', nome : '', content : null},
         facebook : 'https://www.facebook.com/',
@@ -70,16 +62,102 @@ export default class PerfilTatuador extends Component {
     };
     
     componentDidMount () {
+        this.getTattooArtist();
+        this.getTags();
+        this.getPosts();
+        this.getCertifications();
         this.getStudios();
-        this.setState({foto : test});
+        this.getPhotos();
+        this.getSocialMedias();
+        this.getFeedbacks();
     }
 
-    getStudios() {
-        api.get(`/studios`)
+    getTattooArtist() {
+        api.get(`/show-tattoo-artist/${this.state.id}`)
         .then(res => {
-            const studios = res.data;
-            this.setState({ studios });
+            const tattooArtist = res.data;
+            this.setState({ tattooArtist });
         })
+    }
+
+    
+    async getPhotos() {
+        await api.get(`/gallery-tattoo-artist/${this.state.id}`)
+        .then(res => {
+            this.setState({ gallery: res.data });
+        })
+        if(this.state.gallery.length < 1){
+            $('#alertGallery').css('display', 'inline');
+        }else{
+            $('#alertGallery').css('display', 'none');
+        }
+    }
+
+    getSocialMedias() {
+        api.get(`/social-media-tattoo-artist/${this.state.id}`)
+          .then(res => {         
+            this.setState({ socialMedias: res.data });
+          })
+      }
+
+    async getTags () {
+        await api.get(`/tags-tattoo-artist/${this.state.id}`)
+            .then(res => {
+            this.setState({ initialTags: res.data });
+        })
+        if(this.state.initialTags.length < 1){
+            $('#alertTags').css('display', 'inline');
+        }else{
+            $('#alertTags').css('display', 'none');
+        }
+    }
+
+    async getFeedbacks () {
+        await api.get(`/feedbacks-tattoo-artist/${this.state.id}`)
+            .then(res => {
+            this.setState({ feedbacks : res.data });
+        })
+        if(this.state.feedbacks.length < 1){
+            $('#alertFeedbacks').css('display', 'inline');
+        }else{
+            $('#alertFeedbacks').css('display', 'none');
+        }
+    }
+
+    async getStudios () {
+        await api.get(`/studios-tattoo-artist/${this.state.id}`)
+            .then(res => {
+            this.setState({ studios : res.data });
+        })
+        if(this.state.studios.length < 1){
+            $('#alertStudios').css('display', 'inline');
+        }else{
+            $('#alertStudios').css('display', 'none');
+        }
+    }
+
+    async getPosts () {
+        await api.get(`/posts-tattoo-artist/${this.state.id}`)
+            .then(res => {
+            this.setState({ posts : res.data });
+        })
+        if(this.state.posts.length < 1){
+            $('#alertPosts').css('display', 'inline');
+        }else{
+            $('#alertPosts').css('display', 'none');
+        }
+    }
+
+    async getCertifications () {
+    await api.get(`/certifications-tattoo-artist/${this.state.id}`)
+        .then(res => {
+            this.setState({ certifications: res.data });
+        })
+        if(this.state.certifications.length < 1){
+        $('#alertCertifications').css('display', 'inline');
+        }else{
+        $('#alertCertifications').css('display', 'none');
+        }
     }
 
     getAvatar() {
@@ -88,48 +166,38 @@ export default class PerfilTatuador extends Component {
     }
 
   render() {
-      const { user } = this.state;
       return(
           <div className="wrapper wrapper-logado">
-                <Navbar avatar={this.getAvatar}/>
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                 <div className="row ">
                 <div className="col col-lg-4">
                     <Card className="card-profile resumo-perfil">
                         <Card.Header backgroundURL={capa}></Card.Header>
                         <Card.Body className="text-center">
-                          <Profile.Image className="card-profile-img" avatarURL={this.getAvatar()}/>
-                          <h2>{user.name}
-                          < Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                          <Profile.Image className="card-profile-img" 
+                          avatarURL={this.state.tattooArtist.avatarUrl ? this.state.tattooArtist.avatarUrl : avatarDefault}/>
+                          <h2>{this.state.tattooArtist.name}
+                          < Rate className="ml-2" value={this.state.tattooArtist.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                           </h2>
-                            <p>{this.state.descricaoTatuador}</p>
+                            <p>{this.state.tattooArtist.description}</p>
                             <div className="Simple">
                                 <DraggableArea tags={this.state.initialTags} render={({tag, id}) => (
                                 <div className="tag ">                                    
-                                    {tag.content}
-                                </div>)} onChange={tags => console.log(tags)} />
+                                    {tag.name}
+                                </div>)}/>
+                                <div className='alerts'>
+                                    <p id='alertTags'>Sem tags para apresentar</p>
+                                </div>
                              </div>
-                            <a onClick={() =>{
-                                Linking.openURL(
-                                    this.state.facebook
-                                );
-                                
-                            }}><img className="social" src={fc}></img></a>
-                            <a onClick={() =>{
-                                Linking.openURL(
-                                    this.state.twitter
-                                );
-                            }}><img className="social" src={tt}></img></a>
-                            <a onClick={() =>{
-                                Linking.openURL(
-                                    this.state.instagram
-                                );
-                            }}><img className="social" src={it}></img></a>
-                            <a onClick={() =>{
-                                Linking.openURL(
-                                    "https://api.whatsapp.com/send?phone=5561982715613&text=Olá,%20gostaria%20de%20marcar%20uma%20sessão&lang=pt_pt"
-                                );
-                            }}><img className="social" src={wa}></img></a>
+                             {this.state.socialMedias.map(socialMedia => {
+                             return (
+                                <a aria-label={`${socialMedia.name}`} data-balloon-pos="up" onClick={() =>{
+                                    Linking.openURL(
+                                        socialMedia.link
+                                    );
+                                }}><img className="social" src={socialMedia.iconUrl}></img></a>
+                              )})}
                             <button className="chat">+Seguir</button>
                         </Card.Body>
                     </Card>
@@ -143,7 +211,7 @@ export default class PerfilTatuador extends Component {
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <h3>{studio.name}
-                                                {/* <Rate className="ml-2" defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/> */}
+                                                <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h3>
                                         </Media.Heading>
                                         {/* <img src={loc}/> <small>{estudio.local}</small> */}
@@ -151,17 +219,23 @@ export default class PerfilTatuador extends Component {
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div className='alerts'>
+                            <p id='alerStudios'>Sem estúdios cadastrados</p>
+                        </div>
                         </List>
                     </Card>
                     <Card>
                     <Card.Header><h2>Certificações</h2></Card.Header>
                         <Avatar.List className="p-3">
-                            {this.state.certificacoes.map(certif => (
-                                <Avatar aria-label={certif.nome} data-balloon-pos="up" onClick={()=>{
+                            {this.state.certifications.map(certif => (
+                                <Avatar aria-label={certif.name} data-balloon-pos="up" onClick={()=>{
                                     this.setState({certificateView : certif});
-                                    $('#viewCertificate').modal('show');
-                                }}>{certif.sigla}</Avatar>
+                                    $('#viewCertificate').modal('show');}} imageURL={certif.fileUrl}
+                                ></Avatar>
                             ))}
+                            <div className='alerts'>
+                                    <p id='alertCertifications'>Sem certificações para apresentar</p>
+                                </div>
                         </Avatar.List>
                     </Card>
                     <Card>
@@ -170,17 +244,20 @@ export default class PerfilTatuador extends Component {
                         {this.state.feedbacks.map(feedback => (
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={capa}></Avatar>
+                                    <Avatar size="md" imageURL={feedback.avatarUrl ? feedback.avatarUrl : avatarDefault}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{feedback.nome}</h3>
+                                            <h3>{feedback.name}</h3>
                                         </Media.Heading>
-                                        <Rate defaultValue={5} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                        <p><small>{feedback.content}</small></p>
+                                        <Rate defaultValue={feedback.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                        <p><small>{feedback.message}</small></p>
                                     </Media.Body>
                                 </Media>
                             </List.GroupItem>
                         ))}
+                        <div className='alerts'>
+                                    <p id='alertTags'>Sem feedbacks para apresentar</p>
+                                </div>
                         </List>
                     </Card>
                 </div>
@@ -190,15 +267,15 @@ export default class PerfilTatuador extends Component {
                       <h3>Postagens</h3>
                     </Card.Header>
                     <List>
-                    {this.state.posts.map(secao => (
+                    {this.state.posts.map(post => (
                         <List.GroupItem>
                         <Media>
-                            <Avatar size="md" imageURL={test}></Avatar>
+                            <Avatar size="md" imageURL={post.tattooArtist.avatarUrl ? post.tattooArtist.avatarUrl : avatarDefault}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
-                                    <h4>{secao.nome}</h4>
+                                    <h4>{post.tattooArtist.name}</h4>
                                 </Media.Heading>
-                                <small>{secao.content.split('\n').map(function(item) {
+                                <small>{post.content.split('\n').map(function(item) {
                                     return (
                                         <span>
                                         {item}
@@ -210,6 +287,9 @@ export default class PerfilTatuador extends Component {
                         </Media>
                     </List.GroupItem>
                     ))}
+                    <div className='alerts'>
+                        <p id='alertPosts'>Sem postagens para apresentar</p>
+                    </div>
                     </List>
                 </Card>
                 <GalleryCard>
@@ -217,16 +297,19 @@ export default class PerfilTatuador extends Component {
                     <h2>Galeria de artes</h2>
                 </Card.Header>
                     <div className="gallery">
-                        {this.state.galeria.map(foto => (
+                        {this.state.gallery.map(foto => (
                             <div class="mb-3 pics animation all 2">
                                 <Clickable onClick={() => {
                                     this.setState({photoView : foto})
                                     $('#viewPhoto').modal('show');
                                 }}>
-                                    <img className="rounded img-fluid" src={foto.content}></img>
+                                    <img className="rounded img-fluid" src={foto.url}></img>
                                 </Clickable>
                             </div>
                         ))}
+                    </div>
+                    <div className='alerts'>
+                        <p id='alertGallery'>Sem tags para apresentar</p>
                     </div>
                 </GalleryCard>
                 </div>
@@ -236,12 +319,13 @@ export default class PerfilTatuador extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
+                      <h3>{this.state.photoView.title}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.photoView.content}></img>
+                    <img className="rounded img-fluid" src={this.state.photoView.url}></img>
                   </div>
                 </div>
               </div>

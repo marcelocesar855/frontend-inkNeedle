@@ -32,7 +32,7 @@ var routes = [
         notPath: "/busca"
       },
       {
-          path: "/perfil_tatuador",
+          path: "/perfil_tatuador/:id",
           name: "PerfilTatuadorClienteView",
           component: PerfilTatuadorClienteView,
           isAuth: 2,
@@ -86,15 +86,6 @@ var routes = [
       path: "/perfil_estudio/:studioId",
       name: "PerfilEstudioClienteView",
       component: PerfilEstudioClienteView,
-      isAuth: 1,
-      notPath: "/login"
-    },
-    {
-      path: "/perfil_estudio/:studioId",
-      name: "PerfilEstudioClienteView",
-      component: PerfilEstudioClienteView,
-      isAuth: 2,
-      notPath: "/login"
     },
     {
       path: "/agenda",
