@@ -24,30 +24,10 @@ import api from '../services/api';
 import avatarDefault from './../images/avatar.png';
 
 export default class PerfilTatuador extends Component {
-
-<<<<<<< HEAD
-    constructor(props) {
-        super(props);
-        this.state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
-            user: getUser(),
-            id : this.props.match.params.id,
-            studios: [],
-            nomeTatuador : 'Marcelo César',
-            descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
-            initialTags: [],
-            tattooArtist : {},
-            certifications : [],
-            gallery : [],
-            feedbacks : [],
-            posts: [],
-            socialMedias : [],
-            photoView : {id : 0, title : '', content : null},
-            certificateView : {id : 0, sigla : '', nome : '', content : null},
-        };
-        this.handleLike = this.handleLike.bind(this);
-    }
-=======
-    state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
+            
+constructor(props) {
+    super(props);
+    this.state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
         user: getUser(),
         id : this.props.match.params.id,
         studios: [],
@@ -61,7 +41,8 @@ export default class PerfilTatuador extends Component {
         photoView : {id : 0, title : '', content : null},
         certificateView : {id : 0, sigla : '', nome : '', content : null},
     };
->>>>>>> 7209532b81e25be65f9ccdfce9f33c3c24ccc8bb
+    this.handleLike = this.handleLike.bind(this);
+}
     
     componentDidMount () {
         this.getTattooArtist();

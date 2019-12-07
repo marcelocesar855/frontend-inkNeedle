@@ -919,15 +919,16 @@ export default class PerfilTatuador extends Component {
                         <Card.Header><h2>Estúdios</h2></Card.Header>
                         <List>
                             {this.state.studios.map(studio => (
-                              <List.GroupItem onClick={() => { this.openStudio(studio) }} style={{ cursor: 'pointer' }} title={studio.name}>
+                              <List.GroupItem>
                                 <Media>
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{studio.name} 
-                                              <br/>
-                                              <Rate className="ml-2" defaultValue={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                            </h3>
+                                        <a onClick={() => {
+                                            this.openStudio(studio)
+                                            }}><h4 className='to-link'>{studio.name}
+                                            <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                            </h4></a>
                                         </Media.Heading>
                                         {/* <img src={loc}/> <small>{studio.address}</small> TEMP */}
                                     </Media.Body>

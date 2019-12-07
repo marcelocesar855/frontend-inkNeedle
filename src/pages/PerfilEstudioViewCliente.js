@@ -212,9 +212,11 @@ export default class PerfilTatuador extends Component {
                                     <Avatar size="md" imageURL={member.avatarUrl}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{member.name}
-                                                <Rate className="ml-2" value={member.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                            </h3>
+                                            <a onClick={() => {
+                                                this.props.history.push('/perfil_tatuador/' + member.id)
+                                            }}><h4 className='to-link'>{member.name}
+                                            <Rate className="ml-2" value={member.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                            </h4></a>
                                             <small>{member.description}</small>
                                         </Media.Heading>
                                     </Media.Body>
