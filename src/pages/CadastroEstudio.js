@@ -133,19 +133,6 @@ export default class CadastroEstudio extends Component {
         }
     }
 
-//     getLatLong(address)
-// {
-//     address = str_replace(" ", "+", $address);
-    
-//     $json = file_get_contents("http://maps.google.com/maps/api/geocode/json?address=$address&amp;sensor=false&amp;region=$region");
-//     $json = json_decode($json);
-    
-//     $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-//     $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
-    
-//     return array('latitude'=>$lat,'longitude'=>$long);
-//     }
-
     pushErrorMessage (error) {
         toast.error(error,{
             position: "top-right",
@@ -197,8 +184,8 @@ export default class CadastroEstudio extends Component {
                                             state: local.uf,
                                             cep: local.cep,
                                             complement: local.complemento,
-                                            latitude: local,
-                                            longitude: local,
+                                            latitude: lat,
+                                            longitude: lng,
                                         }, response.data.id);
 
                                         toast.success("Estúdio cadastrado com sucesso!", {
