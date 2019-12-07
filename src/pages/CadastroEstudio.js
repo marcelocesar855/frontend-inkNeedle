@@ -245,8 +245,8 @@ export default class CadastroEstudio extends Component {
             state: address.state,
             cep: address.cep,
             complement: address.complement, 
-            latitude: '0',
-            longitude: '0'
+            latitude: address.latitude,
+            longitude: address.longitude
         }
 
         const url = `studios/${studioId}/addresses`;
