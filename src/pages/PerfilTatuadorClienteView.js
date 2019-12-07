@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Linking } from 'react-native-web';
 import { getUser } from '../services/auth';
 import {Clickable} from 'react-clickable';
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import 'balloon-css';
 import $ from 'jquery';
@@ -16,24 +17,7 @@ import '../styles/General.css';
 import '../styles/Tabler.css';
 import '../styles/Stars.css';
 import '../styles/Tags.css';
-import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
-import fc from '../images/facebook.png';
-import tt from '../images/twitter.png';
-import it from '../images/instagram.png';
-import wa from '../images/whatsapp.png';
-import ft1 from '../images/1.jpg';
-import ft2 from '../images/2.jpg';
-import ft3 from '../images/3.jpg';
-import ft4 from '../images/4.jpg';
-import ft5 from '../images/5.jpg';
-import ft6 from '../images/6.jpg';
-import ft7 from '../images/7.jpg';
-import ft8 from '../images/8.jpg';
-import ft11 from '../images/11.png';
-import certif1 from '../images/certif1.jpg';
-import certif2 from '../images/certif2.jpg';
-import certif3 from '../images/certif3.jpg';
 import api from '../services/api';
 
 // IMAGES
@@ -41,25 +25,26 @@ import avatarDefault from './../images/avatar.png';
 
 export default class PerfilTatuador extends Component {
 
-    state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
-        user: getUser(),
-        id : this.props.match.params.id,
-        studios: [],
-        nomeTatuador : 'Marcelo César',
-        descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
-        initialTags: [],
-        tattooArtist : {},
-        certifications : [],
-        gallery : [],
-        feedbacks : [],
-        posts: [],
-        socialMedias : [],
-        photoView : {id : 0, title : '', content : null},
-        certificateView : {id : 0, sigla : '', nome : '', content : null},
-        facebook : 'https://www.facebook.com/',
-        twitter : 'https://www.twitter.com/',
-        instagram : 'https://www.instagram.com/',
-    };
+    constructor(props) {
+        super(props);
+        this.state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
+            user: getUser(),
+            id : this.props.match.params.id,
+            studios: [],
+            nomeTatuador : 'Marcelo César',
+            descricaoTatuador : 'Sou um tatuador muito legal e extrovertido, no meu estúdio tem café, água e biscoito.',
+            initialTags: [],
+            tattooArtist : {},
+            certifications : [],
+            gallery : [],
+            feedbacks : [],
+            posts: [],
+            socialMedias : [],
+            photoView : {id : 0, title : '', content : null},
+            certificateView : {id : 0, sigla : '', nome : '', content : null},
+        };
+        this.handleLike = this.handleLike.bind(this);
+    }
     
     componentDidMount () {
         this.getTattooArtist();
@@ -72,8 +57,22 @@ export default class PerfilTatuador extends Component {
         this.getFeedbacks();
     }
 
-    getTattooArtist() {
-        api.get(`/show-tattoo-artist/${this.state.id}`)
+    async handleLike() {
+        await api.post(`/like-tattoo-artist/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Seguindo ' + this.state.tattooArtist.name,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
+    }
+
+    async getTattooArtist() {
+        await api.get(`/show-tattoo-artist/${this.state.id}`)
         .then(res => {
             const tattooArtist = res.data;
             this.setState({ tattooArtist });
@@ -198,7 +197,7 @@ export default class PerfilTatuador extends Component {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button className="chat">+Seguir</button>
+                            <button className="chat" onClick={this.handleLike}>+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -210,9 +209,11 @@ export default class PerfilTatuador extends Component {
                                     <Avatar size="md" imageURL={capa}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
-                                            <h3>{studio.name}
-                                                <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
-                                            </h3>
+                                            <a onClick={() => {
+                                            this.props.history.push('/perfil_estudio/' + studio.id)
+                                            }}><h4 className='to-link'>{studio.name}
+                                            <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                            </h4></a>
                                         </Media.Heading>
                                         {/* <img src={loc}/> <small>{estudio.local}</small> */}
                                     </Media.Body>
@@ -256,7 +257,7 @@ export default class PerfilTatuador extends Component {
                             </List.GroupItem>
                         ))}
                         <div className='alerts'>
-                                    <p id='alertTags'>Sem feedbacks para apresentar</p>
+                                    <p id='alertFeedbacks'>Sem feedbacks para apresentar</p>
                                 </div>
                         </List>
                     </Card>

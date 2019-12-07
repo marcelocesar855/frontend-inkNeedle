@@ -250,7 +250,7 @@ export default class Busca extends Component {
                         </Card.Body>
                     </Card>
                     <Card>
-                    <Card.Header><h2>Eventos</h2></Card.Header>
+                    <Card.Header><h3>Eventos</h3></Card.Header>
                     <List>
                         {this.state.eventos.map(event => (
                             <List.GroupItem>

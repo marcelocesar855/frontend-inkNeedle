@@ -7,7 +7,7 @@ import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
 import Navbar from '../components/Navbar';
-import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button, Alert} from "tabler-react";
+import {Card, Profile, List, Media, Avatar, Form, GalleryCard} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -186,7 +186,7 @@ export default class PerfilTatuador extends Component {
         });
     }
 
-     handleClickAdd = async () => {
+    handleClickAdd = async () => {
         const tags = this.state.initialTags.slice();
 
         if (this.input.value.length === 0) {
@@ -438,8 +438,18 @@ export default class PerfilTatuador extends Component {
 
       let { modalAddSocialMedia } = this.state;
 
+      switch(modalAddSocialMedia.socialMediaTypeId) {
+        case '1' : modalAddSocialMedia.link = 'https://www.facebook.com/' + modalAddSocialMedia.link;break;
+        
+        case '2' : modalAddSocialMedia.link = 'https://www.twitter.com/' + modalAddSocialMedia.link;break;
+        
+        case '3' : modalAddSocialMedia.link = 'https://www.instagram.com/' + modalAddSocialMedia.link;break;
+
+        default : modalAddSocialMedia.link = this.generateLinkWhatsapp(modalAddSocialMedia.number, modalAddSocialMedia.message);break;
+      }
+
       const data = {
-        link: (modalAddSocialMedia.socialMediaTypeId === '4' ? this.generateLinkWhatsapp(modalAddSocialMedia.number, modalAddSocialMedia.message) : modalAddSocialMedia.link),
+        link: (modalAddSocialMedia.link),
         socialMediaTypeId: modalAddSocialMedia.socialMediaTypeId
       }
 
