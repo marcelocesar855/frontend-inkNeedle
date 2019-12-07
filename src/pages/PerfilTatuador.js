@@ -79,6 +79,7 @@ export default class PerfilTatuador extends Component {
         twitter : '',
         instagram : '',
         selectedAvatarFile : null,
+        selectedBannerFile : null,
         modalAddCertification : {
           name: '',         
           certificationTypeId: '',
