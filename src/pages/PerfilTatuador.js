@@ -845,7 +845,7 @@ export default class PerfilTatuador extends Component {
         return (!!user.avatar.url ? user.avatar.url : avatarDefault);
     }
 
-    openStudio(studio) {
+      openStudio(studio) {
       if (studio.isManager) {
           this.props.history.push(`/meu_estudio/${studio.id}`);
       } else {

@@ -8,7 +8,7 @@ import 'balloon-css';
 import $ from 'jquery';
 import 'bootstrap';
 import Navbar from '../components/Navbar';
-import {Card, Profile, List, Media, Avatar, Form, GalleryCard, Grid, Button} from "tabler-react";
+import {Card, Profile, List, Media, Avatar, GalleryCard} from "tabler-react";
 import Rate from 'rc-rate';
 import {DraggableArea} from 'react-draggable-tags';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,6 +25,7 @@ import avatarDefault from './../images/avatar.png';
 
 export default class PerfilTatuador extends Component {
 
+<<<<<<< HEAD
     constructor(props) {
         super(props);
         this.state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
@@ -45,6 +46,22 @@ export default class PerfilTatuador extends Component {
         };
         this.handleLike = this.handleLike.bind(this);
     }
+=======
+    state = {//variavel que armazena dados do componente para serem usados por ele, e caso alguma das informações mude o render() é executado novamente
+        user: getUser(),
+        id : this.props.match.params.id,
+        studios: [],
+        initialTags: [],
+        tattooArtist : {},
+        certifications : [],
+        gallery : [],
+        feedbacks : [],
+        posts: [],
+        socialMedias : [],
+        photoView : {id : 0, title : '', content : null},
+        certificateView : {id : 0, sigla : '', nome : '', content : null},
+    };
+>>>>>>> 7209532b81e25be65f9ccdfce9f33c3c24ccc8bb
     
     componentDidMount () {
         this.getTattooArtist();
@@ -335,13 +352,13 @@ export default class PerfilTatuador extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                        <h3>{this.state.certificateView.nome}</h3>
+                        <h3>{this.state.certificateView.name}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.certificateView.content}></img>
+                    <img className="rounded img-fluid" src={this.state.certificateView.fileUrl}></img>
                   </div>
                 </div>
               </div>
