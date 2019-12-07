@@ -10,13 +10,16 @@ import CurrencyFormat from 'react-currency-format';
 import TimeRange from '../components/TimeSlider';
 import Navbar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-const apiKey = 'AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q'
+import avatarDefault from './../images/avatar.png';
+import { getUser } from '../services/auth';
+const apiKey = 'AIzaSyBYNeQZyttCVHKAI4WkvL7NlkniJmo7T6Q';
 
 export default class CadastroEstudio extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            user : getUser(),
             nome : '',
             cnpj : '',
             value : {
@@ -89,6 +92,11 @@ export default class CadastroEstudio extends Component {
             loaded : 0
         })
     };
+
+    getAvatar() {
+        const { user } = this.state;
+        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+    }
 
     getAdressFromViaCEP = async (e) => {
         e.preventDefault();
@@ -263,7 +271,7 @@ export default class CadastroEstudio extends Component {
     render() { //renderiza html
         return (
             <div className="wrapper">
-               <Navbar/>
+               <Navbar avatar={this.getAvatar()}/>
                 <div className="wrapper-form">
                     <div className="titulo">
                         <h1>Informe os dados abaixo para o cadastrar o seu estúdio na <strong>InkNeedle!</strong></h1>
