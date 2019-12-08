@@ -66,6 +66,15 @@ constructor(props) {
                 closeOnClick: true,
                 pauseOnHover: true
             })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
         })
     }
 

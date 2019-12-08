@@ -39,8 +39,8 @@ export default class Busca extends Component {
         sessoes : [],
         posts : [],
         eventView : {nome : '', local : '', hora : '',
-        preco : 0, content : null, descricao : ''},
-        sessionView : {id : 0, nome : '', local : '', hora : ''},
+        price : 0, description :  '', studio : {}},
+        sessionView : {id : 0, nome : '', studio : {}, tattooArtist : {}, hora : ''},
         estudios : [],
         loc : JSON.parse(localStorage.getItem('@user-loc')),
         rate : 0,
@@ -114,7 +114,7 @@ export default class Busca extends Component {
           .then(res => {
             this.setState({ eventos : res.data });
         })
-        if(this.state.posts.length < 1){
+        if(this.state.eventos.length < 1){
             $('#alertEvents').css('display', 'inline');
           }else{
             $('#alertEvents').css('display', 'none');
@@ -159,22 +159,27 @@ export default class Busca extends Component {
         })
     };
 
-    cancelEvent () {
-        const event = this.state.eventView;
-        const eventos = this.state.eventos.filter(e => event.id !== e.id);
-        this.setState({
-            eventos : eventos,
-            eventView : {nome : '', local : '', hora : '',
-            preco : 0, content : null, descricao : ''}
-        });
-        toast.configure()
-        toast.success("Evento retirado da lista de interesses.",{
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true
-        });
+    async handleDislikeEvent() {
+        await api.post(`/dislike-event-studio/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Evento ' + this.state.eventView.title + ' retirado da sua lista de interesses',{
+                position: "top-right",
+                autoClose: 7000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
     }
 
     setSession (sessao) {
@@ -223,11 +228,10 @@ export default class Busca extends Component {
     }
 
     formatar(data, hora) {
-        var extenso;
         
         data = new Date(data);
       
-        var day = ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."][data.getDay()];
+        var day = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"][data.getDay()];
         var date = data.getDate();
         var month = ["Jan.", "Fev.", "Mar.", "Abr.", "Mai.", "Jun.", "Jul.", "Ago.", "Set.", "Out.", "Nov.", "Dez."][data.getMonth()];
         var year = data.getFullYear();
@@ -337,11 +341,11 @@ export default class Busca extends Component {
                     {this.state.posts.map(post => (
                         <List.GroupItem>
                         <Media>
-                            <Avatar size="md" imageURL={test}></Avatar>
+                            <Avatar size="md" imageURL={post.tattooArtist.avatarUrl}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
                                     <a onClick={() => {
-                                        this.props.history.push('/perfil_tatuador')
+                                        this.props.history.push('/perfil_tatuador/' + post.tattooArtist.id)
                                     }}><h4 className='to-link'>{post.tattooArtist.name}</h4></a>
                                 </Media.Heading>
                                 <small>{post.content.split('\n').map(function(item) {
@@ -419,17 +423,17 @@ export default class Busca extends Component {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h3>{this.state.eventView.nome}</h3>
+                    <h3>{this.state.eventView.title}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded mx-auto d-block" src={this.state.eventView.content}></img><br/>
-                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
-                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
-                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
-                        <div className='border rounded p-2 text-justify'>{this.state.eventView.descricao.split('\n').map(function(item) {
+                    <img className="rounded mx-auto d-block" src={this.state.eventView.bannerUrl}></img><br/>
+                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.studio.name}</p>
+                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.formatar(this.state.eventView.dateStart, this.state.eventView.timeStart)}</p>
+                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.price !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.price.toFixed(2)) : 'Grátis'}</font>}</p>
+                        <div className='border rounded p-2 text-justify'>{this.state.eventView.description.split('\n').map(function(item) {
                             return (
                                 <span>
                                 {item}
@@ -439,8 +443,9 @@ export default class Busca extends Component {
                             })}</div>
                         <div class="modal-footer">
                             <button className="cancel-event" onClick={() => {
-                            this.cancelEvent();
+                            this.handleDislikeEvent();
                             $('#viewEvent').modal('hide');
+                            this.getEvents()
                         }}>Perdi interesse</button>
                         </div>
                   </div>

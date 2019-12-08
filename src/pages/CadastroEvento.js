@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
+import {getUser} from '../services/auth';
 import avatarDefault from './../images/avatar.png';
 
 import api from '../services/api';
@@ -23,6 +24,7 @@ export default class CadastroEvento extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            user : getUser(),
             studios: [],
             studioId: null,
             eventTypes: [],

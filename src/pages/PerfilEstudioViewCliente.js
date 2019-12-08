@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Linking } from 'react-native-web';
 import { getUser } from '../services/auth';
 import {Clickable} from 'react-clickable';
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import 'balloon-css';
 import $ from 'jquery';
@@ -169,6 +170,52 @@ export default class PerfilTatuador extends Component {
         return val                    
     }
 
+    async handleLikeStudio() {
+        await api.post(`/like-studio/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Seguindo ' + this.state.studio.name,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
+    }
+
+    async handleLikeEvent() {
+        await api.post(`/like-event-studio/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Evento ' + this.state.eventView.title + ' adicionado a sua lista de interesses',{
+                position: "top-right",
+                autoClose: 7000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
+    }
+
   render() {
       return(
           <div className="wrapper wrapper-logado">
@@ -202,7 +249,9 @@ export default class PerfilTatuador extends Component {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button className="chat">+Seguir</button>
+                            <button className="chat" onClick={() => {
+                                this.handleLikeStudio()
+                            }}>+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -406,8 +455,8 @@ export default class PerfilTatuador extends Component {
                   </div>
                   <div class="modal-footer">
                         <button className='cancel-event' onClick={() => {
-                            $('#cancelEvent').modal('show');
-                        }}>Cancelar evento</button>
+                            this.handleLikeEvent()
+                        }}>Tenho interesse</button>
                   </div>
                 </div>
               </div>
