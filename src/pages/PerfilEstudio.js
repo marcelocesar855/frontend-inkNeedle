@@ -1437,7 +1437,7 @@ export default class PerfilEstudio extends Component {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button className='agendar' onClick={this.changePhoto}>Upload</button>
+                                <button className='agendar'>Upload</button>
                             </div>
                         </div>
                     </div>

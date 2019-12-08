@@ -41,7 +41,7 @@ export default class Busca extends Component {
         eventView : {nome : '', local : '', hora : '',
         price : 0, description :  '', studio : {}},
         sessionView : {id : 0, nome : '', studio : {}, tattooArtist : {}, hora : ''},
-        estudios : [],
+        places : [],
         loc : JSON.parse(localStorage.getItem('@user-loc')),
         rate : 0,
         feedback : '',
@@ -65,43 +65,46 @@ export default class Busca extends Component {
         return val                    
     }
 
+    componentWillMount () {
+      this.getEstudios()
+    }
+
     componentDidMount = async () => {
-        this.getEstudios()
         this.getPosts()
         this.getSessions()
         this.getEvents()
     }
 
     getEstudios = async () => {
-        var latitude = ''
-        var longitude = ''
-        if (navigator.geolocation) {
-            var startPos;
-          var geoSuccess = async (position) => {
-            if (position.coords.latitude != null){
-                startPos = position;
-                latitude = startPos.coords.latitude
-                longitude = startPos.coords.longitude
-                localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
-                await api.post('studios/search-geo', {
-                    latitude,
-                    longitude
-                  }).then(response => {
-                    this.setState({estudios : response.data})
-                  }).catch(error => {
-                      alert(error)
-                  })
-            }else{
-                localStorage.setItem('@user-loc',{});
-            }
-          };
-          navigator.geolocation.getCurrentPosition(geoSuccess);
-          
-      }
-      else {
-        console.log('Geolocation is not supported for this Browser/OS.');
-      }
+      var latitude = ''
+      var longitude = ''
+      if (navigator.geolocation) {
+          var startPos;
+        var geoSuccess = async (position) => {
+          if (position.coords.latitude != null){
+              startPos = position;
+              latitude = startPos.coords.latitude
+              longitude = startPos.coords.longitude
+              localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
+              await api.post('studios/search-geo', {
+                  latitude,
+                  longitude
+                }).then(response => {
+                  this.setState({places : response.data})
+                }).catch(error => {
+                    alert(error)
+                })
+          }else{
+              localStorage.setItem('@user-loc',{});
+          }
+        };
+        navigator.geolocation.getCurrentPosition(geoSuccess);
+        
     }
+    else {
+      console.log('Geolocation is not supported for this Browser/OS.');
+    }
+  }
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
         this.setState({
@@ -330,7 +333,7 @@ export default class Busca extends Component {
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
-                    <Mapa initialPlaces={this.state.estudios}></Mapa>
+                    <Mapa places={this.state.places}></Mapa>
                     </Card.Body>
                 </Card>
                 <Card>
@@ -341,12 +344,16 @@ export default class Busca extends Component {
                     {this.state.posts.map(post => (
                         <List.GroupItem>
                         <Media>
-                            <Avatar size="md" imageURL={post.tattooArtist.avatarUrl}></Avatar>
+                            <Avatar size="md" imageURL={post.author.avatarUrl}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
                                     <a onClick={() => {
-                                        this.props.history.push('/perfil_tatuador/' + post.tattooArtist.id)
-                                    }}><h4 className='to-link'>{post.tattooArtist.name}</h4></a>
+                                      if (post.author.type == 'studio'){
+                                        this.props.history.push('/perfil_estudio/' + post.author.id)
+                                      }else{
+                                        this.props.history.push('/perfil_tatuador/' + post.author.id)
+                                      }
+                                    }}><h4 className='to-link'>{post.author.name}</h4></a>
                                 </Media.Heading>
                                 <small>{post.content.split('\n').map(function(item) {
                                     return (

@@ -216,6 +216,25 @@ export default class PerfilTatuador extends Component {
         })
     }
 
+    formatar(data, hora) {
+        
+        data = new Date(data);
+      
+        var day = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"][data.getDay()];
+        var date = data.getDate();
+        var month = ["Jan.", "Fev.", "Mar.", "Abr.", "Mai.", "Jun.", "Jul.", "Ago.", "Set.", "Out.", "Nov.", "Dez."][data.getMonth()];
+        var year = data.getFullYear();
+      
+        return (`${day}, ${date} de ${month} de ${year} às ${hora}h`);
+      }
+
+    getAvatar() {
+        const { user } = this.state;
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
+    }
+
   render() {
       return(
           <div className="wrapper wrapper-logado">
@@ -282,7 +301,7 @@ export default class PerfilTatuador extends Component {
                         {this.state.events.map(event => (
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={event.file.url}></Avatar>
+                                    <Avatar size="md" imageURL={event.bannerUrl ? event.bannerUrl : avatarDefault }></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
@@ -293,9 +312,9 @@ export default class PerfilTatuador extends Component {
                                             }}><h4 className='to-link'>{event.title}</h4></a>
                                         </Media.Heading>
                                         <small>
-                                            <p><img src={loc}/>&nbsp;&nbsp;{event.description}
-                                            <br/><img src={clo}/>&nbsp;&nbsp;{event.dateHour}
-                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.fileId !== 0.0 ? 'R$ '+this.mascaraValor(event.fileId.toFixed(2)) : 'Grátis'}</font>
+                                            <p><img src={loc}/>&nbsp;&nbsp;{event.studio.name}
+                                            <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(event.dateStart, event.timeStart)}
+                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.price !== 0.0 ? 'R$ '+this.mascaraValor(event.price.toFixed(2)) : 'Grátis'}</font>
                                             </p>
                                         </small>
                                     </Media.Body>
