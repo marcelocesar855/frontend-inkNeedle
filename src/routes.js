@@ -34,9 +34,7 @@ var routes = [
       {
           path: "/perfil_tatuador/:id",
           name: "PerfilTatuadorClienteView",
-          component: PerfilTatuadorClienteView,
-          isAuth: 2,
-          notPath: "/meu_perfil"
+          component: PerfilTatuadorClienteView
         },
     {
         path: "/login",

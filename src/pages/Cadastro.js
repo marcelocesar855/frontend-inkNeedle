@@ -99,7 +99,7 @@ export default class Cadastro extends Component {
                                 this.props.history.push('/login');
                             }
                             ).catch( error => {
-                                this.pushErrorMessage(error);
+                                this.pushErrorMessage('Email já cadastrado.');
                                 this.setState({email : ''});
                             });                       
                         }else{

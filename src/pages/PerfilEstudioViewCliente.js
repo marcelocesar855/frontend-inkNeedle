@@ -41,8 +41,8 @@ export default class PerfilTatuador extends Component {
         feedbacks : [],
         posts: [],
         socialMedias : [],
-        photoView : {id : 0, title : '', content : null},
-        certificateView : {id : 0, sigla : '', nome : '', content : null},
+        photoView : {id : 0, title : '', file : {}},
+        certificateView : {id : 0, sigla : '', nome : '', file : {}},
         eventView : {id : 0, title : '', description : '', file : {}, fileId : 0},
         rowsEvent : 1
     };
@@ -88,7 +88,7 @@ export default class PerfilTatuador extends Component {
       }
 
     async getTags () {
-        await api.get(`/tags-tattoo-artist/${this.state.id}`)
+        await api.get(`/studio-index-tags/${this.state.id}`)
             .then(res => {
             this.setState({ initialTags: res.data });
         })
@@ -156,7 +156,9 @@ export default class PerfilTatuador extends Component {
 
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
     }
 
     mascaraValor(val) {
@@ -262,7 +264,7 @@ export default class PerfilTatuador extends Component {
                             {this.state.certifications.map(certif => (
                                 <Avatar aria-label={certif.name} data-balloon-pos="up" onClick={()=>{
                                     this.setState({certificateView : certif});
-                                    $('#viewCertificate').modal('show');}} imageURL={certif.fileUrl}
+                                    $('#viewCertificate').modal('show');}} imageURL={certif.file.url}
                                 ></Avatar>
                             ))}
                             <div className='alerts'>
@@ -302,10 +304,10 @@ export default class PerfilTatuador extends Component {
                     {this.state.posts.map(post => (
                         <List.GroupItem>
                         <Media>
-                            <Avatar size="md" imageURL={post.tattooArtist.avatarUrl ? post.tattooArtist.avatarUrl : avatarDefault}></Avatar>
+                            <Avatar size="md" imageURL={this.state.studio.avatarUrl ? this.state.studio.avatarUrl : avatarDefault}></Avatar>
                             <Media.Body className="ml-3">
                                 <Media.Heading>
-                                    <h4>{post.tattooArtist.name}</h4>
+                                    <h4>{this.state.studio.name}</h4>
                                 </Media.Heading>
                                 <small>{post.content.split('\n').map(function(item) {
                                     return (
@@ -335,7 +337,7 @@ export default class PerfilTatuador extends Component {
                                     this.setState({photoView : foto})
                                     $('#viewPhoto').modal('show');
                                 }}>
-                                    <img className="rounded img-fluid" src={foto.url}></img>
+                                    <img className="rounded img-fluid" src={foto.file.url}></img>
                                 </Clickable>
                             </div>
                         ))}
@@ -357,7 +359,7 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.photoView.url}></img>
+                    <img className="rounded img-fluid" src={this.state.photoView.file.url}></img>
                   </div>
                 </div>
               </div>
@@ -372,7 +374,7 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded img-fluid" src={this.state.certificateView.fileUrl}></img>
+                    <img className="rounded img-fluid" src={this.state.certificateView.file.url}></img>
                   </div>
                 </div>
               </div>

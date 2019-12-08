@@ -140,15 +140,15 @@ export default class PerfilEstudio extends Component {
         this.setState({ descricaoEstudioRows: lines })
     }
 
-    getStudio(studioId) {
-        api.get(`/my-studio/${studioId}`)
+    async getStudio(studioId) {
+       await api.get(`/show-studio/${studioId}`)
             .then(res => {
                 this.setState({ studio: res.data });
             });
     }
 
-    getDescription(studioId) {
-        api.get(`/studio-show-description/${studioId}`)
+    async getDescription(studioId) {
+        await api.get(`/studio-show-description/${studioId}`)
             .then(res => {
                 const { description } = res.data;
                 this.setState({ descricaoEstudio: description });
@@ -157,11 +157,16 @@ export default class PerfilEstudio extends Component {
             })
     }
 
-    getTags(studioId) {
-        api.get(`/studio-index-tags/${studioId}`)
-            .then(res => {
-                this.setState({ initialTags: res.data });
-            })
+    async getTags(studioId) {
+       await api.get(`/studio-index-tags/${studioId}`)
+        .then(res => {
+            this.setState({ initialTags: res.data });
+        })
+        if(this.state.initialTags.length < 1){
+            $('#alertTags').css('display', 'inline');
+        }else{
+            $('#alertTags').css('display', 'none');
+        }
     }
 
     getSocialMediaTypes() {
@@ -171,11 +176,11 @@ export default class PerfilEstudio extends Component {
             })
     }
 
-    getSocialMedias(studioId) {
-        api.get(`/studio-index-social-media/${studioId}`)
-            .then(res => {
-                this.setState({ socialMedias: res.data });
-            })
+    async getSocialMedias(studioId) {
+        await api.get(`/studio-index-social-media/${studioId}`)
+         .then(res => {
+             this.setState({ socialMedias: res.data });
+         })
     }
 
     getCertificationTypes() {
@@ -186,68 +191,107 @@ export default class PerfilEstudio extends Component {
             })
     }
 
-    getCertification(studioId) {
-        api.get(`/studio-index-certification/${studioId}`)
-            .then(res => {
-                const certifications = res.data;
-                this.setState({ certifications });
-            })
+    async getCertification(studioId) {
+        await api.get(`/studio-index-certification/${studioId}`)
+        .then(res => {
+            const certifications = res.data;
+            this.setState({ certifications });
+        })
+        if(this.state.certifications.length < 1){
+            $('#alertCertifications').css('display', 'inline');
+        }else{
+            $('#alertCertifications').css('display', 'none');
+        }
     }
 
-    getFeedbacks(studioId) {
-        api.get(`/studio-my-feedbacks/${studioId}`)
-            .then(res => {
-                this.setState({ feedbacks: res.data });
-            })
+    async getFeedbacks(studioId) {
+       await api.get(`/studio-my-feedbacks/${studioId}`)
+        .then(res => {
+            this.setState({ feedbacks: res.data });
+        })
+        if(this.state.feedbacks.length < 1){
+            $('#alertFeedbacks').css('display', 'inline');
+        }else{
+            $('#alertFeedbacks').css('display', 'none');
+        }
     }
 
-    getPosts(studioId) {
-        api.get(`/studio-index-posts/${studioId}`)
-            .then(res => {
-                this.setState({ posts: res.data });
-            })
+   async getPosts(studioId) {
+        await api.get(`/studio-index-posts/${studioId}`)
+        .then(res => {
+            this.setState({ posts: res.data });
+        })
+        if(this.state.posts.length < 1){
+            $('#alertPosts').css('display', 'inline');
+        }else{
+            $('#alertPosts').css('display', 'none');
+        }
     }
 
-    getGalleries(studioId) {
-        api.get(`/studio-index-galleries/${studioId}`)
-            .then(res => {
-                this.setState({ galleries: res.data });
-            })
+    async getGalleries(studioId) {
+        await api.get(`/studio-index-galleries/${studioId}`)
+        .then(res => {
+            this.setState({ galleries: res.data });
+        })
+        if(this.state.galleries.length < 1){
+            $('#alertGalleries').css('display', 'inline');
+        }else{
+            $('#alertGalleries').css('display', 'none');
+        }
     }
 
-    getEvents(studioId) {
-        api.get(`/studio-index-event/${studioId}`)
-            .then(res => {
-                this.setState({ events: res.data });
-            })
+    async getEvents(studioId) {
+        await api.get(`/studio-index-event/${studioId}`)
+        .then(res => {
+            this.setState({ events: res.data });
+        })
+        if(this.state.events.length < 1){
+            $('#alertEvents').css('display', 'inline');
+        }else{
+            $('#alertEvents').css('display', 'none');
+        }
     }
 
-    getMembers(studioId) {
-        api.get(`/studio-my-members/${studioId}`)
-            .then(res => {
-                this.setState({ members: res.data });
-            })
+    async getMembers(studioId) {
+        await api.get(`/studio-my-members/${studioId}`)
+        .then(res => {
+            this.setState({ members: res.data });
+        })
+        if(this.state.members.length < 1){
+            $('#alertMembers').css('display', 'inline');
+        }else{
+            $('#alertMembers').css('display', 'none');
+        }
     }
 
-    handleClickAdd = () => {
+    handleClickAdd = async () => {
         const tags = this.state.initialTags.slice();
 
         if (this.input.value.length === 0) {
             return;
         }
 
-        if (this.saveTag(this.input.value)) {
+        if (await this.saveTag(this.input.value)) {
             tags.push({ id: tags.length + 1, name: this.input.value });
             this.setState({ initialTags: tags });
         }
-
         this.input.value = '';
+        if(this.state.initialTags.length < 1){
+            $('#alertTags').css('display', 'inline');
+        }else{
+            $('#alertTags').css('display', 'none');
+        }
     }
 
-    handleClickDelete = tag => {
-        if (this.deleteTag(tag.id)) {
+    handleClickDelete = async tag => {
+        if (await this.deleteTag(tag.id)) {
             const tags = this.state.initialTags.filter(t => tag.id !== t.id);
             this.setState({ initialTags: tags });
+        }
+        if(this.state.initialTags.length < 1){
+            $('#alertTags').css('display', 'inline');
+        }else{
+            $('#alertTags').css('display', 'none');
         }
     }
 
@@ -1042,19 +1086,15 @@ export default class PerfilEstudio extends Component {
 
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
     }
-
-    changePhoto() { //possibilita a edição do texto no input
-    };
-
-    uploadPhoto() { //possibilita a edição do texto no input
-    };
 
     render() {
         return (
             <div className="wrapper wrapper-logado">
-                <Navbar />
+                <Navbar avatar={this.getAvatar()}/>
                 <div className="container mt-5">
                     <div className="row ">
                         <div className="col col-lg-4">
@@ -1066,12 +1106,12 @@ export default class PerfilEstudio extends Component {
                                     <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                         $('#uploadAvatar').modal('show');
                                     }}>
-                                        <Profile.Image className="card-profile-img" avatarURL={this.state.studio.avatarUrl} />
+                                        <Profile.Image className="card-profile-img"
+                                        avatarURL={this.state.studio.avatarUrl ? this.state.studio.avatarUrl : avatarDefault}/>
                                     </Clickable>
                                     <h2>{this.state.studio.name}
                                         <Rate className="ml-2" defaultValue={this.state.studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true" />
                                     </h2>
-
                                     <Form.Textarea rows={this.state.descricaoEstudioRows} id='desc'
                                         className='mod-card-back-title'
                                         onChange={this.handleInputChangeDescricao}
@@ -1080,17 +1120,18 @@ export default class PerfilEstudio extends Component {
                                         placeholder="Deixe uma descrição sobre você aqui"
                                         maxLength="65"
                                     />
-
                                     <div className="Simple">
                                         <DraggableArea tags={this.state.initialTags} render={({ tag, id }) => (
                                             <div className="tag ">
                                                 {tag.name}
                                                 &nbsp;&nbsp;
-                                    <img
-                                                    className="delete"
-                                                    src={delTag}
-                                                    onClick={() => this.handleClickDelete(tag)} />
-                                            </div>)} onChange={tags => console.log(tags)} />
+                                    <img className="delete"
+                                        src={delTag}
+                                        onClick={() => this.handleClickDelete(tag)} />
+                                    </div>)} onChange={tags => console.log(tags)} />
+                                    <div className='alerts'>
+                                        <p id='alertTags'>Sem tags para apresentar</p>
+                                    </div>
                                     </div>
                                     <div className="inputs">
                                         <input ref={r => this.input = r} className="rounded-left" />
@@ -1104,7 +1145,6 @@ export default class PerfilEstudio extends Component {
                                     <a aria-label="Adicionar rede social" className="btn btn-primary mt-3" data-balloon-pos="down" onClick={() => { this.addSocialMedia(); }}>
                                         <i className="fa fa-plus" style={{ color: '#FFF' }}></i>
                                     </a>
-                                    {/* <button className="chat">+ Seguir</button> */}
                                 </Card.Body>
                             </Card>
                             <Card>
@@ -1143,6 +1183,9 @@ export default class PerfilEstudio extends Component {
                                             </Media>
                                         </List.GroupItem>
                                     ))}
+                                    <div className='alerts'>
+                                        <p id='alertMembers'>Sem membros para apresentar</p>
+                                    </div>
                                 </List>
                             </Card>
                             <Card>
@@ -1173,6 +1216,9 @@ export default class PerfilEstudio extends Component {
                                             </Media>
                                         </List.GroupItem>
                                     ))}
+                                    <div className='alerts'>
+                                        <p id='alertEvents'>Sem eventos para apresentar</p>
+                                    </div>
                                 </List>
                                 <button className="cad-estudio mb-4" onClick={
                                     this.cadastroEvento
@@ -1187,8 +1233,11 @@ export default class PerfilEstudio extends Component {
                                     {this.state.certifications.map(certification => (
                                         <Avatar aria-label={certification.name} data-balloon-pos="up" onClick={() => {
                                             this.editCertification(certification)
-                                        }}>{certification.certificationType.name}</Avatar>
+                                        }} imageURL={certification.file.url}></Avatar>
                                     ))}
+                                    <div className='alerts'>
+                                        <p id='alertCertifications'>Sem certificações para apresentar</p>
+                                    </div>
                                 </Avatar.List>
                             </Card>
                             <Card>
@@ -1208,6 +1257,9 @@ export default class PerfilEstudio extends Component {
                                             </Media>
                                         </List.GroupItem>
                                     ))}
+                                    <div className='alerts'>
+                                        <p id='alertFeedbacks'>Sem feedbacks para apresentar</p>
+                                    </div>
                                 </List>
                             </Card>
                         </div>
@@ -1242,6 +1294,9 @@ export default class PerfilEstudio extends Component {
                                             </Media>
                                         </List.GroupItem>
                                     ))}
+                                    <div className='alerts'>
+                                        <p id='alertPosts'>Sem postagens para apresentar</p>
+                                    </div>
                                 </List>
                             </Card>
                             <GalleryCard>
@@ -1262,6 +1317,9 @@ export default class PerfilEstudio extends Component {
                                         </div>
                                     ))}
                                 </div>
+                                    <div className='alerts'>
+                                        <p id='alertGalleries'>Sem fotos para apresentar</p>
+                                    </div>
                             </GalleryCard>
                         </div>
                     </div>

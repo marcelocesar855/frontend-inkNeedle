@@ -7,7 +7,6 @@ import '../styles/General.css';
 import Notifications from'./Notifications';
 import logo2 from '../images/logo2.png';
 import { logout } from '../services/auth';
-import avatarDefault from './../images/avatar.png';
 import help from './../images/help.png';
 import socket from "./../services/socket";
 

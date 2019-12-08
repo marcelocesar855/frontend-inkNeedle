@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
+import avatarDefault from './../images/avatar.png';
 
 import api from '../services/api';
 import Swal from 'sweetalert2'
@@ -195,10 +196,17 @@ export default class CadastroEvento extends Component {
             });
     }
 
+    getAvatar() {
+        const { user } = this.state;
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
+    }
+
     render() { //renderiza html
         return (
             <div className="wrapper">
-               <Navbar/>
+               <Navbar avatar={this.getAvatar()}/>
                 <div className="wrapper-form">
                     <div className="titulo mt-4">
                         <h1>Informe os dados abaixo para o cadastrar o evento a ser realizado</h1>

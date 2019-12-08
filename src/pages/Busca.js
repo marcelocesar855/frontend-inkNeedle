@@ -228,7 +228,9 @@ export default class Busca extends Component {
     
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
     }
 
   render() {

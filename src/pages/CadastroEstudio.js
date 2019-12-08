@@ -95,7 +95,9 @@ export default class CadastroEstudio extends Component {
 
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
     }
 
     getAdressFromViaCEP = async (e) => {

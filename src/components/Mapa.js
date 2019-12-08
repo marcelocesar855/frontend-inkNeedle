@@ -35,8 +35,8 @@ export default GoogleApiWrapper({
            {estudios.map(studio =>(
             <Marker key={studio.id}
             position={{
-                lat: studio.lat,
-                lng: studio.lng
+                lat: studio.addresses[0].latitude,
+                lng: studio.addresses[0].longitude
             }} onClick={() => {
                 this.setState({selectedPlace: studio});
                 this.setState({selected : true})
@@ -45,14 +45,14 @@ export default GoogleApiWrapper({
            ))}
 
             <InfoWindow visible={this.state.selectedPlace} position={{
-                lat: this.state.selectedPlace.lat,
-                lng: this.state.selectedPlace.lng
+                // lat: this.state.selectedPlace.addresses[0].latitude,
+                // lng: this.state.selectedPlace.addresses[0].longitude
             }}>
-            <Avatar size="md" imageURL={this.state.selectedPlace.imageURL}></Avatar>
+            <Avatar size="md" imageURL={this.state.selectedPlace.avatarUrl}></Avatar>
             <a onClick={() => {
-              this.props.history.push('/perfil_estudio')
-              }}><h3>{this.state.selectedPlace.name}</h3> </a>
-            <p>{this.state.selectedPlace.descricao}</p> 
+              this.props.history.push('/perfil_estudio/' + this.state.selectedPlace.id)
+              }}><h3 className='to-link'>{this.state.selectedPlace.name}</h3> </a>
+            <p>{this.state.selectedPlace.description}</p> 
             </InfoWindow>
         </Map>
     );

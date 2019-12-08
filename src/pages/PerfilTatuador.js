@@ -842,9 +842,11 @@ export default class PerfilTatuador extends Component {
     }
 
     getAvatar() {
-        const { user } = this.state;
-        return (!!user.avatar.url ? user.avatar.url : avatarDefault);
-    }
+      const { user } = this.state;
+      if(user != null){
+          return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+      }
+  }
 
       openStudio(studio) {
       if (studio.isManager) {
@@ -922,7 +924,7 @@ export default class PerfilTatuador extends Component {
                             {this.state.studios.map(studio => (
                               <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={capa}></Avatar>
+                                    <Avatar size="md" imageURL={studio.avatarUrl}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                         <a onClick={() => {

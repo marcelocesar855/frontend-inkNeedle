@@ -159,7 +159,9 @@ constructor(props) {
 
     getAvatar() {
         const { user } = this.state;
-        return (!!user.avatarUrl ? user.avatarUrl : avatarDefault);
+        if(user != null){
+            return (!!user.avatar.url ? user.avatar.url : avatarDefault);
+        }
     }
 
   render() {
@@ -263,7 +265,7 @@ constructor(props) {
                 <div className="col col-lg-8 mb-5">
                 <Card>
                     <Card.Header>
-                      <h3>Postagens</h3>
+                      <h2>Postagens</h2>
                     </Card.Header>
                     <List>
                     {this.state.posts.map(post => (
