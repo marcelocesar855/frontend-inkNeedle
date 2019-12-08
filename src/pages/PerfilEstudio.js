@@ -29,7 +29,7 @@ import avatarDefault from './../images/avatar.png';
 // Helpers
 import Swal from 'sweetalert2'
 import api from '../services/api';
-import { getUser } from '../services/auth';
+import { getUser, setAvatarUser } from '../services/auth';
 import moment from 'moment';
 
 export default class PerfilEstudio extends Component {
@@ -1078,10 +1078,54 @@ export default class PerfilEstudio extends Component {
         return val
     }
 
-    changePhoto() { //possibilita a edição do texto no input
-        this.setState({
-            foto: this.state.selectedFile
+    changePhoto = () => { //possibilita a edição do texto no input
+        const { selectedAvatarFile } = this.state.selectedAvatarFile;        
+        let url =  '/studios/' + this.state.studioId + '/avatar';
+        let formData = new FormData();
+
+        formData.append('file', selectedAvatarFile);
+
+        api({
+          method: 'post',
+          url,
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' }
         })
+        .then((response) => {
+            if (response.data.url) {
+                setAvatarUser(response.data.url);
+                this.setState({user : getUser()})
+                this.getAvatar();
+                $('#uploadAvatar').modal('hide');
+            }
+        })
+        .catch((response) => {
+            console.log(response);
+        });
+    };
+
+    changeBanner = () => { //possibilita a edição do texto no input
+        const { selectedBannerFile } = this.state.selectedBannerFile;        
+        let url =  '/studios/' + this.state.studioId + '/banner';
+        let formData = new FormData();
+
+        formData.append('file', selectedBannerFile);
+
+        api({
+          method: 'post',
+          url,
+          data: formData,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        .then((response) => {
+            if (response.data.url) {
+                this.setState({user : getUser()})
+                $('#uploadBanner').modal('hide');
+            }
+        })
+        .catch((response) => {
+            console.log(response);
+        });
     };
 
     getAvatar() {
@@ -1099,9 +1143,11 @@ export default class PerfilEstudio extends Component {
                     <div className="row ">
                         <div className="col col-lg-4">
                             <Card className="card-profile resumo-perfil">
-                                <Card.Header aria-label="Mudar foto de capa" backgroundURL={this.state.studio.bannerUrl} onClick={() => {
+                                <Clickable aria-label="Mudar foto de capa"  data-balloon-pos="down" className='center'  onClick={() => {
                                     $('#uploadBanner').modal('show');
-                                }}></Card.Header>
+                                }}>
+                                <Card.Header backgroundURL={this.state.studio.bannerUrl}></Card.Header>
+                                </Clickable>
                                 <Card.Body className="text-center">
                                     <Clickable aria-label="Mudar foto de perfil" data-balloon-pos="down" className='center' onClick={() => {
                                         $('#uploadAvatar').modal('show');
@@ -1274,7 +1320,7 @@ export default class PerfilEstudio extends Component {
                                     {this.state.posts.map(post => (
                                         <List.GroupItem>
                                             <Media>
-                                                <Avatar size="md" imageURL={this.getAvatar()}></Avatar>
+                                                <Avatar size="md" imageURL={this.state.studio.avatarUrl}></Avatar>
                                                 <Media.Body className="ml-3">
                                                     <Media.Heading>
                                                         <h4>{this.state.studio.name}</h4>
@@ -1353,7 +1399,7 @@ export default class PerfilEstudio extends Component {
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h3 class="modal-title" id="TituloModalCentralizado">Alterar foto de perfil</h3>
+                                <h3 class="modal-title" id="TituloModalCentralizado">Alterar capa do perfil</h3>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1367,7 +1413,7 @@ export default class PerfilEstudio extends Component {
                                 </div>
                             </div>
                             <div class="modal-footer text-center">
-                                <button className='btn btn-primary' onClick={this.changePhoto}>Upload</button>
+                                <button className='btn btn-primary' onClick={this.changeBanner}>Upload</button>
                             </div>
                         </div>
                     </div>

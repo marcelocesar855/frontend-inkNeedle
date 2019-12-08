@@ -23,9 +23,8 @@ import test from '../images/teste.jpg';
 import capa from '../images/RM_11.png';
 import Navbar from '../components/Navbar';
 import Mapa from '../components/Mapa';
-import banner from '../images/banner.jpg'
-import banner1 from '../images/banner1.jpg'
 import api from '../services/api';
+import Swal from 'sweetalert2'
 import avatarDefault from './../images/avatar.png';
 
 export default class Busca extends Component {
@@ -183,20 +182,18 @@ export default class Busca extends Component {
     }
 
     cancelSession () {
-        const sessao = this.state.sessionView;
-        const sessoes = this.state.sessoes.filter(s => sessao.id !== s.id);
-        this.setState({
-            sessoes : sessoes,
-            sessionView : {id : 0, nome : '', local : '', hora : ''}
-        });
-        toast.configure()
-        toast.success("Sessão desmarcada.",{
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true
-        });
+        let url = ` /customer/schedulings/${this.state.sessionView.id}/cancel`;
+          api({
+            method: 'delete',
+            url
+          }).then((response) => {
+            Swal.fire(
+              'Cancelado!',
+              'Sessão cancelada com sucesso! O tatuador será notificado do cancelamento.',
+              'success'
+            );
+            this.getSessions();
+          });
     }
 
     changePhoto = () => { //possibilita a edição do texto no input
@@ -225,7 +222,19 @@ export default class Busca extends Component {
         });
     }
 
-    
+    formatar(data, hora) {
+        var extenso;
+        
+        data = new Date(data);
+      
+        var day = ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."][data.getDay()];
+        var date = data.getDate();
+        var month = ["Jan.", "Fev.", "Mar.", "Abr.", "Mai.", "Jun.", "Jul.", "Ago.", "Set.", "Out.", "Nov.", "Dez."][data.getMonth()];
+        var year = data.getFullYear();
+      
+        return (`${day}, ${date} de ${month} de ${year} às ${hora}h`);
+      }
+
     getAvatar() {
         const { user } = this.state;
         if(user != null){
@@ -257,18 +266,18 @@ export default class Busca extends Component {
                         {this.state.eventos.map(event => (
                             <List.GroupItem>
                                 <Media>
-                                    <Avatar size="md" imageURL={event.content}></Avatar>
+                                    <Avatar size="md" imageURL={event.bannerUrl}></Avatar>
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
                                                 this.setState({eventView : event})
                                                 $('#viewEvent').modal('show');
-                                            }}><h4 className='to-link'>{event.nome}</h4></a>
+                                            }}><h4 className='to-link'>{event.title}</h4></a>
                                         </Media.Heading>
                                         <small>
-                                            <p><img src={loca}/>&nbsp;&nbsp;{event.local}
-                                            <br/><img src={clo}/>&nbsp;&nbsp;{event.hora}
-                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.preco !== 0.0 ? 'R$ '+this.mascaraValor(event.preco.toFixed(2)) : 'Grátis'}</font>
+                                            <p><img src={loca}/>&nbsp;&nbsp;{event.studio.name}
+                                            <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(event.dateStart, event.timeStart)}
+                                            <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.price !== 0.0 ? 'R$ '+this.mascaraValor(event.price.toFixed(2)) : 'Grátis'}</font>
                                             </p>
                                         </small>
                                     </Media.Body>
@@ -286,19 +295,18 @@ export default class Busca extends Component {
                     {this.state.sessoes.map(sessao => (
                     <List.GroupItem>
                     <Media>
-                        <Avatar size="md" imageURL={capa}></Avatar>
+                        <Avatar size="md" imageURL={sessao.bannerUrl}></Avatar>
                         <Media.Body className="ml-3">
                             <small>
-                                <p><img src={loca}/>&nbsp;&nbsp;{sessao.local}
-                                <br/><img src={clo}/>&nbsp;&nbsp;{sessao.hora}
-                                <br/><img src={person}/>&nbsp;&nbsp;{sessao.nome}
+                                <p><img src={loca}/>&nbsp;&nbsp;{sessao.studio.name}
+                                <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(sessao.dateStart, sessao.hourStart)}
+                                <br/><img src={person}/>&nbsp;&nbsp;{sessao.tattooArtist.name}
                                 </p>    
                             </small>
                         </Media.Body>
                         <button className='btn' onClick={() => {
                             this.setState({
-                                sessionView : sessao,
-                                loc : JSON.parse(localStorage.getItem('@user-loc'))
+                                sessionView : sessao
                             })
                             $('#deleteSession').modal('show');
                         }}><img src={trash}></img></button>
@@ -367,9 +375,9 @@ export default class Busca extends Component {
                   </div>
                   <div class="modal-body">
                     <h3>Você tem certeza que deseja desmarcar a sessão?</h3>
-                    <p>Local:&nbsp;&nbsp;{this.state.sessionView.local}</p>
-                    <p>Data e hora:&nbsp;&nbsp;{this.state.sessionView.hora}</p>
-                    <p>Tatuador:&nbsp;&nbsp;{this.state.sessionView.nome}</p>
+                    <p>Local:&nbsp;&nbsp;{this.state.sessionView.studio.name}</p>
+                    <p>Data e hora:&nbsp;&nbsp;{this.formatar(this.state.sessionView.studio.dateStart, this.state.sessionView.studio.hourStart)}</p>
+                    <p>Tatuador:&nbsp;&nbsp;{this.state.sessionView.tattooArtist.name}</p>
                     <p><font color='red'>Obs: O tatuador será notificado da desmarcação.</font></p>
                   </div>
                   <div class="modal-footer">

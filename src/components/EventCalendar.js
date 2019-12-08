@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import api from '../services/api';
 import 'react-toastify/dist/ReactToastify.css';
 import {SingleDatePicker} from 'react-dates';
 import FullCalendar from '@fullcalendar/react'
@@ -28,7 +29,9 @@ import trash from '../images/trash.png';
           selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           receivedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           newEvent : {id : 0, cliente : '', time : ['',''], date : null},
-          cliente : ''
+          cliente : '',
+          estudios : [],
+          estudio : 0
         }
         this.findEventById = this.findEventById.bind(this);
       }
@@ -49,14 +52,29 @@ import trash from '../images/trash.png';
       }});
     };
 
-    componentDidMount() {
+    async componentDidMount() {
       this.state.events.map(event => {
         event.title = event.time[0] + ' - ' + event.cliente
         event.start = event.date
         const events = this.state.events.filter(e => event.id !== e.id);
         this.setState({events : [event].concat(events)})
       })
+      await api.get(`/studios`)
+        .then(res => {
+            const estudios = res.data;
+            this.setState({ estudios });
+        })
     }
+
+    handleInputChangeEstudio = e => { //possibilita a edição do texto no input
+      this.setState({estudio : e.target.value});
+    };
+
+    handleInputChangeEstudioEdit = e => { //possibilita a edição do texto no input
+      this.setState({selectedEvent : 
+        {estudio : e.target.value}
+      });
+    };
 
     addEditedEvent () {
       toast.configure()
@@ -191,20 +209,20 @@ import trash from '../images/trash.png';
                     </button>
                   </div>
                   <div class="modal-body">
-                    <form className="agenda">
+                    <form className="agenda combo-estudio">
                     <p>Data:&nbsp;&nbsp;
                     <SingleDatePicker
-                      date={moment(this.state.newEvent.date)} // momentPropTypes.momentObj or null
+                      date={moment(this.state.newEvent.date)} 
                       displayFormat='DD/MM/YYYY'
                       numberOfMonths={1}
                       onDateChange={date => this.setState({ newEvent : {
                         date : date,
                         time : this.state.newEvent.time,
                         cliente : this.state.newEvent.cliente
-                      } })} // PropTypes.func.isRequired
-                      focused={this.state.focused} // PropTypes.bool
-                      onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-                      id="add" // PropTypes.string.isRequired,
+                      } })} 
+                      focused={this.state.focused} 
+                      onFocusChange={({ focused }) => this.setState({ focused })} 
+                      id="add" 
                     /></p>
                     <p>Duração:&nbsp;&nbsp;
                     <TimeRangePicker className='border-0' disableClock='true'
@@ -212,6 +230,12 @@ import trash from '../images/trash.png';
                       value={this.state.newEvent.time}
                     />
                     </p>
+                    <p>Estúdio:&nbsp;<select value={this.state.estudio} onChange={this.handleInputChangeEstudio}>
+                        <option value="0" disabled>Selecione o estúdio</option>
+                        {this.state.estudios.map(estudio => (
+                          <option value={estudio.id}>{estudio.name}</option>
+                          ))}
+                    </select></p>
                     <p>Nome do cliente:&nbsp;&nbsp;
                     <input value={this.state.newEvent.cliente}
                     onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
@@ -277,6 +301,12 @@ import trash from '../images/trash.png';
                       value={this.state.selectedEvent.time}
                     />
                     </p>
+                    <p>Estúdio:&nbsp;<select value={this.state.selectedEvent.estudio} onChange={this.handleInputChangeEstudio}>
+                        <option value="0" disabled>Selecione o estúdio</option>
+                        {this.state.estudios.map(estudio => (
+                          <option value={estudio.id}>{estudio.name}</option>
+                          ))}
+                    </select></p>
                     <p>Nome do cliente:&nbsp;&nbsp;
                     <input value={this.state.selectedEvent.cliente}
                     onChange={e => { //possibilita a edição do texto no input
