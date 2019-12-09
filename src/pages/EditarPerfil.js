@@ -4,50 +4,46 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Cadastro.css';
 import '../styles/General.css';
-import { getUser } from '../services/auth';
+import { getUser, setUser } from '../services/auth';
 import Navbar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputMask from 'react-input-mask';
 import avatarDefault from './../images/avatar.png';
 
-const initialState = {
-    user: getUser(),
-    nome : '',
-    telefone : '',
-    email : '',
-};
-
 export default class EditarPerfil extends Component {
 
     state = {
         user : getUser(),
-        nome : '',
-        telefone : '',
+        name : '',
+        phone : '',
         email : '',
     };
 
     componentDidMount() {
-        const number =''
-        if (this.state.user.phones.length > 0) {
-            number = this.state.user.phones[0].number
+        const phones = this.state.user.phones;
+        let number = null;
+
+        if (phones.length > 0) {
+            number = phones[0].number;
         }
+
         this.setState({
-            nome : this.state.user.name,
-            telefone : number,
+            name : this.state.user.name,
+            phone : number,
             email : this.state.user.email
         })
     }
     
-    handleInputChangeNome = e => { //possibilita a edição do texto no input
-        this.setState({nome : e.target.value});
+    handleInputChangeNome = e => { 
+        this.setState({ name : e.target.value });
     };
 
-    handleInputChangeTelefone = e => { //possibilita a edição do texto no input
-        this.setState({telefone : e.target.value});
+    handleInputChangeTelefone = e => { 
+        this.setState({ phone : e.target.value });
     };
 
-    handleInputChangeEmail = e => { //possibilita a edição do texto no input
-        this.setState({email : e.target.value});
+    handleInputChangeEmail = e => { 
+        this.setState({ email : e.target.value });
     };
 
     pushErrorMessage (error) {
@@ -57,14 +53,14 @@ export default class EditarPerfil extends Component {
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true
-        })
+        });
     }
 
     handlePassword = async (e) => {
         e.preventDefault();
         toast.configure()
         const email = this.state.user.email;
-        await api.post("password-recovery/", {email}).then( response => {
+        await api.post("password-recovery/", { email }).then( response => {
             toast.success("Você receberá em breve no seu e-mail um link para redefinir sua senha.",{
                 position: "top-right",
                 autoClose: 5000,
@@ -79,31 +75,31 @@ export default class EditarPerfil extends Component {
         e.preventDefault();
         toast.configure();
         var erro = '';
-        const name = this.state.nome;
-        const userStatusId = 2;
-        const number = this.state.telefone;
+        const { name, phone, email} = this.state;
+
         const phones = [{
-            number : this.state.telefone,
-            phoneTypeId : 0
-        }]
-        if (this.state.telefone.charAt(6) > 5){
+            number: phone,
+            phoneTypeId : 1
+        }];
+
+        if (phone.charAt(6) > 5){
             phones[0].phoneTypeId = 1
         }else{
             phones[0].phoneTypeId = 2
         }
-        const email = this.state.email;
+
         if(name !== ''){
-            if(number !== '' && number.length === 15){
+            if(phone !== ''){
                 if((email !== '' && email.indexOf('@') > 0 && email.indexOf('.' > 2))){
-                    await api.post("users/", {name,userStatusId,phones,email}).then( response =>{
+                    await api.put("users/", {name, phones, email}).then( response =>{
                         toast.success("Dados editados com sucesso.",{
                             position: "top-right",
                             autoClose: 5000,
                             hideProgressBar: false,
                             closeOnClick: true,
                             pauseOnHover: true
-                        })
-                        this.setState(initialState);
+                        });
+                        setUser({ name, phones, email });
                         this.props.history.push('/login');
                     }
                     ).catch( error => {
@@ -116,11 +112,11 @@ export default class EditarPerfil extends Component {
                 }
             }else{
                 erro = "Informe um número de telefone válido.";
-                this.pushErrorMessage(erro)
+                this.pushErrorMessage(erro);
             }
         }else{
             erro ="Informe seu nome.";
-            this.pushErrorMessage(erro)
+            this.pushErrorMessage(erro);
         }
     };
 
@@ -139,15 +135,15 @@ export default class EditarPerfil extends Component {
                     <div className="titulo">
                         <h1>Edição dos dados do seu cadastro na <strong>InkNeedle!</strong></h1>
                     </div>
-                    <form className="formulario">
-                        <p>Nome:&nbsp;<input value={this.state.nome}
+                    <form onSubmit={this.handleSubmit} className="formulario">
+                        <p>Nome:&nbsp;<input value={this.state.name}
                         onChange={this.handleInputChangeNome} placeholder="Nome completo"></input></p>
-                        <p>Telefone:&nbsp;<InputMask type="text" value={this.state.telefone}
+                        <p>Telefone:&nbsp;<InputMask type="text" value={this.state.phone}
                         onChange={this.handleInputChangeTelefone} mask="(99) 99999-9999" maskChar="" placeholder="Número de telefone"></InputMask></p>
                         <p>Email:&nbsp;<input type="email" value={this.state.email}
                         onChange={this.handleInputChangeEmail} placeholder="E-mail"></input></p>
-                        <button onClick={this.handleSubmit}>Alterar informações</button>
-                        <button onClick={this.handlePassword}>Alterar senha</button>
+                        <button type="submit">Alterar informações</button>
+                        <button onClick={this.handlePassword} type="button">Alterar senha</button>
                     </form>
                 </div>
                 <div className="footer-copyright text-center py-2 rodape">2019 - InkNeedle</div>
