@@ -187,6 +187,7 @@ export default class CadastroEstudio extends Component {
                                         cnpj: cnpj,
                                         isBodyPiercing: true
                                     }).then(async (response) => {
+                                        
                                         await this.saveAddress({
                                             name: local.endereco,
                                             neighborhood: local.bairro,
@@ -198,6 +199,8 @@ export default class CadastroEstudio extends Component {
                                             longitude: lng,
                                         }, response.data.id);
 
+                                        await this.saveCertification(response.data.id);
+
                                         toast.success("Estúdio cadastrado com sucesso!", {
                                             position: "top-right",
                                             autoClose: 5000,
@@ -208,7 +211,7 @@ export default class CadastroEstudio extends Component {
 
                                         this.toPerfilTatuador();
                                     }).catch((error) => {
-                                        toast.success("Não foi possível Cadastrar Estúdio. Tente novamente mais tarde!", {
+                                        toast.success(error.response.data.message, {
                                             position: "top-right",
                                             autoClose: 5000,
                                             hideProgressBar: false,
@@ -264,6 +267,29 @@ export default class CadastroEstudio extends Component {
         await api.post(url, data).then((response) => {
             console.log(response);
         });
+    }
+    
+    saveCertification = async (studioId) => {
+        let { selectedFile } = this.state;
+
+        let url = `/studio-store-certification`;
+
+        const formData = new FormData();
+
+        formData.append('name', 'Certificação Anvisa');
+        formData.append('certificationTypeId', 1);
+        formData.append('file', selectedFile);
+        formData.append('studioId', studioId);
+
+        await api({
+            method: 'post',
+            url,
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        .then((response) => {
+            console.log(response);  
+        });            
     }
 
     toPerfilTatuador = () => {
