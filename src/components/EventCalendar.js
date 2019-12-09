@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '../styles/General.css';
 import {List, Media} from "tabler-react";
+import Swal from 'sweetalert2'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import { getUser } from '../services/auth';
@@ -27,7 +28,7 @@ import trash from '../images/trash.png';
           editFocused : null,
           receivedFocused : null,
           events : [],
-          selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}},
+          selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}, status : [{}]},
           receivedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           newEvent : {id : 0, cliente : 0, time : ['',''], date : null},
           estudios : [],
@@ -94,7 +95,8 @@ async getClientesEdit() {
        id : this.state.selectedEvent.id,
        date : this.state.selectedEvent.date,
        time : this.state.selectedEvent.time,
-       studio : this.state.selectedEvent.studio
+       studio : this.state.selectedEvent.studio,
+       status : this.state.selectedEvent.status
       }});
      toast.configure()
      toast.success(this.state.selectedEvent.customer.name + " vinculado a sessão.",{
@@ -149,7 +151,8 @@ async getClientesEdit() {
           date : this.state.selectedEvent.date,
           time : this.state.selectedEvent.time,
           studio : { id : e.target.value},
-          customer : this.state.selectedEvent.customer
+          customer : this.state.selectedEvent.customer,
+          status : this.state.selectedEvent.status
         }
       });
     };
@@ -163,12 +166,13 @@ async getClientesEdit() {
     async addEditedEvent () {
       toast.configure()
       if (this.state.selectedEvent.customer != {} && this.state.selectedEvent.date != null && this.state.selectedEvent.time != ['','']) {
+        const id = this.state.selectedEvent.id
         const date = this.state.selectedEvent.date
         const hourStart = this.state.selectedEvent.time[0]
         const hourEnd = this.state.selectedEvent.time[1]
         const customerId = this.state.selectedEvent.customer.id
         const studioId = this.state.selectedEvent.studio.id
-        await api.put('/schedulings/',{
+        await api.put('/schedulings/' + id,{
           date,
           hourStart,
           hourEnd,
@@ -291,6 +295,71 @@ async getClientesEdit() {
       $('#addEvent').modal('show')
     }
 
+    cancelSession(id) {
+      Swal.fire({
+          title: 'Você tem certeza que deseja cancelar essa sessão?',
+          text: "Você não poderá reverter isso e o cliente será notificado do cancelamento!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#FF8C00',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sim, cancelar!',
+          cancelButtonText: 'Não',
+          preConfirm: () => {
+              let url = '/schedulings/'+ id +'/status';
+              api({
+                  method: 'put',
+                  url,
+                  data: {
+                    schedulingStatusId: 2,
+                    descritption: "Cancelada pelo tatuador"                  
+                  }
+              }).then((response) => {
+                  Swal.fire(
+                      'Cancelado!',
+                      'Sessão cancelada com sucesso',
+                      'success'
+                  );
+                  this.getSessions()
+                  $('#editEvent').modal('hide')
+              });
+          },
+      });
+  }
+
+  closeSession(id) {
+    Swal.fire({
+        title: 'Você tem certeza que deseja concluir essa sessão?',
+        text: "Você não poderá reverter isso e o cliente receberá o convite para avalia-lo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#FF8C00',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, concluir!',
+        cancelButtonText: 'Não',
+        preConfirm: () => {
+            let url = '/schedulings/'+ id +'/status';
+            api({
+                method: 'put',
+                url,
+                data: {
+                  schedulingStatusId: 3,
+                  descritption: "Concluída pelo tatuador"                  
+                }
+            }).then((response) => {
+                Swal.fire(
+                    'Concluida!',
+                    'Sessão concluida com sucesso',
+                    'success'
+                );
+                this.getSessions()
+                $('#editEvent').modal('hide')
+            });
+        },
+    });
+    
+}
+
     findEventById(id) {
       return this.state.events.map( event => {
         if (event.id == id){
@@ -396,11 +465,13 @@ async getClientesEdit() {
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h3 class="modal-title" id="TituloModalCentralizado">Editar sessão</h3>
+                  <h3 class="modal-title" id="TituloModalCentralizado">Editar sessão</h3>&nbsp;<small>{this.state.selectedEvent.status[this.state.selectedEvent.status.length - 1].description}</small>
                     <div>
-                      <button role="button" class="far fa-calendar-check btn"></button>
+                      <button role="button" class="far fa-calendar-check btn" onClick={() => {
+                                  this.closeSession(this.state.selectedEvent.id)
+                              }}></button>
                       <button className='btn' onClick={() => {
-                                  $('#deleteEvent').modal('show');
+                                  this.cancelSession(this.state.selectedEvent.id)
                               }}><img src={trash}></img></button>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
@@ -419,7 +490,8 @@ async getClientesEdit() {
                         date : date,
                         time : this.state.selectedEvent.time,
                         studio : this.state.selectedEvent.studio,
-                        customer : this.state.selectedEvent.customer
+                        customer : this.state.selectedEvent.customer,
+                        status : this.state.selectedEvent.status
                       }})} // PropTypes.func.isRequired
                       focused={this.state.editFocused} // PropTypes.bool
                       onFocusChange={({ focused }) => this.setState({ editFocused : focused })} // PropTypes.func.isRequired
@@ -433,7 +505,8 @@ async getClientesEdit() {
                           date : this.state.selectedEvent.date,
                           time : e, 
                           studio : this.state.selectedEvent.studio,
-                          customer : this.state.selectedEvent.customer
+                          customer : this.state.selectedEvent.customer,
+                          status : this.state.selectedEvent.status
                         }})}}
                       value={this.state.selectedEvent.time} format='HH:mm'
                     />
@@ -452,7 +525,8 @@ async getClientesEdit() {
                         date : this.state.selectedEvent.date,
                         time : this.state.selectedEvent.time,
                         customer : {name : e.target.value},
-                        studio : this.state.selectedEvent.studio
+                        studio : this.state.selectedEvent.studio,
+                        status : this.state.selectedEvent.status
                       }});
                     }} placeholder="Email do cliente"></input>
                     </p>
@@ -460,9 +534,6 @@ async getClientesEdit() {
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="agendar" data-dismiss="modal" onClick={() => {
-                      this.setState({
-                        selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}}
-                     })
                     }}>Cancelar</button>
                     <button type="button" class="agendar" onClick={() => {
                       this.addEditedEvent()

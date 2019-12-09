@@ -932,6 +932,7 @@ export default class PerfilTatuador extends Component {
                                             }}><h4 className='to-link'>{studio.name}
                                             <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h4></a>
+                                          <small>{studio.description}</small>
                                         </Media.Heading>
                                         {/* <img src={loc}/> <small>{studio.address}</small> TEMP */}
                                     </Media.Body>

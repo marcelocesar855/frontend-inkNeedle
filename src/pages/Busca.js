@@ -161,7 +161,7 @@ export default class Busca extends Component {
     }
 
     async getSessions(){
-        await api.get(`/schedulings`)
+        await api.get(`customer/schedulings`)
           .then(res => {
             this.setState({ sessoes : res.data });
         })
