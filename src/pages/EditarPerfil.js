@@ -27,7 +27,7 @@ export default class EditarPerfil extends Component {
     };
 
     componentDidMount() {
-        const number =''
+        var number = ''
         if (this.state.user.phones.length > 0) {
             number = this.state.user.phones[0].number
         }

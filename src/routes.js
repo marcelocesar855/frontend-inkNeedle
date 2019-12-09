@@ -113,7 +113,7 @@ var routes = [
       notPath: "/busca"
     },
     {
-      path: "/editar_perfil",
+      path: "/editar__perfil",
       name: "EditarPerfil",
       component: EditarPerfil,
       isAuth : 2,
