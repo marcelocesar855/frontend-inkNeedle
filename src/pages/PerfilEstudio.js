@@ -113,7 +113,16 @@ export default class PerfilEstudio extends Component {
         selectedAvatarFile: null,
         selectedBannerFile: null,
         memberDelete: { id: 0, nome: '', descricao: '' },
-        eventView: { nome: '', local: '', hora: '' },
+        eventView: {
+            title: '',
+            description: '',
+            dateStart: null,
+            dateEnd: null,
+            timeStart: null,
+            timeEnd: null,
+            price: 0,
+            bannerUrl: null
+        },
         preco: 0, content: null, descricao: ''
     };
 
@@ -1013,15 +1022,26 @@ export default class PerfilEstudio extends Component {
     }
 
     cancelEvent() {
-        const event = this.state.eventView;
-        const eventos = this.state.eventos.filter(e => event.id !== e.id);
-        this.setState({
-            eventos: eventos,
-            eventView: {
-                nome: '', local: '', hora: '',
-                preco: 0, content: null, descricao: ''
+        const { studioId, eventView } = this.state;
+        
+        let url = `/studio-destroy-event/${eventView.id}`;
+
+        api({
+            method: 'delete',
+            url,
+            data: {
+                studioId
             }
+        }).then((response) => {
+            Swal.fire(
+                'Removido!',
+                'Evento removido com sucesso.',
+                'success'
+            );
+            $('#viewEvent').modal('hide');
+            this.getEvents(studioId);
         });
+        
     }
 
     handleEnter = e => {
@@ -1248,13 +1268,13 @@ export default class PerfilEstudio extends Component {
                                                 <Avatar size="md" imageURL={event.bannerUrl}></Avatar>
                                                 <Media.Body className="ml-3">
                                                     <Media.Heading>
-                                                        <a onClick={() => {
-                                                            $('#viewEvent').modal('show');
-                                                            const lines = document.getElementById('descEvent').scrollHeight / 20;
+                                                        <a onClick={() => {                                                            
+                                                            // const lines = document.getElementById('descEvent').scrollHeight / 20;
                                                             this.setState({
                                                                 eventView: event,
-                                                                rowsEvent: lines
-                                                            })
+                                                                // rowsEvent: lines
+                                                            });
+                                                            $('#viewEvent').modal('show');
                                                         }}><h4 className='to-link'>{event.title}</h4></a>
                                                     </Media.Heading>
                                                     <small>
@@ -1768,24 +1788,24 @@ export default class PerfilEstudio extends Component {
                     </div>
                 </div>
 
-                {/* <div class="modal fade" id="viewEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+                <div class="modal fade" id="viewEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h3>{this.state.eventView.nome}</h3>
+                    <h3>{this.state.eventView.title}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded mx-auto d-block" src={this.state.eventView.content}></img><br/>
-                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p>
-                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.hora}</p>
-                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.preco !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.preco.toFixed(2)) : 'Grátis'}</font>}</p>
+                        <img className="rounded mx-auto d-block" src={this.state.eventView.bannerUrl}></img><br/>
+                        {/* <font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.local}</p> */}
+                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.timeStart}</p>
+                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{ !!this.state.eventView.price ? 'R$ '+this.mascaraValor(this.state.eventView.price.toFixed(2)) : 'Grátis'}</font>}</p>
                             <Form.Textarea rows={this.state.rowsEvent} id='descEvent'
                             className='mod-card-back-title'
                             onChange={this.handleInputChangeDescEvent}
-                            value={this.state.eventView.descricao}
+                            value={this.state.eventView.description}
                             placeholder="Descreva o evento a ser realizado"
                             />
                   </div>
@@ -1796,7 +1816,7 @@ export default class PerfilEstudio extends Component {
                   </div>
                 </div>
               </div>
-              </div> */}
+              </div>
 
                 <div class="modal fade" id="cancelEvent" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
