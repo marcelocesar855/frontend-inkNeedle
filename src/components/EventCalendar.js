@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import '../styles/General.css';
+import {List, Media} from "tabler-react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import api from '../services/api';
@@ -23,17 +24,14 @@ import trash from '../images/trash.png';
           focused : null,
           editFocused : null,
           receivedFocused : null,
-          events : [{ id: 1, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-02', title : '', start : ''},
-          { id: 2, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-03', title : '', start : '' },
-          { id: 3, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-04', title : '', start : '' },
-          { id: 4, cliente: 'Rodrigo Fonseca', time : ['15:30','18:00'], date: '2019-11-05', title : '', start : '' }],
+          events : [],
           selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           receivedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
-          newEvent : {id : 0, cliente : '', time : ['',''], date : null},
-          cliente : '',
+          newEvent : {id : 0, cliente : 0, time : ['',''], date : null},
           estudios : [],
           estudio : 0,
-          users : []
+          users : [],
+          cliente : {name : ''}
         }
         this.findEventById = this.findEventById.bind(this);
       }
@@ -41,10 +39,42 @@ import trash from '../images/trash.png';
     handleInputChangeTime = e => { //possibilita a edição do texto no input
       this.setState({newEvent: {
         date : this.state.newEvent.date,
-        time : e,
-        cliente : this.state.newEvent.cliente
+        time : e
       }});
     };
+
+    handleEnterSearch = e => {
+      if (e.key === 'Enter') {
+          this.getClientes()
+      }
+   } 
+
+   async getClientes() {
+     const search = this.state.cliente.name
+    await api.post(`schedulings/customer-search`, {search}).then(
+      res => {
+        if (res.data.length > 0) {
+        this.setState({ cliente : res.data[0] });
+        toast.configure()
+        toast.success(this.state.cliente.name + " vinculado a sessão.",{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true
+          });
+      }else{
+        toast.configure()
+      toast.error('Cliente não encontrado',{
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true
+      });
+      }
+    })
+}
 
     handleInputChangeNome = e => { //possibilita a edição do texto no input
       this.setState({newEvent : {
@@ -53,6 +83,11 @@ import trash from '../images/trash.png';
         cliente : e.target.value
       }});
     };
+
+    handleInputChangeCliente = e => { //possibilita a edição do texto no input
+      this.setState({newEvent : {cliente : e.target.value}});
+    };
+
 
     async componentDidMount() {
       this.state.events.map(event => {
@@ -169,7 +204,7 @@ import trash from '../images/trash.png';
 
     handleInputChangeCliente= e => { //possibilita a edição do texto no input
       this.setState({ 
-          cliente : e.target.value
+          cliente : {name : e.target.value}
       })
     };
 
@@ -219,8 +254,7 @@ import trash from '../images/trash.png';
                       numberOfMonths={1}
                       onDateChange={date => this.setState({ newEvent : {
                         date : date,
-                        time : this.state.newEvent.time,
-                        cliente : this.state.newEvent.cliente
+                        time : this.state.newEvent.time
                       } })} 
                       focused={this.state.focused} 
                       onFocusChange={({ focused }) => this.setState({ focused })} 
@@ -238,9 +272,9 @@ import trash from '../images/trash.png';
                           <option value={estudio.id}>{estudio.name}</option>
                           ))}
                     </select></p>
-                    <p>Nome do cliente:&nbsp;&nbsp;
-                    <input value={this.state.newEvent.cliente}
-                    onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
+                    <p>Pesquisar cliente:&nbsp;&nbsp;
+                    <input value={this.state.cliente.name} onKeyPress={this.handleEnterSearch}
+                    onChange={this.handleInputChangeCliente} placeholder="Email do cliente"></input>
                     </p>
                   </form>
                   </div>

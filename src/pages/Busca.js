@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Rate from 'rc-rate';
-import TimeFormat from 'hh-mm-ss'
+
 import moment from 'moment';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
