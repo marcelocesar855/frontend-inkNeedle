@@ -151,7 +151,7 @@ export default class FeedbackCustomer extends Component {
                                         <h5 className="card-title text-center">Feedback</h5>
                                         <form onSubmit={this.handleSubmitForm}>
                                             <div className="form-group text-center">
-                                            <Rate className="ml-4" defaultValue={0} style={{ fontSize: 20 }} onChange={this.handleInputChangeScore} allowClear={false} required/>
+                                            <Rate className="ml-4" className='feedback' defaultValue={0} style={{ fontSize: 20 }} onChange={this.handleInputChangeScore} allowClear={false} required/>
                                             </div>
                                             <div className="form-group">
                                                 <textarea className="form-control" maxLength="100" onChange={this.handleInputMessage} placeholder="Mensagem"></textarea>

@@ -10,7 +10,6 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import $ from 'jquery';
-import {FormGroup, FormControl, Combobox, Col} from 'react-input-enhancements';
 import 'bootstrap';
 import '../styles/Agenda.css';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
@@ -243,25 +242,6 @@ import trash from '../images/trash.png';
                     <input value={this.state.newEvent.cliente}
                     onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
                     </p>
-                    <FormGroup>
-                        <Col xs={6}>
-                          <Combobox
-                            value={this.state.cliente}
-                            options={this.state.users}
-                            dropdownProps={{ style: { width: '100%' } }}
-                            onSelect={this.handleInputChangeCliente}
-                            autocomplete
-                          >
-                            {(inputProps, { registerInput }) =>
-                              <FormControl
-                                {...inputProps}
-                                type='text'
-                                placeholder='No Country'
-                              />
-                            }
-                          </Combobox>
-                        </Col>
-                      </FormGroup>
                   </form>
                   </div>
                   <div class="modal-footer">

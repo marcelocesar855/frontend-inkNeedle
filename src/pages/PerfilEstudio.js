@@ -721,6 +721,14 @@ export default class PerfilEstudio extends Component {
         $('#viewImage').modal('hide');
     }
 
+    pushTattooArtist(tattooArtistId) {
+        if (tattooArtistId == this.state.user.id){
+        this.props.history.push(`/meu_perfil`);
+        }else{
+            this.props.history.push(`/perfil_tatuador/${tattooArtistId}`);
+        }
+    }
+
     addGalleryClose() {
         $('#uploadGaleryImage').modal('hide');
     }
@@ -793,7 +801,7 @@ export default class PerfilEstudio extends Component {
             cancelButtonText: 'Não',
             preConfirm: () => {
                 let { studioId } = this.state;
-                let url = `/tattoo-artist-destroy-galleries/${id}`;
+                let url = `/studio-destroy-galleries/${id}`;
                 api({
                     method: 'delete',
                     url,
@@ -899,9 +907,6 @@ export default class PerfilEstudio extends Component {
 
     handleSubmit = async (e) => { //método responsável por interceptar o submit do form
         e.preventDefault(); //evita comportamentos padrões do submit
-    };
-
-    handleInputChange = e => {
     };
 
     handleInputChangeDescEvent = e => { //possibilita a edição do texto no input
@@ -1093,9 +1098,7 @@ export default class PerfilEstudio extends Component {
         })
         .then((response) => {
             if (response.data.url) {
-                setAvatarUser(response.data.url);
-                this.setState({user : getUser()})
-                this.getAvatar();
+                this.getStudio();
                 $('#uploadAvatar').modal('hide');
             }
         })
@@ -1119,7 +1122,7 @@ export default class PerfilEstudio extends Component {
         })
         .then((response) => {
             if (response.data.url) {
-                this.setState({user : getUser()})
+                this.getStudio();
                 $('#uploadBanner').modal('hide');
             }
         })
@@ -1143,7 +1146,7 @@ export default class PerfilEstudio extends Component {
                     <div className="row ">
                         <div className="col col-lg-4">
                             <Card className="card-profile resumo-perfil">
-                                <Clickable aria-label="Mudar foto de capa"  data-balloon-pos="down" className='center'  onClick={() => {
+                                <Clickable aria-label="Mudar foto de capa"  data-balloon-pos="down" onClick={() => {
                                     $('#uploadBanner').modal('show');
                                 }}>
                                 <Card.Header backgroundURL={this.state.studio.bannerUrl}></Card.Header>
@@ -1216,9 +1219,11 @@ export default class PerfilEstudio extends Component {
                                                 <Avatar size="md" imageURL={member.avatarUrl}></Avatar>
                                                 <Media.Body className="ml-3">
                                                     <Media.Heading>
-                                                        <h3>{member.name}
-                                                            <Rate className="ml-2" defaultValue={member.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true" />
-                                                        </h3>
+                                                    <a onClick={() => {
+                                                        this.pushTattooArtist(member.id);                                                
+                                                    }}><h4 className='to-link'>{member.name}
+                                                    <Rate className="ml-2" value={member.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
+                                                    </h4></a>
                                                     </Media.Heading>
                                                     <small>{member.description}</small>
                                                 </Media.Body>

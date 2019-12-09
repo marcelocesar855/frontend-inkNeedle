@@ -6,6 +6,7 @@ import $ from 'jquery';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Rate from 'rc-rate';
+import TimeFormat from 'hh-mm-ss'
 import moment from 'moment';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -47,16 +48,22 @@ export default class Busca extends Component {
         rate : 0,
         feedback : '',
         rows : 1,
+        search : ''
     }
-
-
-    handleSubmit = async (e) => { //método responsável por interceptar o submit do form
-        e.preventDefault(); //evita comportamentos padrões do submit
-    };
 
     handleInputChangeRate =  e => {
         this.setState({rate  : e})
     };
+
+    handleInputChangeSearch =  e => {
+      this.setState({search  : e.target.value})
+  };
+
+  handleEnterSearch = e => {
+    if (e.key === 'Enter') {
+        this.getEstudios()
+    }
+} 
 
     mascaraValor(val) {
         val = val.toString().replace(/\D/g,"");
@@ -79,6 +86,7 @@ export default class Busca extends Component {
     getEstudios = async () => {
       var latitude = ''
       var longitude = ''
+      var search = ''
       if (navigator.geolocation) {
           var startPos;
         var geoSuccess = async (position) => {
@@ -86,10 +94,12 @@ export default class Busca extends Component {
               startPos = position;
               latitude = startPos.coords.latitude
               longitude = startPos.coords.longitude
+              search = this.state.search
               localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
               await api.post('studios/search-geo', {
                   latitude,
-                  longitude
+                  longitude,
+                  search
                 }).then(response => {
                   this.setState({places : response.data})
                 }).catch(error => {
@@ -353,7 +363,8 @@ export default class Busca extends Component {
                 <div className="col col-lg- mb-5">
                 <Card className="map-card">
                 <Card.Header>
-                    <Form.Input placeholder="Buscar por estúdios e/ou profissionais">
+                    <Form.Input placeholder="Buscar por estúdios e/ou profissionais" value={this.state.search} onChange={this.handleInputChangeSearch}
+                    onKeyPress={this.handleEnterSearch}>
                     </Form.Input>
                 </Card.Header>
                     <Card.Body className="mapa">
