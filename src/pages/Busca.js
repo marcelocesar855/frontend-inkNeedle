@@ -163,27 +163,19 @@ export default class Busca extends Component {
         })
     };
 
-    async handleDislikeEvent() {
-        await api.post(`/dislike-event-studio/${this.state.id}`)
+    handleDislikeEvent = async (e) => {
+      e.preventDefault();
+
+      const { eventView } = this.state;
+
+      await api.post(`/dislike-event-studio/${eventView.id}`)
         .then(() => {
-            toast.configure()
-            toast.success('Evento ' + this.state.eventView.title + ' retirado da sua lista de interesses',{
-                position: "top-right",
-                autoClose: 7000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+          this.toastAlert(`Evento ${eventView.title} removido da sua lista de interesses`, 'success');          
+          this.getEvents();
+          $('#viewEvent').modal('hide');
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
-        })
+          this.toastAlert(error.response.data.message, 'error');
+        });
     }
 
     setSession (sessao) {
@@ -248,6 +240,35 @@ export default class Busca extends Component {
         if(user != null){
             return (!!user.avatar.url ? user.avatar.url : avatarDefault);
         }
+    }
+
+    toastAlert(message, type = 'info') {
+      toast.configure();
+      const config = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true
+      };
+
+      switch (type) {
+        case 'success':
+          toast.success(message, config);
+          break;
+        case 'error':
+          toast.error(message, config);
+          break;
+        case 'warn':
+          toast.warn(message, config);
+          break;
+        case 'info':
+          toast.info(message, config);
+          break;
+        default:
+          toast.info(message, config);
+          break;
+      }
     }
 
   render() {
@@ -452,11 +473,7 @@ export default class Busca extends Component {
                             )
                             })}</div>
                         <div class="modal-footer">
-                            <button className="cancel-event" onClick={() => {
-                            this.handleDislikeEvent();
-                            $('#viewEvent').modal('hide');
-                            this.getEvents()
-                        }}>Perdi interesse</button>
+                            <button className="cancel-event" onClick={this.handleDislikeEvent}>Perdi interesse</button>
                         </div>
                   </div>
                 </div>

@@ -206,15 +206,15 @@ export default class PerfilTatuador extends Component {
     }
 
     async getCertifications () {
-    await api.get(`/certifications-studio/${this.state.id}`)
-        .then(res => {
-            this.setState({ certifications: res.data });
-        })
-        if(this.state.certifications.length < 1){
-        $('#alertCertifications').css('display', 'inline');
-        }else{
-        $('#alertCertifications').css('display', 'none');
-        }
+        await api.get(`/certifications-studio/${this.state.id}`)
+            .then(res => {
+                this.setState({ certifications: res.data });
+            })
+            if(this.state.certifications.length < 1){
+            $('#alertCertifications').css('display', 'inline');
+            }else{
+            $('#alertCertifications').css('display', 'none');
+            }
     }
 
     getAvatar() {
@@ -232,27 +232,38 @@ export default class PerfilTatuador extends Component {
         return val                    
     }
 
-    async handleLikeEvent() {
-        await api.post(`/like-event-studio/${this.state.id}`)
+    handleEventCustomerLikeAlter(check) {
+        const { eventView } = this.state;
+        eventView.customerLike = check;
+        this.setState({ eventView });
+    }
+
+    handleLikeEvent = async (e) =>{
+        e.preventDefault();
+
+        const { eventView } = this.state;
+
+        await api.post(`/like-event-studio/${eventView.id}`)
         .then(() => {
-            toast.configure()
-            toast.success('Evento ' + this.state.eventView.title + ' adicionado a sua lista de interesses',{
-                position: "top-right",
-                autoClose: 7000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(`Evento ${eventView.title} adicionado a sua lista de interesses`, 'success');
+            this.handleEventCustomerLikeAlter(true);            
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
-        })
+            this.toastAlert(error.response.data.message, 'error');           
+        });
+    }
+
+    handleDislikeEvent = async (e) =>{
+        e.preventDefault();
+
+        const { eventView } = this.state;
+
+        await api.post(`/dislike-event-studio/${eventView.id}`)
+        .then(() => {
+            this.toastAlert(`Evento ${eventView.title} removido da sua lista de interesses`, 'success');  
+            this.handleEventCustomerLikeAlter(false);           
+        }).catch(error => {
+            this.toastAlert(error.response.data.message, 'error');           
+        });
     }
 
     formatar(data, hora) {
@@ -314,7 +325,7 @@ export default class PerfilTatuador extends Component {
 
                              {
                                 (this.state.studio.customerLike ? (
-                                    <button style={{background: 'rgb(23, 189, 1)'}} className="chat" onClick={this.handleDislike}>Seguindo</button>
+                                          <button style={{ background: 'rgb(23, 189, 1)' }} className="chat" aria-label="Deixar de seguir" data-balloon-pos="up" onClick={this.handleDislike}>Seguindo</button>
                                 ) : (
                                     <button className="chat" onClick={this.handleLike}>+Seguir</button>
                                 ))
@@ -354,14 +365,11 @@ export default class PerfilTatuador extends Component {
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
-                                                $('#viewEvent').modal('show');
                                                 this.setState({
                                                     eventView : event
-                                                })
-                                                if (this.state.eventView.customerLike){
-                                                    $('#event').css('background', 'rgb(23, 189, 1)');
-                                                }
+                                                });
 
+                                                $('#viewEvent').modal('show');
                                             }}><h4 className='to-link'>{event.title}</h4></a>
                                         </Media.Heading>
                                         <small>
@@ -526,9 +534,16 @@ export default class PerfilTatuador extends Component {
                             </div>
                   </div>
                   <div class="modal-footer">
-                        <button id='event' className='cancel-event' onClick={() => {
-                            this.handleLikeEvent()
-                        }}>Tenho interesse</button>
+                      {
+                        (this.state.eventView.customerLike ? (
+                            <button style={{ background: 'rgb(23, 189, 1)' }} aria-label="Perdi Interesse" data-balloon-pos="up" className='cancel-event' onClick={this.handleDislikeEvent}>
+                                Já na sua lista de interesses
+                            </button>
+                        ) : (
+                            <button className='cancel-event' onClick={this.handleLikeEvent}>Tenho interesse</button>
+                        ))
+                      }
+                        
                   </div>
                 </div>
               </div>

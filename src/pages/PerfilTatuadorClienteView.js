@@ -253,7 +253,7 @@ constructor(props) {
                             
                              {
                                 (this.state.tattooArtist.customerLike ? (
-                                    <button style={{background: 'rgb(23, 189, 1)'}} className="chat" onClick={this.handleDislike}>Seguindo</button>
+                                          <button style={{ background: 'rgb(23, 189, 1)' }} aria-label="Deixar de seguir" data-balloon-pos="up" className="chat" onClick={this.handleDislike}>Seguindo</button>
                                 ) : (
                                     <button className="chat" onClick={this.handleLike}>+Seguir</button>
                                 ))
