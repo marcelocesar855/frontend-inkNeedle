@@ -13,6 +13,7 @@ import Agenda from './pages/Agenda';
 import AgendaCliente from './pages/AgendaCliente';
 import EditarPerfil from './pages/EditarPerfil';
 import Busca from './pages/Busca';
+import FeedbackCustomer from './pages/FeedbackCustomer';
 
 import StoreStudio from './pages/Studio/store';
 
@@ -55,6 +56,11 @@ var routes = [
       path: "/recuperar_senha/:token",
       name: "RecuSenha",
       component: RedefSenha
+    },
+    {
+      path: "/feedback/:token",
+      name: "Feedback",
+      component: FeedbackCustomer
     },
     {
       path: "/cadastro_estudio",
