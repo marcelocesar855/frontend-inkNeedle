@@ -3,12 +3,14 @@ import '../styles/General.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import api from '../services/api';
+import ReactDOM from 'react-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import {SingleDatePicker} from 'react-dates';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import $ from 'jquery';
+import {FormGroup, FormControl, Combobox, Col} from 'react-input-enhancements';
 import 'bootstrap';
 import '../styles/Agenda.css';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
@@ -31,7 +33,8 @@ import trash from '../images/trash.png';
           newEvent : {id : 0, cliente : '', time : ['',''], date : null},
           cliente : '',
           estudios : [],
-          estudio : 0
+          estudio : 0,
+          users : []
         }
         this.findEventById = this.findEventById.bind(this);
       }
@@ -240,6 +243,25 @@ import trash from '../images/trash.png';
                     <input value={this.state.newEvent.cliente}
                     onChange={this.handleInputChangeNome} placeholder="Nome do cliente"></input>
                     </p>
+                    <FormGroup>
+                        <Col xs={6}>
+                          <Combobox
+                            value={this.state.cliente}
+                            options={this.state.users}
+                            dropdownProps={{ style: { width: '100%' } }}
+                            onSelect={this.handleInputChangeCliente}
+                            autocomplete
+                          >
+                            {(inputProps, { registerInput }) =>
+                              <FormControl
+                                {...inputProps}
+                                type='text'
+                                placeholder='No Country'
+                              />
+                            }
+                          </Combobox>
+                        </Col>
+                      </FormGroup>
                   </form>
                   </div>
                   <div class="modal-footer">

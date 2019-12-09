@@ -52,7 +52,7 @@ componentDidMount () {
                 </div>
                 <div class = "cont">
                   {this.props.notifications.map(notification => (
-                    <div class={'sec', notification.status === 0 ? '': 'new'} >
+                    <div class={'sec',  notification.status > 0 ? '': 'new'} >
                         <List.GroupItem className='sec-int'>
                         <Media>
                             <Avatar size="md" imageURL={this.getAvatar()}></Avatar>
