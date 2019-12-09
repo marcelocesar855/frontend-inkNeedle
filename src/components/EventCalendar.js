@@ -3,6 +3,7 @@ import '../styles/General.css';
 import {List, Media} from "tabler-react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
+import { getUser } from '../services/auth';
 import api from '../services/api';
 import ReactDOM from 'react-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,12 +21,13 @@ import trash from '../images/trash.png';
     export default class EventCalendar extends Component {
       constructor (props){
         super(props)
-        this.state = {     
+        this.state = { 
+          user : getUser(),   
           focused : null,
           editFocused : null,
           receivedFocused : null,
           events : [],
-          selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
+          selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}},
           receivedEvent : {id: 0, cliente : '', time : ['',''], date: null, title : '', start : ''},
           newEvent : {id : 0, cliente : 0, time : ['',''], date : null},
           estudios : [],
@@ -48,6 +50,12 @@ import trash from '../images/trash.png';
           this.getClientes()
       }
    } 
+
+   handleEnterSearchEdit = e => {
+    if (e.key === 'Enter') {
+        this.getClientesEdit()
+    }
+ } 
 
    async getClientes() {
      const search = this.state.cliente.name
@@ -76,6 +84,39 @@ import trash from '../images/trash.png';
     })
 }
 
+async getClientesEdit() {
+  const search = this.state.selectedEvent.customer.name
+ await api.post(`schedulings/customer-search`, {search}).then(
+   res => {
+     if (res.data.length > 0) {
+     this.setState({ selectedEvent : {
+       customer : res.data[0],
+       id : this.state.selectedEvent.id,
+       date : this.state.selectedEvent.date,
+       time : this.state.selectedEvent.time,
+       studio : this.state.selectedEvent.studio
+      }});
+     toast.configure()
+     toast.success(this.state.selectedEvent.customer.name + " vinculado a sessão.",{
+       position: "top-right",
+       autoClose: 5000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true
+       });
+   }else{
+     toast.configure()
+   toast.error('Cliente não encontrado',{
+   position: "top-right",
+   autoClose: 5000,
+   hideProgressBar: false,
+   closeOnClick: true,
+   pauseOnHover: true
+   });
+   }
+ })
+}
+
     handleInputChangeNome = e => { //possibilita a edição do texto no input
       this.setState({newEvent : {
         date : this.state.newEvent.date,
@@ -90,77 +131,63 @@ import trash from '../images/trash.png';
 
 
     async componentDidMount() {
-      this.state.events.map(event => {
-        event.title = event.time[0] + ' - ' + event.cliente
-        event.start = event.date
-        const events = this.state.events.filter(e => event.id !== e.id);
-        this.setState({events : [event].concat(events)})
-      })
-      await api.get(`/studios`)
-        .then(res => {
-            const estudios = res.data;
-            this.setState({ estudios });
-        })
+      this.getSessions()
+      this.getStudios()
     }
 
-    handleInputChangeEstudio = e => { //possibilita a edição do texto no input
-      this.setState({estudio : e.target.value});
-    };
+    async getStudios () {
+      await api.get(`/studios-tattoo-artist/${this.state.user.id}`)
+          .then(res => {
+          this.setState({ estudios : res.data });
+      })
+  }
 
-    handleInputChangeEstudioEdit = e => { //possibilita a edição do texto no input
-      this.setState({selectedEvent : 
-        {estudio : e.target.value}
+  handleInputChangeEstudioEdit  = e => { //possibilita a edição do texto no input
+      this.setState({
+        selectedEvent : { 
+          id : this.state.selectedEvent.id,
+          date : this.state.selectedEvent.date,
+          time : this.state.selectedEvent.time,
+          studio : { id : e.target.value},
+          customer : this.state.selectedEvent.customer
+        }
       });
     };
 
-    addEditedEvent () {
-      toast.configure()
-        const event = {
-          id : this.state.selectedEvent.id,
-          date : moment(this.state.selectedEvent.date).format('YYYY-MM-DD'),
-          time : this.state.selectedEvent.time,
-          cliente : this.state.selectedEvent.cliente
-        };
-        event.title = event.time[0] + ' - ' + event.cliente
-        event.start = moment(event.date).format('YYYY-MM-DD')
-        const events = this.state.events.filter(e => event.id !== e.id);
-        this.setState({events : [event].concat(events)})
-        this.setState({
-            selectedEvent : {id : 0, cliente : '', time : ['',''], date : null}
-        })
-        $('#editEvent').modal('hide')
-        toast.success('Sessão remarcada com sucesso.',{
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true
-      })
-    }
+    handleInputChangeEstudio = e => { //possibilita  a edição do texto no input
+      this.setState(
+        {estudio : e.target.value}
+      );
+    };
 
-    saveEvent(){
+    async addEditedEvent () {
       toast.configure()
-      if (this.state.newEvent.cliente != '' && this.state.newEvent.date != null && this.state.newEvent.time != ['','']) {
-        const events = this.state.events;
-        const newEvent =  {
-          id : events.length + 1,
-          date : this.state.newEvent.date,
-          time : this.state.newEvent.time,
-          cliente : this.state.newEvent.cliente
-        };
-        newEvent.title = newEvent.time[0] + ' - ' + newEvent.cliente
-        newEvent.start = newEvent.date
-        this.setState({events : [newEvent].concat(events)})
-        this.setState({
-           newEvent : {id : 0, cliente : '', time : ['',''], date : null}
+      if (this.state.selectedEvent.customer != {} && this.state.selectedEvent.date != null && this.state.selectedEvent.time != ['','']) {
+        const date = this.state.selectedEvent.date
+        const hourStart = this.state.selectedEvent.time[0]
+        const hourEnd = this.state.selectedEvent.time[1]
+        const customerId = this.state.selectedEvent.customer.id
+        const studioId = this.state.selectedEvent.studio.id
+        await api.put('/schedulings/',{
+          date,
+          hourStart,
+          hourEnd,
+          customerId,
+          studioId
         })
-        toast.success('Sessão marcada com sucesso.',{
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true
-      })
+        .then(res => {
+            this.getSessions()
+            this.setState({
+              selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}}
+           })
+          toast.success('Sessão atualizada com sucesso.',{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+          })
+        })
       }else{
         toast.error('Todas as informações são necessárias para a marcação da sessão.',{
           position: "top-right",
@@ -172,12 +199,89 @@ import trash from '../images/trash.png';
       }
     }
 
-    deleteEvent () {
-      const event = this.state.selectedEvent;
-      const events = this.state.events.filter(e => event.id !== e.id);
-      this.setState({
-            events : events
-      });
+    dateFormat(date) {
+      return moment.utc(date).format('YYYY-MM-DD');
+  }
+
+    timeFormat(time) {
+      return moment.utc(time, 'HH:mm:ss').format('HH:mm');
+  }
+
+    async getSessions() {
+      await api.get('/schedulings/')
+      .then(res => {
+        this.setState({events : []})
+          res.data.map(res => {
+            var event = {
+              id : res.id,
+              date : this.dateFormat(res.date),
+              time : [this.timeFormat(res.hourStart), this.timeFormat(res.hourEnd)],
+              customer : res.customer,
+              studio : res.studio,
+              status : res.status,
+              title : this.timeFormat(res.hourStart) + ' - ' + res.customer.name
+            }
+            const events = this.state.events;
+            this.setState({events : [event].concat(events)})
+          })
+      })
+    }
+
+    async saveEvent(){
+      toast.configure()
+      if (this.state.cliente != {} && this.state.newEvent.date != null && this.state.newEvent.time != ['','']) {
+        const date = this.state.newEvent.date
+        const hourStart = this.state.newEvent.time[0]
+        const hourEnd = this.state.newEvent.time[1]
+        const customerId = this.state.cliente.id
+        const studioId = this.state.estudio
+        await api.post('/schedulings/',{
+          date,
+          hourStart,
+          hourEnd,
+          customerId,
+          studioId
+        })
+        .then(res => {
+            this.getSessions()
+            this.setState({
+              newEvent : {id : 0,time : ['',''], date : null}
+           })
+          toast.success('Sessão marcada com sucesso.',{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+          })
+        })
+      }else{
+        toast.error('Todas as informações são necessárias para a marcação da sessão.',{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true
+      })
+      }
+    }
+
+    async deleteEvent () {
+      const id = this.state.selectedEvent.id;
+      await api.post('/schedulings/'+ id + '/cancel')
+      .then(res => {
+          this.getSessions()
+          this.setState({
+            selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}}
+         })
+         toast.success('Sessão desmarcada com sucesso.',{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true
+        })
+      })
   }
 
     showNewEvent(info) {
@@ -191,12 +295,7 @@ import trash from '../images/trash.png';
       return this.state.events.map( event => {
         if (event.id == id){
           this.setState({
-            selectedEvent : {
-              id: event.id,
-              cliente : event.cliente,
-              time : event.time,
-              date: event.date
-            }
+            selectedEvent : event
           })
         }
       })
@@ -319,7 +418,8 @@ import trash from '../images/trash.png';
                         id : this.state.selectedEvent.id,
                         date : date,
                         time : this.state.selectedEvent.time,
-                        cliente : this.state.selectedEvent.cliente
+                        studio : this.state.selectedEvent.studio,
+                        customer : this.state.selectedEvent.customer
                       }})} // PropTypes.func.isRequired
                       focused={this.state.editFocused} // PropTypes.bool
                       onFocusChange={({ focused }) => this.setState({ editFocused : focused })} // PropTypes.func.isRequired
@@ -331,39 +431,42 @@ import trash from '../images/trash.png';
                         this.setState({selectedEvent: {
                           id : this.state.selectedEvent.id,
                           date : this.state.selectedEvent.date,
-                          time : e,
-                          cliente : this.state.selectedEvent.cliente
+                          time : e, 
+                          studio : this.state.selectedEvent.studio,
+                          customer : this.state.selectedEvent.customer
                         }})}}
-                      value={this.state.selectedEvent.time}
+                      value={this.state.selectedEvent.time} format='HH:mm'
                     />
                     </p>
-                    <p>Estúdio:&nbsp;<select value={this.state.selectedEvent.estudio} onChange={this.handleInputChangeEstudio}>
+                    <p>Estúdio:&nbsp;<select value={this.state.selectedEvent.studio.id} onChange={this.handleInputChangeEstudioEdit}>
                         <option value="0" disabled>Selecione o estúdio</option>
                         {this.state.estudios.map(estudio => (
                           <option value={estudio.id}>{estudio.name}</option>
                           ))}
                     </select></p>
                     <p>Nome do cliente:&nbsp;&nbsp;
-                    <input value={this.state.selectedEvent.cliente}
-                    onChange={e => { //possibilita a edição do texto no input
+                    <input value={this.state.selectedEvent.customer.name} onKeyPress={this.handleEnterSearchEdit}
+                    onChange={e => { //possibilita a edição do texto no input 
                       this.setState({selectedEvent : {
                         id : this.state.selectedEvent.id,
                         date : this.state.selectedEvent.date,
                         time : this.state.selectedEvent.time,
-                        cliente : e.target.value
+                        customer : {name : e.target.value},
+                        studio : this.state.selectedEvent.studio
                       }});
-                    }} placeholder="Nome do cliente"></input>
+                    }} placeholder="Email do cliente"></input>
                     </p>
                   </form>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="agendar" data-dismiss="modal" onClick={() => {
                       this.setState({
-                        selectedEvent : {id : 0, cliente : '', time : ['',''], date : null}
+                        selectedEvent : {id: 0, cliente : '', time : ['',''], date: null, studio : {}, customer : {}}
                      })
                     }}>Cancelar</button>
                     <button type="button" class="agendar" onClick={() => {
                       this.addEditedEvent()
+                      $('#editEvent').modal('hide')
                     }}>Salvar</button>
                   </div>
                 </div>
