@@ -6501,13 +6501,6 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-hh-mm-ss@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/hh-mm-ss/-/hh-mm-ss-1.2.0.tgz#6d0f0b8280824a634cb1d1f20e0bc7bc8b689948"
-  integrity sha512-f4I9Hz1dLpX/3mrEs7yq30+FiuO3tt5NWAqAGeBTaoeoBfB8vhcQ3BphuDc5DjZb/K809agqrAaFlP0jhEU/8w==
-  dependencies:
-    zero-fill "^2.2.3"
-
 history@^4.7.2:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/history/-/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
@@ -14369,8 +14362,3 @@ yeast@0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
   integrity sha1-AI4G2AlDIMNy28L47XagymyKxBk=
-
-zero-fill@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/zero-fill/-/zero-fill-2.2.3.tgz#a3def06ba5e39ae644850bb4ca2ad4112b4855e9"
-  integrity sha1-o97wa6XjmuZEhQu0yirUEStIVek=
