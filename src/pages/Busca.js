@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Rate from 'rc-rate';
 
-import moment from 'moment';
+import Moment from 'moment';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/PerfilTatuador.css';
@@ -35,7 +35,6 @@ export default class Busca extends Component {
     state = {
         foto : null,
         user: getUser(),
-        nome : 'Marcelo César',
         selectedAvatarFile : null,
         eventos : [],
         sessoes : [],
@@ -234,15 +233,13 @@ export default class Busca extends Component {
     }
 
     formatar(data, hora) {
-        
         data = new Date(data);
-      
         var day = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"][data.getDay()];
         var date = data.getDate();
         var month = ["Jan.", "Fev.", "Mar.", "Abr.", "Mai.", "Jun.", "Jul.", "Ago.", "Set.", "Out.", "Nov.", "Dez."][data.getMonth()];
         var year = data.getFullYear();
       
-        return (`${day}, ${date} de ${month} de ${year} às ${hora}h`);
+        return (`${day}, ${date} de ${month} de ${year} às ${hora}`);
       }
 
     getAvatar() {
