@@ -72,49 +72,63 @@ export default class Busca extends Component {
         return val                    
     }
 
-    componentWillMount () {
-      this.getEstudios()
+    componentWillMount () {      
+      this.setPosition();
     }
 
     componentDidMount = async () => {
+        this.getEstudios()
         this.getPosts()
         this.getSessions()
         this.getEvents()
     }
 
-    getEstudios = async () => {
-      var latitude = ''
-      var longitude = ''
-      var search = ''
-      if (navigator.geolocation) {
-          var startPos;
-        var geoSuccess = async (position) => {
-          if (position.coords.latitude != null){
-              startPos = position;
-              latitude = startPos.coords.latitude
-              longitude = startPos.coords.longitude
-              search = this.state.search
-              localStorage.setItem('@user-loc', JSON.stringify({lat : startPos.coords.latitude, lng : startPos.coords.longitude}));
-              await api.post('studios/search-geo', {
-                  latitude,
-                  longitude,
-                  search
-                }).then(response => {
-                  this.setState({places : response.data})
-                }).catch(error => {
-                    alert(error)
-                })
-          }else{
-              localStorage.setItem('@user-loc',{});
+    setPosition() {      
+      if (!navigator.geolocation) {
+          this.toastAlert('Geolocation is not supported for this Browser/OS.', 'warn');
+      }
+
+      navigator.geolocation.getCurrentPosition((position) => {        
+          if (position.coords.latitude != null) {            
+            const data = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            localStorage.setItem('@user-loc', JSON.stringify(data));
+          } else {
+            localStorage.setItem('@user-loc', {  });
           }
-        };
-        navigator.geolocation.getCurrentPosition(geoSuccess);
-        
+      });
     }
-    else {
-      console.log('Geolocation is not supported for this Browser/OS.');
+
+    getPosition() {
+      const positionStorage = localStorage.getItem('@user-loc');
+      let position = JSON.parse(positionStorage);
+
+      if (!position.lat) {
+          return null;
+      }
+
+      return position;
     }
-  }
+
+    getEstudios = async () => {
+        const search = this.state.search
+        const position = this.getPosition();
+
+        const data = {
+          latitude: position.lat,
+          longitude: position.lng,
+          search
+        }
+
+        await api.post('studios/search-geo', data).then(response => {
+            this.setState({ places: response.data })
+        }).catch(error => {
+            this.toastAlert(error.response.data.message, 'error');
+        });
+    }
 
     handleInputChangeFoto = e => { //possibilita a edição do texto no input
         this.setState({

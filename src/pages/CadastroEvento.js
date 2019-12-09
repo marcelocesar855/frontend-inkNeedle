@@ -29,10 +29,12 @@ export default class CadastroEvento extends Component {
             studioId: null,
             eventTypes: [],
             eventTypeId: null,
-            name : '', 
+            title : '', 
             price : '',           
-            startDate : moment(),
-            endDate : moment(),
+            dateStart : moment(),
+            dateEnd : moment(),
+            timeStart: null,
+            timeEnd: null,
             selectedFile : null,
             focusedInput : null,
             description : '',
@@ -64,8 +66,8 @@ export default class CadastroEvento extends Component {
         })
     }
 
-    handleInputChangeName = e => { //possibilita a edição do texto no input
-        this.setState({name : e.target.value});
+    handleInputChangeTitle = e => { //possibilita a edição do texto no input
+        this.setState({title : e.target.value});
     };
 
     handleInputChangePrice = e => { //possibilita a edição do texto no input
@@ -85,6 +87,14 @@ export default class CadastroEvento extends Component {
 
     handleInputChangeDatas ({ startDate, endDate }) { //possibilita a edição do texto no input
         this.setState({ startDate , endDate });
+    };
+
+    handleInputTimeStart = e => { //possibilita a edição do texto no input
+        this.setState({ timeStart: e.target.value });
+    };
+
+    handleInputTimeEnd = e => { //possibilita a edição do texto no input
+        this.setState({ timeEnd: e.target.value });
     };
 
     handleInputChangeDescritption = e => { //possibilita a edição do texto no input
@@ -126,19 +136,31 @@ export default class CadastroEvento extends Component {
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
 
-        const { name, studioId, eventTypeId, price, selectedFile, startDate, endDate } = this.state;
-
-        let description = this.state.description;
+        const { 
+            title,
+            description,
+            dateStart,
+            dateEnd,
+            timeStart,
+            timeEnd,
+            price,
+            studioId,
+            eventTypeId
+        } = this.state;
 
         let erro = '';     
  
-        if(name !== ''){
+        if(title !== ''){
             if (!!studioId){
                 if (!!eventTypeId) {
                     if (description !== '') {    
-                        description = `${description} | Data do evento ${startDate} - ${endDate}`                    
-                        if (!!startDate){
-                            await this.saveEvent();
+                        if (!!dateStart){
+                            if (!!timeStart) {
+                                await this.saveEvent();
+                            } else {
+                                erro = "Informe o início do evento";
+                            }
+                            
                         }else{
                             erro = "Informe a data do evento";
                         }
@@ -170,17 +192,31 @@ export default class CadastroEvento extends Component {
     };
 
     saveEvent() {
-        const { name, studioId, eventTypeId, price, selectedFile, description, startDate } = this.state;
+        const {
+            title,
+            description,
+            dateStart,
+            dateEnd,
+            timeStart,
+            timeEnd,
+            price,
+            studioId,
+            eventTypeId,
+            selectedFile
+        } = this.state;
 
         let url = `/studio-store-event`;
 
         const formData = new FormData();
 
-        formData.append('title', name);
+        formData.append('title', title);
         formData.append('description', description);
+        formData.append('dateStart', dateStart);
+        formData.append('dateEnd', dateEnd);
+        formData.append('timeStart', timeStart);
+        formData.append('timeEnd', timeEnd);
         formData.append('studioId', studioId);
         formData.append('eventTypeId', eventTypeId);
-        formData.append('dateHour', startDate);
         formData.append('file', selectedFile);
         formData.append('price', accounting.unformat(price));
 
@@ -221,13 +257,13 @@ export default class CadastroEvento extends Component {
                         <h1>Informe os dados abaixo para o cadastrar o evento a ser realizado</h1>
                     </div>
                     <form className="formulario mb-5" onSubmit={this.handleSubmit}>
-                        <p>Nome:&nbsp;<input value={this.state.name}
-                        onChange={this.handleInputChangeName} placeholder="Nome do evento"></input></p>
+                        <p>Nome:&nbsp;<input value={this.state.title}
+                        onChange={this.handleInputChangeTitle} placeholder="Nome do evento"></input></p>
                             <p>Data:&nbsp;
                             <DateRangePicker
-                                startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+                                startDate={this.state.dateStart} // momentPropTypes.momentObj or null,
                                 startDateId="startDate" // PropTypes.string.isRequired,
-                                endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+                                endDate={this.state.dateEnd} // momentPropTypes.momentObj or null,
                                 endDateId="endDate" // PropTypes.string.isRequired,
                                 numberOfMonths={1} displayFormat="DD/MM/YYYY"
                                 onDatesChange={this.handleInputChangeDatas} // PropTypes.func.isRequired,
@@ -235,7 +271,9 @@ export default class CadastroEvento extends Component {
                                 onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
                             />
                         </p>
-                        <p>Preço:&nbsp;<CurrencyFormat type="text" value={this.state.price}
+                        <p>Início:&nbsp;<CurrencyFormat type="text" onChange={this.handleInputTimeStart} format="##:##" placeholder="00:00"></CurrencyFormat></p>
+                        <p>Termino:&nbsp;<CurrencyFormat type="text" onChange={this.handleInputTimeEnd} format="##:##" placeholder="00:00"></CurrencyFormat></p>
+                        <p>Preço R$:&nbsp;<CurrencyFormat type="text" value={this.state.price}
                         onChange={this.handleInputChangePrice} thousandSeparator="."
                         decimalSeparator="," decimalScale="2" prefix="R$ " fixedDecimalScale="true" placeholder="Grátis? Deixe em branco"></CurrencyFormat></p>
                         <p>Estúdio:&nbsp;

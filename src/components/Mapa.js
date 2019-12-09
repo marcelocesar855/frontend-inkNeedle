@@ -24,7 +24,7 @@ export default GoogleApiWrapper({
 
       openStudio(studio, selected) {
         if(studio.id != 0 && selected){
-          window.location.href = `perfil_estudio/${studio.id}`;
+           window.location.href = `perfil_estudio/${studio.id}`;
         }
       }
 
