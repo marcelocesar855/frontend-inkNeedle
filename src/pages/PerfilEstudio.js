@@ -1079,7 +1079,7 @@ export default class PerfilEstudio extends Component {
     }
 
     changePhoto = () => { //possibilita a edição do texto no input
-        const { selectedAvatarFile } = this.state.selectedAvatarFile;        
+        const {selectedAvatarFile} = this.state;        
         let url =  '/studios/' + this.state.studioId + '/avatar';
         let formData = new FormData();
 
@@ -1105,7 +1105,7 @@ export default class PerfilEstudio extends Component {
     };
 
     changeBanner = () => { //possibilita a edição do texto no input
-        const { selectedBannerFile } = this.state.selectedBannerFile;        
+        const { selectedBannerFile } = this.state;        
         let url =  '/studios/' + this.state.studioId + '/banner';
         let formData = new FormData();
 

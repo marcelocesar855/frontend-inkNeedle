@@ -230,7 +230,7 @@ constructor(props) {
                             </List.GroupItem>
                         ))}
                         <div className='alerts'>
-                            <p id='alerStudios'>Sem estúdios cadastrados</p>
+                            <p id='alertStudios'>Sem estúdios cadastrados</p>
                         </div>
                         </List>
                     </Card>
