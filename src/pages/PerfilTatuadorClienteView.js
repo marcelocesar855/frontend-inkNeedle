@@ -53,68 +53,69 @@ constructor(props) {
         this.getPhotos();
         this.getSocialMedias();
         this.getFeedbacks();
-        this.verifyCustomerLike()
     }
 
-    verifyCustomerLike() {
-        if (this.state.tattooArtist.customerLike){
-            $('#follow').css('background', 'rgb(23, 189, 1)');
-        }
+    handleCustomerLikeAlter(check) {
+        const { tattooArtist } = this.state;
+        tattooArtist.customerLike = check;
+        this.setState({ tattooArtist });
     }
 
-    likeOrDislike() {
-        if (this.state.tattooArtist.customerLike){
-            this.handleDislike()
-        }else{
-            this.handleLike()
-        }
-        this.getTattooArtist()
-    }
+    handleLike = async (e) => {
+        e.preventDefault();
 
-    async handleLike() {
+        const { tattooArtist } = this.state;
+
         await api.post(`/like-tattoo-artist/${this.state.id}`)
         .then(() => {
-            toast.configure()
-            toast.success('Seguindo ' + this.state.tattooArtist.name,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(`Seguindo ${tattooArtist.name}`, 'success');
+            this.handleCustomerLikeAlter(true);
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(error.response.data.message, 'error');
         })
     }
 
-    async handleDislike() {
+    handleDislike = async (e) => {
+        e.preventDefault();
+
+        const { tattooArtist } = this.state;
+
         await api.post(`/dislike-tattoo-artist/${this.state.id}`)
         .then(() => {
-            toast.configure()
-            toast.success('Deixou de seguir ' + this.state.tattooArtist.name,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(`Deixou de seguir ${tattooArtist.name}`, 'success');
+            this.handleCustomerLikeAlter(false);
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(error.response.data.message, 'error');
         })
+    }
+
+    toastAlert(message, type = 'info') {
+        toast.configure();
+        const config = {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        };
+
+        switch (type) {
+            case 'success':
+                toast.success(message, config);
+                break;
+            case 'error':
+                toast.error(message, config);
+                break;
+            case 'warn':
+                toast.warn(message, config);
+                break;
+            case 'info':
+                toast.info(message, config);
+                break;
+            default:
+                toast.info(message, config);
+                break;
+        }
     }
 
     async getTattooArtist() {
@@ -212,6 +213,10 @@ constructor(props) {
         }
     }
 
+    pushStudio(studioId) {
+        this.props.history.push(`/perfil_estudio/${studioId}`);
+    }
+
   render() {
       return(
           <div className="wrapper wrapper-logado">
@@ -245,7 +250,14 @@ constructor(props) {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button id='follow' className="chat" onClick={this.likeOrDislike}>+Seguir</button>
+                            
+                             {
+                                (this.state.tattooArtist.customerLike ? (
+                                    <button style={{background: 'rgb(23, 189, 1)'}} className="chat" onClick={this.handleDislike}>Seguindo</button>
+                                ) : (
+                                    <button className="chat" onClick={this.handleLike}>+Seguir</button>
+                                ))
+                             }
                         </Card.Body>
                     </Card>
                     <Card>
@@ -258,7 +270,7 @@ constructor(props) {
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
-                                            this.props.history.push('/perfil_estudio/' + studio.id)
+                                                this.pushStudio(studio.id);
                                             }}><h4 className='to-link'>{studio.name}
                                             <Rate className="ml-2" value={studio.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h4></a>

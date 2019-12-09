@@ -60,64 +60,37 @@ export default class PerfilTatuador extends Component {
         this.getFeedbacks();
     }
 
-    verifyCustomerLike() {
-        if (this.state.studio.customerLike){
-            $('#follow').css('background', 'rgb(23, 189, 1)');
-        }
+    handleCustomerLikeAlter(check) {
+        const { studio } = this.state;
+        studio.customerLike = check;
+        this.setState({ studio });
     }
 
-    likeOrDislike() {
-        if (this.state.studio.customerLike){
-            this.handleDislike()
-        }else{
-            this.handleLike()
-        }
-        this.getStudio()
-    }
+    handleLike = async (e) => {
+        e.preventDefault();
 
-    async handleLike() {
+        const { studio } = this.state;
+
         await api.post(`/like-studio/${this.state.id}`)
-        .then(() => {
-            toast.configure()
-            toast.success('Seguindo ' + this.state.tattooArtist.name,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+        .then(() => {           
+            this.toastAlert(`Seguindo ${studio.name}`, 'success'); 
+            this.handleCustomerLikeAlter(true);
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(error.response.data.message, 'error');
         })
     }
 
-    async handleDislike() {
+    handleDislike = async (e) => {
+        e.preventDefault();
+
+        const { studio } = this.state;
+
         await api.post(`/dislike-studio/${this.state.id}`)
-        .then(() => {
-            toast.configure()
-            toast.success('Deixou de seguir ' + this.state.tattooArtist.name,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+        .then(() => {            
+            this.toastAlert(`Deixou de seguir ${studio.name}`, 'success');  
+            this.handleCustomerLikeAlter(false);
         }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
+            this.toastAlert(error.response.data.message, 'error');            
         })
     }
 
@@ -129,6 +102,34 @@ export default class PerfilTatuador extends Component {
         })
     }
 
+    toastAlert(message, type = 'info') {
+        toast.configure();
+        const config = {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true
+        };
+
+        switch (type) {
+            case 'success':
+                toast.success(message, config);
+                break;
+            case 'error':
+                toast.error(message, config);
+                break;
+            case 'warn':
+                toast.warn(message, config);
+                break;
+            case 'info':
+                toast.info(message, config);
+                break;
+            default: 
+                toast.info(message, config);
+                break;
+        }        
+    }
     
     async getPhotos() {
         await api.get(`/gallery-studio/${this.state.id}`)
@@ -273,6 +274,10 @@ export default class PerfilTatuador extends Component {
         }
     }
 
+    pushTattooArtist(tattooArtistId) {
+        this.props.history.push(`/perfil_tatuador/${tattooArtistId}`);
+    }
+
   render() {
       return(
           <div className="wrapper wrapper-logado">
@@ -306,7 +311,15 @@ export default class PerfilTatuador extends Component {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button id='follow' className="chat" onClick={this.likeOrDislike}>+Seguir</button>
+
+                             {
+                                (this.state.studio.customerLike ? (
+                                    <button style={{background: 'rgb(23, 189, 1)'}} className="chat" onClick={this.handleDislike}>Seguindo</button>
+                                ) : (
+                                    <button className="chat" onClick={this.handleLike}>+Seguir</button>
+                                ))
+                             }
+                            
                         </Card.Body>
                     </Card>
                     <Card>
@@ -319,7 +332,7 @@ export default class PerfilTatuador extends Component {
                                     <Media.Body className="ml-3">
                                         <Media.Heading>
                                             <a onClick={() => {
-                                                this.props.history.push('/perfil_tatuador/' + member.id)
+                                                this.pushTattooArtist(member.id);                                                
                                             }}><h4 className='to-link'>{member.name}
                                             <Rate className="ml-2" value={member.score} style={{ fontSize: 20 }} allowHalf allowClear={false} disabled="true"/>
                                             </h4></a>
