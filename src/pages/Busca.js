@@ -160,6 +160,14 @@ export default class Busca extends Component {
           }
     }
 
+    dateFormat(date) {
+      return moment.utc(date).format('YYYY-MM-DD');
+  }
+
+    timeFormat(time) {
+      return moment.utc(time, 'HH:mm:ss').format('HH:mm');
+  }
+
     async getSessions(){
         await api.get(`customer/schedulings`)
           .then(res => {
@@ -253,7 +261,7 @@ export default class Busca extends Component {
         var month = ["Jan.", "Fev.", "Mar.", "Abr.", "Mai.", "Jun.", "Jul.", "Ago.", "Set.", "Out.", "Nov.", "Dez."][data.getMonth()];
         var year = data.getFullYear();
       
-        return (`${day}, ${date} de ${month} de ${year} às ${hora}`);
+        return (`${day}, ${date} de ${month} de ${year} às ${this.timeFormat(hora)}`);
       }
 
     getAvatar() {
