@@ -29,7 +29,8 @@ export default class CadastroEvento extends Component {
             studioId: null,
             eventTypes: [],
             eventTypeId: null,
-            name : '',            
+            name : '', 
+            price : '',           
             startDate : moment(),
             endDate : moment(),
             selectedFile : null,
@@ -65,6 +66,10 @@ export default class CadastroEvento extends Component {
 
     handleInputChangeName = e => { //possibilita a edição do texto no input
         this.setState({name : e.target.value});
+    };
+
+    handleInputChangePrice = e => { //possibilita a edição do texto no input
+        this.setState({price : e.target.value});
     };
 
     handleInputChangeStudio = e => { //possibilita a edição do texto no input
@@ -121,7 +126,7 @@ export default class CadastroEvento extends Component {
     handleSubmit = async (e) => { //envia as informações a serem salvar para o backend
         e.preventDefault();
 
-        const { name, studioId, eventTypeId, selectedFile, startDate, endDate } = this.state;
+        const { name, studioId, eventTypeId, price, selectedFile, startDate, endDate } = this.state;
 
         let description = this.state.description;
 
@@ -165,7 +170,7 @@ export default class CadastroEvento extends Component {
     };
 
     saveEvent() {
-        const { name, studioId, eventTypeId, selectedFile, description, startDate } = this.state;
+        const { name, studioId, eventTypeId, price, selectedFile, description, startDate } = this.state;
 
         let url = `/studio-store-event`;
 
@@ -177,6 +182,8 @@ export default class CadastroEvento extends Component {
         formData.append('eventTypeId', eventTypeId);
         formData.append('dateHour', startDate);
         formData.append('file', selectedFile);
+        formData.append('price', accounting.unformat(price));
+
 
         api({
             method: 'post',
@@ -228,6 +235,9 @@ export default class CadastroEvento extends Component {
                                 onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
                             />
                         </p>
+                        <p>Preço:&nbsp;<CurrencyFormat type="text" value={this.state.price}
+                        onChange={this.handleInputChangePrice} thousandSeparator="."
+                        decimalSeparator="," decimalScale="2" prefix="R$ " fixedDecimalScale="true" placeholder="Grátis? Deixe em branco"></CurrencyFormat></p>
                         <p>Estúdio:&nbsp;
                         <select value={this.state.studioId} onChange={this.handleInputChangeStudio}>
                             <option value="">Sede do evento</option>
@@ -237,7 +247,7 @@ export default class CadastroEvento extends Component {
                         </select></p>
                         <p>Tipo de Evento:&nbsp;
                         <select value={this.state.eventTypeId} onChange={this.handleInputChangeEventType}>
-                            <option value="">Sede do evento</option>
+                            <option value="">Tipo do evento</option>
                             {this.state.eventTypes.map(studio => {
                                 return (<option value={studio.id}>{studio.name}</option>);
                             })}

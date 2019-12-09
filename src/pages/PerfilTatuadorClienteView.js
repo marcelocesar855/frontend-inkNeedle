@@ -53,6 +53,22 @@ constructor(props) {
         this.getPhotos();
         this.getSocialMedias();
         this.getFeedbacks();
+        this.verifyCustomerLike()
+    }
+
+    verifyCustomerLike() {
+        if (this.state.tattooArtist.customerLike){
+            $('#follow').css('background', 'rgb(23, 189, 1)');
+        }
+    }
+
+    likeOrDislike() {
+        if (this.state.tattooArtist.customerLike){
+            this.handleDislike()
+        }else{
+            this.handleLike()
+        }
+        this.getTattooArtist()
     }
 
     async handleLike() {
@@ -60,6 +76,29 @@ constructor(props) {
         .then(() => {
             toast.configure()
             toast.success('Seguindo ' + this.state.tattooArtist.name,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
+    }
+
+    async handleDislike() {
+        await api.post(`/dislike-tattoo-artist/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Deixou de seguir ' + this.state.tattooArtist.name,{
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -206,7 +245,7 @@ constructor(props) {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button className="chat" onClick={this.handleLike}>+Seguir</button>
+                            <button id='follow' className="chat" onClick={this.likeOrDislike}>+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>

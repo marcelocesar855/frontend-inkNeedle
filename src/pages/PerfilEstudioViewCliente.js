@@ -44,7 +44,7 @@ export default class PerfilTatuador extends Component {
         socialMedias : [],
         photoView : {id : 0, title : '', file : {}},
         certificateView : {id : 0, sigla : '', nome : '', file : {}},
-        eventView : {id : 0, title : '', description : '', file : {}, fileId : 0},
+        eventView : {id : 0, title : '', description : '', studio : {}, price : 0},
         rowsEvent : 1
     };
     
@@ -58,6 +58,67 @@ export default class PerfilTatuador extends Component {
         this.getPhotos();
         this.getSocialMedias();
         this.getFeedbacks();
+    }
+
+    verifyCustomerLike() {
+        if (this.state.studio.customerLike){
+            $('#follow').css('background', 'rgb(23, 189, 1)');
+        }
+    }
+
+    likeOrDislike() {
+        if (this.state.studio.customerLike){
+            this.handleDislike()
+        }else{
+            this.handleLike()
+        }
+        this.getStudio()
+    }
+
+    async handleLike() {
+        await api.post(`/like-studio/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Seguindo ' + this.state.tattooArtist.name,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
+    }
+
+    async handleDislike() {
+        await api.post(`/dislike-studio/${this.state.id}`)
+        .then(() => {
+            toast.configure()
+            toast.success('Deixou de seguir ' + this.state.tattooArtist.name,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        }).catch(error => {
+            toast.configure()
+            toast.error(error.response.data.message,{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true
+            })
+        })
     }
 
     getStudio() {
@@ -170,29 +231,6 @@ export default class PerfilTatuador extends Component {
         return val                    
     }
 
-    async handleLikeStudio() {
-        await api.post(`/like-studio/${this.state.id}`)
-        .then(() => {
-            toast.configure()
-            toast.success('Seguindo ' + this.state.studio.name,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
-        }).catch(error => {
-            toast.configure()
-            toast.error(error.response.data.message,{
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true
-            })
-        })
-    }
-
     async handleLikeEvent() {
         await api.post(`/like-event-studio/${this.state.id}`)
         .then(() => {
@@ -268,9 +306,7 @@ export default class PerfilTatuador extends Component {
                                     );
                                 }}><img className="social" src={socialMedia.iconUrl}></img></a>
                               )})}
-                            <button className="chat" onClick={() => {
-                                this.handleLikeStudio()
-                            }}>+Seguir</button>
+                            <button id='follow' className="chat" onClick={this.likeOrDislike}>+Seguir</button>
                         </Card.Body>
                     </Card>
                     <Card>
@@ -309,6 +345,10 @@ export default class PerfilTatuador extends Component {
                                                 this.setState({
                                                     eventView : event
                                                 })
+                                                if (this.state.eventView.customerLike){
+                                                    $('#event').css('background', 'rgb(23, 189, 1)');
+                                                }
+
                                             }}><h4 className='to-link'>{event.title}</h4></a>
                                         </Media.Heading>
                                         <small>
@@ -457,10 +497,10 @@ export default class PerfilTatuador extends Component {
                     </button>
                   </div>
                   <div class="modal-body">
-                    <img className="rounded mx-auto d-block" src={this.state.eventView.file.url}></img><br/>
-                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.description}</p>
-                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.state.eventView.dateHour}</p>
-                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.fileId !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.fileId.toFixed(2)) : 'Grátis'}</font>}</p>
+                    <img className="rounded mx-auto d-block" src={this.state.eventView.bannerUrl}></img><br/>
+                        <p><font className='font-weight-bold'>Onde será:</font>&nbsp;&nbsp;{this.state.eventView.studio.name}</p>
+                        <p><font className='font-weight-bold'>Quando:</font>&nbsp;&nbsp;{this.formatar(this.state.eventView.dateStart, this.state.eventView.timeStart)}</p>
+                        <p><font className='font-weight-bold'>Entrada:</font>&nbsp;&nbsp;{<font color="green">{this.state.eventView.price !== 0.0 ? 'R$ '+this.mascaraValor(this.state.eventView.price.toFixed(2)) : 'Grátis'}</font>}</p>
                             <div class="border rounded p-2 text-justify">
                                 {this.state.eventView.description.split('\n').map(function(item) {
                                     return (
@@ -473,7 +513,7 @@ export default class PerfilTatuador extends Component {
                             </div>
                   </div>
                   <div class="modal-footer">
-                        <button className='cancel-event' onClick={() => {
+                        <button id='event' className='cancel-event' onClick={() => {
                             this.handleLikeEvent()
                         }}>Tenho interesse</button>
                   </div>

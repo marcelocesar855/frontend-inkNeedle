@@ -51,8 +51,8 @@ export default class Navbar extends Component {
                             <a class="dropdown-item" href="/editar_perfil">Editar informações</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="" onClick={() => {
-                                logout()
-                                this.props.history.push('/login')
+                                logout();
+                                window.location.href = '/login';
                             }}>Sair</a>
                             </div>
                         </li>

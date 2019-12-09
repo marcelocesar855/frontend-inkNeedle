@@ -6,6 +6,7 @@ import $ from 'jquery';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Rate from 'rc-rate';
+import moment from 'moment';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/PerfilTatuador.css';
@@ -192,7 +193,7 @@ export default class Busca extends Component {
     cancelSession () {
         let url = ` /customer/schedulings/${this.state.sessionView.id}/cancel`;
           api({
-            method: 'delete',
+            method: 'post',
             url
           }).then((response) => {
             Swal.fire(
@@ -282,7 +283,9 @@ export default class Busca extends Component {
                                             }}><h4 className='to-link'>{event.title}</h4></a>
                                         </Media.Heading>
                                         <small>
-                                            <p><img src={loca}/>&nbsp;&nbsp;{event.studio.name}
+                                            <p><img src={loca}/>&nbsp;&nbsp;<a className='to-link' onClick={
+                                                () => {this.props.history.push('/perfil_estudio/' + event.studio.id)}
+                                            }>{event.studio.name}</a>
                                             <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(event.dateStart, event.timeStart)}
                                             <br/><img src={mone}/>&nbsp;&nbsp;<font color="green">{event.price !== 0.0 ? 'R$ '+this.mascaraValor(event.price.toFixed(2)) : 'Grátis'}</font>
                                             </p>
@@ -306,7 +309,7 @@ export default class Busca extends Component {
                         <Media.Body className="ml-3">
                             <small>
                                 <p><img src={loca}/>&nbsp;&nbsp;{sessao.studio.name}
-                                <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(sessao.dateStart, sessao.hourStart)}
+                                <br/><img src={clo}/>&nbsp;&nbsp;{this.formatar(sessao.date, sessao.hourStart)}
                                 <br/><img src={person}/>&nbsp;&nbsp;{sessao.tattooArtist.name}
                                 </p>    
                             </small>
@@ -387,7 +390,7 @@ export default class Busca extends Component {
                   <div class="modal-body">
                     <h3>Você tem certeza que deseja desmarcar a sessão?</h3>
                     <p>Local:&nbsp;&nbsp;{this.state.sessionView.studio.name}</p>
-                    <p>Data e hora:&nbsp;&nbsp;{this.formatar(this.state.sessionView.studio.dateStart, this.state.sessionView.studio.hourStart)}</p>
+                    <p>Data e hora:&nbsp;&nbsp;{this.formatar(this.state.sessionView.studio.date, this.state.sessionView.studio.hourStart)}</p>
                     <p>Tatuador:&nbsp;&nbsp;{this.state.sessionView.tattooArtist.name}</p>
                     <p><font color='red'>Obs: O tatuador será notificado da desmarcação.</font></p>
                   </div>
