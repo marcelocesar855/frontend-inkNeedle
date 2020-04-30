@@ -20,7 +20,7 @@
     "expo": "^35.0.1",
     "google-maps-react": "^2.0.2",
     "jest-expo": "^35.0.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "^2.18.1",
     "popper.js": "1.14.7",
     "rc-rate": "^2.5.0",
